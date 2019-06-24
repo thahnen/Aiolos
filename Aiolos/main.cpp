@@ -1,34 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
 #include <opencv2/opencv.hpp>
+
+#include "GLCM.h"
 
 using namespace std;
 using namespace cv;
-
-
-/**************************************************************************************************
- *
- *      HELPER FUNCTIONS
- *
- **************************************************************************************************/
-unsigned int max_gray_value(Mat image) {
-    switch (image.type() & CV_MAT_DEPTH_MASK) {
-        case CV_8S:
-            // 2^4 hoechster Wert
-            return 16;
-        case CV_8U:
-        case CV_16S:
-            // 2^8 hoechster Wert
-            return 256;
-        case CV_16U:
-        case CV_32S:
-            // 2^16 hoechster Wert
-            return 65536;
-        default:
-            // Float etc nicht bedacht, erst einmal das zurückgeben!
-            return -1;
-    }
-}
 
 
 /**************************************************************************************************
@@ -40,6 +18,8 @@ class Scheme {
 public:
     // Function to calculate the dominant texture orientation
     unsigned int min_theta(Mat image) {
+        cout << "DEBUG: min_theta started!" << endl;
+
         // Assertion: only one channel!
         assert(image.channels() == 1);
 
@@ -47,9 +27,11 @@ public:
 
         // Assertion: only values 0 <= x < 360
         for (int theta = 0; theta < 360; ++theta) {
+            cout << "DEBUG: min_theta -> Winkel: " << theta << "°" << endl;
             values.push_back(Z_(image, theta));
         }
 
+        // TODO: mehr als eine dominante Orientierung zulassen!
         unsigned int min_value = *min_element(values.begin(), values.end());
 
         return arg(min_value);
@@ -79,7 +61,7 @@ protected:
         }
 
         // return GLCM-Matrix element
-        return value;
+        return value / q;
     }
 
     // Normalization factor
@@ -105,13 +87,16 @@ protected:
 
     // degree of concentration of larger GLCM elements
     unsigned int Z(Mat image, double r, unsigned int theta) {
+        cout << "DEBUG: Z started!" << endl;
+
         unsigned int value = 0;
         unsigned int depth = max_gray_value(image);
 
         // Assertion: Matrix-Element (n,m) in Bounds!
-        for (int i = 1; i < depth; ++i) {
-            for (int j = 1; j < depth; ++j) {
-                value += w(i, j) * G(image, i, j, r, theta);
+        for (int i = 0; i < depth; ++i) {
+            cout << "DEBUG: Z -> Matrix-Reihe " << i << " von " << depth << endl;
+            for (int j = 0; j < depth; ++j) {
+                value += w(i+1, j+1) * G(image, i, j, r, theta);
             }
         }
 
@@ -120,11 +105,14 @@ protected:
 
     // same as abof but for practical usage!
     unsigned int Z_(Mat image, unsigned int theta) {
+        cout << "DEBUG: Z_ started!" << endl;
+
         unsigned int value = 0;
         unsigned int max_r = ceil(max(image.rows, image.cols) * sqrt(2)); // max radius to get the corners
 
         // Assertion: 1 <= r < max_r
-        for (int r = 1; r < max_r; ++r) {
+        for (int r = 0; r < max_r; ++r) {
+            cout << "DEBUG: Z_ -> Radius: " << r << endl;
             value += Z(image, r, theta);
         }
 
@@ -144,6 +132,7 @@ protected:
 class Scheme1 : public Scheme {
 private:
     // GLCM matrix element (m,n) using relative position (r,theta)
+    [[deprecated("Not implemented yet!")]]
     unsigned int G(Mat image, unsigned int m, unsigned int n, double r, unsigned int theta) {
         return (floor(r) + 1 - r) * G_(image, m, n, r, 0) + (r - floor(r)) * G_(image, m, n, r, 0);
     };
@@ -160,6 +149,8 @@ class Scheme2 : public Scheme {
 private:
     // GLCM matrix element (m,n) using relative position (r,theta)
     unsigned int G(Mat image, unsigned int m, unsigned int n, double r, unsigned int theta) {
+        //cout << "DEBUG: Scheme2 -> G started!" << endl;
+
         double c_1 = (floor(r*cos(theta)) + 1 - r*cos(theta)) * (floor(r*sin(theta)) + 1 - r*sin(theta));
         double c_2 = (r*cos(theta) - floor(r*cos(theta))) * (floor(r*sin(theta)) + 1 - r*sin(theta));
         double c_3 = (floor(r*cos(theta)) + 1 - r*cos(theta)) * (r*sin(theta) - floor(r*sin(theta)));
@@ -210,11 +201,14 @@ int main() {
     Mat gray_image = image.clone();
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
     imshow("Zebrastreifen (Grayscale):", gray_image);
+    cout << "Graustufenbild mit höchstem Grauwert: " << max_gray_value(gray_image) << endl;
     waitKey(0);
 
-    Scheme2 scheme;
-    cout << "Winkel suchen ..." << endl;
-    cout << "Winkel gefunden: " << scheme.min_theta(gray_image) << endl;
+    // GLCM testweise erstellen
+    auto begin = chrono::steady_clock::now();
+    vector<vector<Mat>> elems = createAllGLCMs(image);
+    cout << "Anzahl GLCMs: " << elems.size() << endl;
+    cout << "Hat gedauert: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     waitKey(0);
     return 0;
