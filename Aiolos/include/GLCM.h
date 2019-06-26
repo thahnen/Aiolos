@@ -29,7 +29,7 @@
  *  @param theta    the angle, from the relative position (radius,theta), coinciding with the pixel
  *  @return         GLCM, to get the values from!
  */
-cv::Mat createGLCM(cv::Mat image, double r, unsigned int theta) {
+cv::Mat createGLCM(const cv::Mat& image, double r, unsigned int theta) {
     auto begin = std::chrono::steady_clock::now();
 
     unsigned int max_gray = max_gray_value(image);
@@ -39,8 +39,7 @@ cv::Mat createGLCM(cv::Mat image, double r, unsigned int theta) {
 
     cv::Mat GLCM(max_gray, max_gray, CV_32S, cv::Scalar(0));
 
-    #pragma omp parallel
-    #pragma omp for
+    #pragma omp parallel for collapse(2)
     for (int i = 0; i < max_gray; ++i) {
         for (int j = 0; j < max_gray; ++j) {
             // For every matrix element get its value:
@@ -55,29 +54,25 @@ cv::Mat createGLCM(cv::Mat image, double r, unsigned int theta) {
 
 
 /**
- *  Creats all relevant "gray level co-occurance matrix" (GLCM
+ *  Creats all relevant "gray level co-occurance matrix" (GLCM)
  *
  *  @param image    the given image, the GLCMs are created for
  *  @return         Matrix of GLCMs, ordered by (angle,radius), to get the values from!
  */
-std::vector<std::vector<cv::Mat>> createAllGLCMs(cv::Mat image) {
-    unsigned int max_angle = 360;
+std::vector<std::vector<cv::Mat>> createAllGLCMs(cv::Mat& image) {
+    unsigned int max_angle = 180; // weil Orientierung egal ist!
     unsigned int max_radius = 1; //ceil(sqrt(2)*std::max(image.cols, image.rows));
 
     std::vector<std::vector<cv::Mat>> allGLCMs;
 
-    #pragma omp parallel
-    #pragma omp for
+    #pragma omp parallel for
     for (int theta = 0; theta < max_angle; ++theta) {
         std::vector<cv::Mat> GLCMwithAngle;
 
-        /*
+        #pragma omp parallel for
         for (int r = 0; r < max_radius; ++r) {
             GLCMwithAngle.push_back(createGLCM(image, r, theta));
         }
-         */
-
-        GLCMwithAngle.push_back(createGLCM(image, max_radius, theta));
 
         allGLCMs.push_back(GLCMwithAngle);
     }

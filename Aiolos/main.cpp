@@ -196,18 +196,23 @@ private:
  **************************************************************************************************/
 int main() {
     Mat image = imread("/home/thahnen/Downloads/zebrastreifen.jpg");
-    imshow("Zebrastrifen:", image);
 
     Mat gray_image = image.clone();
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
-    imshow("Zebrastreifen (Grayscale):", gray_image);
     cout << "Graustufenbild mit höchstem Grauwert: " << max_gray_value(gray_image) << endl;
-    waitKey(0);
 
     // GLCM testweise erstellen
     auto begin = chrono::steady_clock::now();
-    vector<vector<Mat>> elems = createAllGLCMs(image);
-    cout << "Anzahl GLCMs: " << elems.size() << endl;
+
+    //Mat glcm(max_gray_value(gray_image), max_gray_value(gray_image), CV_32SC1, Scalar(0));
+    //GLCM(gray_image, glcm, 1, 1);
+    //imshow("GLCM", glcm);
+
+    //Mat elems = createGLCM(image, 0, 0);
+    //vector<vector<Mat>> elems = createAllGLCMs(image);
+    //cout << "Anzahl GLCMs: " << elems.size() << endl;
+
+    cout << "Haupt-Orientierung: " << theta_min(gray_image) << endl;
     cout << "Hat gedauert: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     waitKey(0);
