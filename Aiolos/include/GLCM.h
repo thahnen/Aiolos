@@ -60,7 +60,7 @@ namespace GLCM {
     void Z_(const cv::Mat& image, std::vector<double>& orientation_distribution, unsigned int max_radius, Implementation impl) {
         //#pragma omp parallel for
         for (unsigned int theta = 0; theta < orientation_distribution.size(); theta++) {
-            std::cout << "Winkel " << theta << "°" << std::endl;
+            double theta_rad = theta * CV_PI / 180;
             double value = 0;
 
             #pragma omp parallel for reduction(+:value)
@@ -71,16 +71,16 @@ namespace GLCM {
                 // Unterscheiden, welche Implementierung genommen wurde
                 switch (impl) {
                     case SCHEME1:
-                        Scheme1::GLCM(image, glcm, r, theta);
+                        Scheme1::GLCM(image, glcm, r, theta_rad);
                         break;
                     case SCHEME2:
-                        Scheme2::GLCM(image, glcm, r, theta);
+                        Scheme2::GLCM(image, glcm, r, theta_rad);
                         break;
                     case SCHEME3:
-                        Scheme3::GLCM(image, glcm, r, theta);
+                        Scheme3::GLCM(image, glcm, r, theta_rad);
                         break;
                     case STANDARD:
-                        Standard::GLCM(image, glcm, r, theta);
+                        Standard::GLCM(image, glcm, r, theta_rad);
                         break;
                 }
 
@@ -98,14 +98,16 @@ namespace GLCM {
      *  @param impl         which implementation of the GLCM shall be used
      *  @param max_r        fixed maximum radius or if not stated one based on the image boundaries
      *  @return             the dominant angle
+     *
+     *  TODO: herausfinden, in was für einer Masseinheit der Winkel eigentlich zurückkommt, ist mir noch nicht so ganz klar!
      */
-    double theta_min(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
+    unsigned int theta_min(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
         unsigned int max_radius = max_r == 0 ? ceil(sqrt(2)*std::max(image.cols, image.rows)) : max_r;
 
         std::vector<double> orientation_distribution(180);
         Z_(image, orientation_distribution, max_radius, impl);
 
-        double min_value = *min_element(orientation_distribution.begin(), orientation_distribution.end());
+        int min_value = std::distance(orientation_distribution.begin(), min_element(orientation_distribution.begin(), orientation_distribution.end()));
 
 #if DEBUG_THETA_MIN
         for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
@@ -113,8 +115,7 @@ namespace GLCM {
         }
 #endif
 
-        // Winkel ist in Bogenmaß, daher Grad = Rad * 180/PI
-        return (std::arg(min_value)*180/M_PI);
+        return min_value;
     }
 }
 

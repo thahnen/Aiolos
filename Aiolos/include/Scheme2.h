@@ -18,7 +18,7 @@ namespace Scheme2 {
      *  @param m            Matrix element (m,n)
      *  @param n            Matrix element (m,n)
      *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on
+     *  @param theta        the angle, the GLCM is based on (in degrees!)
      *  @return             the number of pixel pairs which coincide with the requested grayscale value!
      */
     unsigned int G(const cv::Mat& image, unsigned int m, unsigned int n, double r, unsigned int theta) {
@@ -65,7 +65,7 @@ namespace Scheme2 {
      *  @param image        the given image
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on
+     *  @param theta        the angle, the GLCM is based on (in degrees!)
      *
      *  TODO: maybe change GLCM-matrix to cv::Mat_<double>& ?
      */

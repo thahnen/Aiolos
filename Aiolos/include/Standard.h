@@ -15,10 +15,10 @@ namespace Standard {
      *
      *  @param image        the given image, to test the condition
      *  @param r            the radius, part of the condition
-     *  @param theta        the angle, part of the condition
+     *  @param theta        the angle, part of the condition (in radiants!)
      *  @return             the number of pixel pairs which fullfill the condition
      */
-    unsigned int Q(const cv::Mat& image, double r, unsigned int theta) {
+    unsigned int Q(const cv::Mat& image, double r, double theta) {
         int value = 0;
 
         #pragma omp parallel for collapse(2) reduction(+:value)
@@ -43,11 +43,11 @@ namespace Standard {
      *  @param image        the given image
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on
+     *  @param theta        the angle, the GLCM is based on (in radiants!)
      *
      *  TODO: maybe change GLCM-matrix to cv::Mat_<double>& ?
      */
-    void GLCM(const cv::Mat& image, cv::Mat& glcm, double r, unsigned int theta) {
+    void GLCM(const cv::Mat& image, cv::Mat& glcm, double r, double theta) {
         double q = Q(image, r, theta);
 
         #pragma omp parallel for collapse(2)

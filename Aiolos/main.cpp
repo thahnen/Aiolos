@@ -17,9 +17,11 @@ using namespace cv;
  **************************************************************************************************/
 int main() {
     //Mat image = imread("/home/thahnen/Downloads/zebrastreifen.jpg");
-    Mat image = imread("/home/thahnen/Downloads/sar_plane.png");
+    //Mat image = imread("/home/thahnen/Downloads/sar_plane.png");
+    Mat image = imread("/home/thahnen/Downloads/sar_landebahn.png");
+    //Mat image = imread("/home/thahnen/Downloads/sar_highway.jpg");
     if (!image.data) {
-        cout << "Image not found or could not be read!" << endl;
+        cout << "Image not found or could not be loaded!" << endl;
         return 1;
     }
 
@@ -29,16 +31,26 @@ int main() {
 
     // GLCM testweise erstellen
     auto begin = chrono::steady_clock::now();
-    //double main_angle = GLCM::theta_min(gray_image, STANDARD, 50);
-    double main_angle = GLCM::theta_min(gray_image, SCHEME2, 1);
+    unsigned int main_angle = GLCM::theta_min(gray_image, STANDARD, 50);
+    //unsigned int main_angle = GLCM::theta_min(gray_image, SCHEME2, 1);
     cout << "Haupt-Orientierung: " << main_angle << "°" << endl;
     cout << "Hat insgesamt gedauert: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
 
+    // Einzeichnen der 0°-Linie, zur Orientierung!
+    Point o1(image.cols/2, image.rows/2);
+    Point o2(image.cols/2 - 40*cos(0), image.rows/2 - 40*sin(0));
+    line(image, o1, o2, Scalar(0, 255, 0));
+
+    // Einzeichnen der 90°-Linie, zur Orientierung!
+    Point o3(image.cols/2, image.rows/2);
+    Point o4(image.cols/2 - 40*cos(90*CV_PI/180), image.rows/2 - 40*sin(90*CV_PI/180));
+    line(image, o3, o4, Scalar(0, 128, 0));
+
     // Einzeichnen der Linie, die der vorherrschenden Orientierung folgt!
-    Point p1(image.cols/2 + 40*cos(main_angle), image.rows/2 + 40*sin(main_angle));
-    Point p2(image.cols/2 - 40*cos(main_angle), image.rows/2 - 40*sin(main_angle));
-    line(image, p1, p2, Scalar(0, 0, 255));
+    Point p1(image.cols/2 + 40*cos(main_angle*CV_PI/180), image.rows/2 + 40*sin(main_angle*CV_PI/180));
+    Point p2(image.cols/2 - 40*cos(main_angle*CV_PI/180), image.rows/2 - 40*sin(main_angle*CV_PI/180));
+    line(image, p1, p2, Scalar(0, 0, 255), 5);
 
     imshow("Graubild:", gray_image);
     imshow("Farbbild mit Linie", image);
