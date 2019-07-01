@@ -10,6 +10,10 @@
 #include <omp.h>
 #include <opencv4/opencv2/opencv.hpp>
 #include "BasicFunctions.h"
+#include "Standard.h"
+#include "Scheme1.h"
+#include "Scheme2.h"
+#include "Scheme3.h"
 
 #define DEBUG_THETA_MIN false
 
@@ -26,85 +30,6 @@ enum Implementation {
 
 
 namespace GLCM {
-    /**
-     *  Normalization factor for the GLCM based on a condition
-     *
-     *  @param image        the given image, to test the condition
-     *  @param r            the radius, part of the condition
-     *  @param theta        the angle, part of the condition
-     *  @return             the number of pixel pairs which fullfill the condition
-     */
-    unsigned int Q(const cv::Mat& image, double r, unsigned int theta) {
-        int value = 0;
-
-        #pragma omp parallel for collapse(2) reduction(+:value)
-        for (unsigned x = 0; x < image.cols; x++) {
-            for (unsigned int y = 0; y < image.rows; y++) {
-                unsigned x2 = x + r*cos(theta);
-                unsigned y2 = y + r*sin(theta);
-
-                if (x >= 0 && x < image.cols && y >= 0 && y < image.rows) {
-                    value++;
-                }
-            }
-        }
-
-        return value;
-    }
-
-
-    /**
-     *  Creates a single GLCM based on the given parameters
-     *
-     *  @param image        the given image
-     *  @param glcm         the matrix, the GLCM is stored to
-     *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on
-     *
-     *  TODO: maybe change GLCM-matrix to cv::Mat_<double>& ?
-     */
-    void GLCM(const cv::Mat& image, cv::Mat& glcm, double r, unsigned int theta) {
-        double q = Q(image, r, theta);
-
-        #pragma omp parallel for collapse(2)
-        for (unsigned int x = 0; x < image.cols; x++) {
-            for (unsigned int y = 0; y < image.rows; y++) {
-                int x2 = x + r*cos(theta);
-                int y2 = y + r*sin(theta);
-
-                //
-                if (x2 < 0 || x2 >= image.cols || y2 < 0 || y2 >= image.rows) continue;
-
-                switch (image.type() & CV_MAT_DEPTH_MASK) {
-                    case CV_8SC1:
-                        glcm.at<double>(image.at<char>(y, x), image.at<char>(y2, x2)) += 1;
-                        break;
-                    case CV_8UC1:
-                        glcm.at<double>(image.at<uchar>(y, x), image.at<uchar>(y2, x2)) += 1;
-                        break;
-                    case CV_16SC1:
-                        glcm.at<double>(image.at<short>(y, x), image.at<short>(y2, x2)) += 1;
-                        break;
-                    case CV_16UC1:
-                        glcm.at<double>(image.at<ushort>(y, x), image.at<ushort>(y2, x2)) += 1;
-                        break;
-                    case CV_32SC1:
-                        glcm.at<double>(image.at<int>(y, x), image.at<int>(y2, x2)) += 1;
-                        break;
-                    default:
-                        throw std::runtime_error("Unsupported Mat-type!");
-                }
-            }
-        }
-
-        #pragma omp parallel for collapse(2)
-        for (unsigned i = 0; i < glcm.cols; i++) {
-            for (unsigned j = 0; j < glcm.rows; j++) {
-                glcm.at<double>(j, i) = glcm.at<double>(j, i) / q;
-            }
-        }
-    }
-
     /**
      *  Calculates the degree of concentration of a GLCM
      *
@@ -135,6 +60,7 @@ namespace GLCM {
     void Z_(const cv::Mat& image, std::vector<double>& orientation_distribution, unsigned int max_radius, Implementation impl) {
         //#pragma omp parallel for
         for (unsigned int theta = 0; theta < orientation_distribution.size(); theta++) {
+            std::cout << "Winkel " << theta << "°" << std::endl;
             double value = 0;
 
             #pragma omp parallel for reduction(+:value)
@@ -145,14 +71,16 @@ namespace GLCM {
                 // Unterscheiden, welche Implementierung genommen wurde
                 switch (impl) {
                     case SCHEME1:
-                        //
+                        Scheme1::GLCM(image, glcm, r, theta);
                         break;
                     case SCHEME2:
+                        Scheme2::GLCM(image, glcm, r, theta);
                         break;
                     case SCHEME3:
+                        Scheme3::GLCM(image, glcm, r, theta);
                         break;
                     case STANDARD:
-                        GLCM(image, glcm, r, theta);
+                        Standard::GLCM(image, glcm, r, theta);
                         break;
                 }
 

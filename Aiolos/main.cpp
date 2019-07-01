@@ -18,6 +18,10 @@ using namespace cv;
 int main() {
     //Mat image = imread("/home/thahnen/Downloads/zebrastreifen.jpg");
     Mat image = imread("/home/thahnen/Downloads/sar_plane.png");
+    if (!image.data) {
+        cout << "Image not found or could not be read!" << endl;
+        return 1;
+    }
 
     Mat gray_image = image.clone();
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
@@ -25,7 +29,8 @@ int main() {
 
     // GLCM testweise erstellen
     auto begin = chrono::steady_clock::now();
-    double main_angle = GLCM::theta_min(gray_image, STANDARD, 50);
+    //double main_angle = GLCM::theta_min(gray_image, STANDARD, 50);
+    double main_angle = GLCM::theta_min(gray_image, SCHEME2, 1);
     cout << "Haupt-Orientierung: " << main_angle << "°" << endl;
     cout << "Hat insgesamt gedauert: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
