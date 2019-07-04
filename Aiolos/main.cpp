@@ -12,13 +12,14 @@ using namespace cv;
 /**************************************************************************************************
  *
  *      MAIN FUNCTION FOR TESTING
+ *      TODO: change all images in the functions of GLCM to Mat_<T> to gain possible speed?
  *
  **************************************************************************************************/
 int main() {
     //Mat image = imread("/home/thahnen/Downloads/zebrastreifen.jpg");
-    Mat image = imread("/Users/thahnen/Downloads/sar_plane.png");
+    //Mat image = imread("/home/thahnen/Downloads/sar_plane.png");
     //Mat image = imread("/home/thahnen/Downloads/sar_landebahn.png");
-    //Mat image = imread("/home/thahnen/Downloads/sar_highway.jpg");
+    Mat image = imread("/home/thahnen/Downloads/sar_highway.jpg");
     if (!image.data) {
         cout << "Image not found or could not be loaded!" << endl;
         return 1;
@@ -28,12 +29,18 @@ int main() {
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
     cout << "Graustufenbild mit höchstem Grauwert: " << max_gray_value(gray_image) << endl;
 
-    // GLCM testweise erstellen
+
+    // Haupt-Orientierung erhalten & Schemata vergleichen!
     auto begin = chrono::steady_clock::now();
     unsigned int main_angle = GLCM::theta_min(gray_image, STANDARD, 50);
-    //unsigned int main_angle = GLCM::theta_min(gray_image, SCHEME2, 1);
-    cout << "Haupt-Orientierung: " << main_angle << "°" << endl;
-    cout << "Hat insgesamt gedauert: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+    cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+
+    begin = chrono::steady_clock::now();
+    unsigned int main_angle2 = GLCM::theta_min(gray_image, SCHEME2, 50);
+    cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+
+    // Vegleich der beiden Möglichkeiten
+    cout << "Haupt-Orientierung: Std: " << main_angle << "°, Sc2: " << main_angle2 << "°" << endl;
 
 
     // Einzeichnen der 0°-Linie, zur Orientierung!

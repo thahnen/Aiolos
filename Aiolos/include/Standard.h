@@ -27,7 +27,7 @@ namespace Standard {
                 unsigned int x2 = x + r*cos(theta);
                 unsigned int y2 = y + r*sin(theta);
 
-                if (x >= 0 && x < image.cols && y >= 0 && y < image.rows) value++;
+                if (x2 >= 0 && x2 < image.cols && y2 >= 0 && y2 < image.rows) value++;
             }
         }
 
