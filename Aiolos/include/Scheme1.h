@@ -16,14 +16,13 @@ namespace Scheme1 {
      *  @param image        the given image
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on
-     *
-     *  TODO: maybe change GLCM-matrix to cv::Mat_<double>& ?
+     *  @param theta        the angle, the GLCM is based on (in radiant!)
      */
     [[deprecated("Not implemented yet!")]]
-    void GLCM(const cv::Mat& image, cv::Mat& glcm, double r, unsigned int theta) {
+    void GLCM(const cv::Mat& image, cv::Mat_<double>& glcm, double r, double theta) {
         return;
     }
 }
+
 
 #endif //AIOLOS_SCHEME1_H

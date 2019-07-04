@@ -21,7 +21,7 @@ namespace Scheme2 {
      *  @param theta        the angle, the GLCM is based on (in degrees!)
      *  @return             the number of pixel pairs which coincide with the requested grayscale value!
      */
-    unsigned int G(const cv::Mat& image, unsigned int m, unsigned int n, double r, unsigned int theta) {
+    unsigned int G(const cv::Mat& image, unsigned int m, unsigned int n, double r, double theta) {
         unsigned int q = Standard::Q(image, r, theta);
         unsigned int value = 0;
 
@@ -54,10 +54,8 @@ namespace Scheme2 {
                 }
             }
         }
-
         return value / q;
     }
-
 
     /**
      *  Adjusted version for creating a single GLCM used by Scheme 2
@@ -65,11 +63,9 @@ namespace Scheme2 {
      *  @param image        the given image
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on (in degrees!)
-     *
-     *  TODO: maybe change GLCM-matrix to cv::Mat_<double>& ?
+     *  @param theta        the angle, the GLCM is based on (in radiant!)
      */
-    void GLCM(const cv::Mat& image, cv::Mat& glcm, double r, unsigned int theta) {
+    void GLCM(const cv::Mat& image, cv::Mat_<double>& glcm, double r, double theta) {
         unsigned int dist_x = floor(r*cos(theta));
         unsigned int dist_y = floor(r*sin(theta));
 
@@ -86,10 +82,11 @@ namespace Scheme2 {
                 unsigned int gray_3 = G(image, m, n, dist_x, dist_y);
                 unsigned int gray_4 = G(image, m, n, dist_x+1, dist_y+1);
 
-                glcm.at<double>(n, m) = c_1*gray_1 + c_2*gray_2 + c_3*gray_3 + c_4*gray_4;
+                glcm(n, m) = c_1*gray_1 + c_2*gray_2 + c_3*gray_3 + c_4*gray_4;
             }
         }
     }
 }
+
 
 #endif //AIOLOS_SCHEME2_H

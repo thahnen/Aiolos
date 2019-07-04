@@ -12,13 +12,12 @@ using namespace cv;
 /**************************************************************************************************
  *
  *      MAIN FUNCTION FOR TESTING
- *      TODO: does run infinitly?
  *
  **************************************************************************************************/
 int main() {
     //Mat image = imread("/home/thahnen/Downloads/zebrastreifen.jpg");
-    //Mat image = imread("/home/thahnen/Downloads/sar_plane.png");
-    Mat image = imread("/home/thahnen/Downloads/sar_landebahn.png");
+    Mat image = imread("/Users/thahnen/Downloads/sar_plane.png");
+    //Mat image = imread("/home/thahnen/Downloads/sar_landebahn.png");
     //Mat image = imread("/home/thahnen/Downloads/sar_highway.jpg");
     if (!image.data) {
         cout << "Image not found or could not be loaded!" << endl;

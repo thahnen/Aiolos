@@ -28,8 +28,7 @@ unsigned int max_gray_value(const cv::Mat& image) {
             // 2^16 hoechster Wert
             return 65536;
         default:
-            // Float etc nicht bedacht, erst einmal das zurückgeben!
-            return -1;
+            throw std::runtime_error("Unsupported Mat-type!");
     }
 }
 
