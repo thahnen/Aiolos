@@ -36,7 +36,7 @@ namespace GLCM {
      *  @param glcm         the GLCM, to work on
      *  @return             the degree of concentration
      *
-     *  REVIEW: done, nothing to optimize
+     *  REVIEW: Usage does not depend on anything
      */
     double Z(const cv::Mat1d& glcm) {
         double value = 0;
@@ -56,7 +56,7 @@ namespace GLCM {
      *  Calculates values for all the given angles of Z(cv::Mat_<double>&)
      *
      *  @param image                        the given image
-     *  @param angle_distribution           all possible angles
+     *  @param angle_distribution           all possible orientation angles
      *  @param max_radius                   the given maximum radius
      *  @param impl                         which implementation of the GLCM shall be used
      */
@@ -74,13 +74,13 @@ namespace GLCM {
                 // Unterscheiden, welche Implementierung genommen wurde
                 switch (impl) {
                     case SCHEME1:
-                        //Scheme1::GLCM(image, glcm, r, theta_rad);
+                        Scheme1::GLCM(image, glcm, r, theta_rad);
                         break;
                     case SCHEME2:
                         Scheme2::GLCM(image, glcm, r, theta_rad);
                         break;
                     case SCHEME3:
-                        //Scheme3::GLCM(image, glcm, r, theta_rad);
+                        Scheme3::GLCM(image, glcm, r, theta_rad);
                         break;
                     case STANDARD:
                         Standard::GLCM(image, glcm, r, theta_rad);
@@ -94,6 +94,7 @@ namespace GLCM {
         }
     }
 
+
     /**
      *  Calculates the dominant texture orientation of an image
      *
@@ -103,7 +104,7 @@ namespace GLCM {
      *  @return             the dominant angle (in degrees!)
      */
     unsigned int theta_min(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
-        unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols, image.rows));
+        unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
         // TODO: ggf hier schon Switch-Case der einzelnen Bildtypen?
         // dann: Mat_<char>& ref = (Mat_<char>&) image; usw mit den anderen Typen!
