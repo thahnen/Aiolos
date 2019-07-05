@@ -17,9 +17,29 @@ namespace Scheme1 {
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
      *  @param theta        the angle, the GLCM is based on (in radiant!)
+     *
+     *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    [[deprecated("Not implemented yet!")]]
-    void GLCM(const cv::Mat& image, cv::Mat_<double>& glcm, double r, double theta) {
+    [[deprecated("[Scheme1::GLCM] Not implemented yet!")]]
+    void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
+        return;
+    }
+
+
+    /**
+     *  Adjusted version for creating a single GLCM used by Scheme 1
+     *
+     *  @tparam T           single channel type: char/uchar, short/ushort, int
+     *  @param image        the given image
+     *  @param glcm         the matrix, the GLCM is stored to
+     *  @param r            the radius, the GLCM is based on
+     *  @param theta        the angle, the GLCM is based on (in radiant!)
+     *
+     *  REVIEW: Use when T is known by compile time!
+     */
+    template <typename T>
+    [[deprecated("[Scheme3::GLCM_] Not implemented yet!")]]
+    void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
         return;
     }
 }

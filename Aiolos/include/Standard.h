@@ -17,15 +17,21 @@ namespace Standard {
      *  @param r            the radius, part of the condition
      *  @param theta        the angle, part of the condition (in radiants!)
      *  @return             the number of pixel pairs which fullfill the condition
+     *
+     *  REVIEW: Usage does not depend on specific Mat-Type
      */
     unsigned int Q(const cv::Mat& image, double r, double theta) {
         unsigned int value = 0;
 
+        // Only calculated once!
+        double dist_x = r*cos(theta);
+        double dist_y = r*sin(theta);
+
         #pragma omp parallel for collapse(2) reduction(+:value)
         for (unsigned int x = 0; x < image.cols; x++) {
             for (unsigned int y = 0; y < image.rows; y++) {
-                unsigned int x2 = x + r*cos(theta);
-                unsigned int y2 = y + r*sin(theta);
+                unsigned int x2 = x + dist_x;
+                unsigned int y2 = y + dist_y;
 
                 if (x2 >= 0 && x2 < image.cols && y2 >= 0 && y2 < image.rows) value++;
             }
@@ -42,15 +48,19 @@ namespace Standard {
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
      *  @param theta        the angle, the GLCM is based on (in radiant!)
+     *
+     *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    void GLCM(const cv::Mat& image, cv::Mat_<double>& glcm, double r, double theta) {
-        unsigned int q = Q(image, r, theta);
+    void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
+        // Only calculated once!
+        double dist_x = r*cos(theta);
+        double dist_y = r*sin(theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int y = 0; y < image.cols; y++) {
             for (unsigned int x = 0; x < image.rows; x++) {
-                unsigned int y2 = y + r*sin(theta);
-                unsigned int x2 = x + r*cos(theta);
+                unsigned int y2 = y + dist_y;
+                unsigned int x2 = x + dist_x;
 
                 if (x2 < 0 || x2 >= image.cols || y2 < 0 || y2 >= image.rows) continue;
 
@@ -71,10 +81,54 @@ namespace Standard {
                         glcm(image.at<int>(y, x), image.at<int>(y2, x2))++;
                         break;
                     default:
-                        throw std::runtime_error("Unsupported Mat-type!");
+                        throw std::runtime_error("[Standard::GLCM] Unsupported Mat-type!");
                 }
             }
         }
+
+        // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
+        unsigned int q = Q(image, r, theta);
+
+        #pragma omp parallel for collapse(2)
+        for (unsigned int i = 0; i < glcm.cols; i++) {
+            for (unsigned int j = 0; j < glcm.rows; j++) {
+                glcm(j, i) /= q;
+            }
+        }
+    }
+
+
+    /**
+     *  Creates the standard GLCM based on the given parameters
+     *
+     *  @tparam T           single channel type: char/uchar, short/ushort, int
+     *  @param image        the given image
+     *  @param glcm         the matrix, the GLCM is stored to
+     *  @param r            the radius, the GLCM is based on
+     *  @param theta        the angle, the GLCM is based on (in radiant!)
+     *
+     *  REVIEW: Use when T is known by compile time!
+     */
+    template <typename T>
+    void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
+        // Only calculated once! -> maybe put as parameter instead of r and theta!
+        double dist_x = r*cos(theta);
+        double dist_y = r*sin(theta);
+
+        #pragma omp parallel for collapse(2)
+        for (unsigned int y = 0; y < image.cols; y++) {
+            for (unsigned int x = 0; x < image.rows; x++) {
+                unsigned int y2 = y + dist_y;
+                unsigned int x2 = x + dist_x;
+
+                if (x2 < 0 || x2 >= image.cols || y2 < 0 || y2 >= image.rows) continue;
+
+                glcm(image(y, x), image(y2, x2))++;
+            }
+        }
+
+        // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
+        unsigned int q = Q(image, r, theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int i = 0; i < glcm.cols; i++) {

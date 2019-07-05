@@ -12,14 +12,14 @@ using namespace cv;
 /**************************************************************************************************
  *
  *      MAIN FUNCTION FOR TESTING
- *      TODO: change all images in the functions of GLCM to Mat_<T> to gain possible speed?
  *
  **************************************************************************************************/
 int main() {
     //Mat image = imread("/home/thahnen/Downloads/zebrastreifen.jpg");
     //Mat image = imread("/home/thahnen/Downloads/sar_plane.png");
     //Mat image = imread("/home/thahnen/Downloads/sar_landebahn.png");
-    Mat image = imread("/home/thahnen/Downloads/sar_highway.jpg");
+    //Mat image = imread("/home/thahnen/Downloads/sar_highway.jpg");
+    Mat image = imread("/Users/thahnen/Downloads/sar_plane.png");
     if (!image.data) {
         cout << "Image not found or could not be loaded!" << endl;
         return 1;
