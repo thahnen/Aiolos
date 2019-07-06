@@ -18,7 +18,7 @@ namespace Standard {
      *  @param theta        the angle, part of the condition (in radiants!)
      *  @return             the number of pixel pairs which fullfill the condition
      *
-     *  REVIEW: Usage does not depend on specific Mat-Type
+     *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
      */
     unsigned int Q(const cv::Mat& image, double r, double theta) {
         unsigned int value = 0;

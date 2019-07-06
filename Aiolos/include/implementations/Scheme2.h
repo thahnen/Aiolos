@@ -9,7 +9,8 @@
 #include <opencv4/opencv2/opencv.hpp>
 #include "Standard.h"
 
-#define DEBUG_GLCM_SCHEME_2 false
+#define DEBUG_GLCM_SCHEME_2     false
+#define DEBUG_GLCM_CT_SCHEME_2  false
 
 
 namespace Scheme2 {
@@ -69,13 +70,13 @@ namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if DEBUG_GLCM_SCHEME_2
+                            #if DEBUG_GLCM_SCHEME_2
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-#endif
+                            #endif
 
                             continue;
                         }
@@ -90,13 +91,13 @@ namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if DEBUG_GLCM_SCHEME_2
+                            #if DEBUG_GLCM_SCHEME_2
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-#endif
+                            #endif
 
                             continue;
                         }
@@ -111,13 +112,13 @@ namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if DEBUG_GLCM_SCHEME_2
+                            #if DEBUG_GLCM_SCHEME_2
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-#endif
+                            #endif
 
                             continue;
                         }
@@ -132,13 +133,13 @@ namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if DEBUG_GLCM_SCHEME_2
+                            #if DEBUG_GLCM_SCHEME_2
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-#endif
+                            #endif
 
                             continue;
                         }
@@ -153,13 +154,13 @@ namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if DEBUG_GLCM_SCHEME_2
+                            #if DEBUG_GLCM_SCHEME_2
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-#endif
+                            #endif
 
                             continue;
                         }
@@ -239,12 +240,12 @@ namespace Scheme2 {
 
                 if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if DEBUG_GLCM_SCHEME_2
+                    #if DEBUG_GLCM_CT_SCHEME_2
                     #pragma omp critical
                     {
                         std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4 << " , glcm.cols: " << glcm.cols << std::endl;
                     };
-#endif
+                    #endif
 
                     continue;
                 }
