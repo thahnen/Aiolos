@@ -22,11 +22,19 @@ Add support for multiple main orientations in one single image!
 ## Prerequisites
 
 Needs following software installed:
-1. [OpenCV 4+](https://opencv.org/) for working on images
-2. [OpenMP](https://www.openmp.org/) for parallelization
+1. Some kind of **Unix** => there is no Windows implementation yet!
+2. [CMake](https://cmake.org/) to build the project
+2. [OpenCV 4+](https://opencv.org/) for working on images
+3. [OpenMP](https://www.openmp.org/) for parallelization
 
 ---
 
 ## Results
 
 I am sorry there are none to show yet! I will add some when I am back at the office!
+
+---
+
+## Name?
+
+Named after the [ancient greek god of winds](https://en.wikipedia.org/wiki/Aeolus_(Odyssey)) just because the paper used the method for Sea Surface Wind Direction Retrieval from SAR Imagery!
