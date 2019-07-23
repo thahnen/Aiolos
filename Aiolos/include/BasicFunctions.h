@@ -5,7 +5,7 @@
 #ifndef AIOLOS_BASICFUNCTIONS_H
 #define AIOLOS_BASICFUNCTIONS_H
 
-#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 
 /**

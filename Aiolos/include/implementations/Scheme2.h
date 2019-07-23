@@ -6,7 +6,8 @@
 #define AIOLOS_SCHEME2_H
 
 #include <omp.h>
-#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
+
 #include "Standard.h"
 
 #define DEBUG_GLCM_SCHEME_2     false

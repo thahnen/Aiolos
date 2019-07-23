@@ -8,7 +8,8 @@
 #include <iostream>
 #include <vector>
 #include <omp.h>
-#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
+
 #include "BasicFunctions.h"
 #include "implementations/Standard.h"
 #include "implementations/Scheme1.h"
