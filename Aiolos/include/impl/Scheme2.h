@@ -10,9 +10,6 @@
 
 #include "Standard.h"
 
-#define DEBUG_GLCM_SCHEME_2     false
-#define DEBUG_GLCM_CT_SCHEME_2  false
-
 
 namespace Scheme2 {
     /**
@@ -29,55 +26,62 @@ namespace Scheme2 {
         unsigned int dist_x = floor(r*cos(theta));
         unsigned int dist_y = floor(r*sin(theta));
 
+#if SCHEME2_TEST
+        double c_1, c_2, c_3, c_4;
+        {
+            double a = (dist_x+1 - r*cos(theta));
+            double b = (r*cos(theta) - dist_x);
+            double c = (dist_y+1 -r*sin(theta));
+            double d = (r*sin(theta) - dist_y);
+
+            c_1 = a*c;
+            c_2 = b*c;
+            c_3 = a*d;
+            c_4 = b*d;
+        }
+#else
+        // Using this "version": c_1-4 are calculated (possible extra calculations)
         double c_1 = (dist_x+1 - r*cos(theta)) * (dist_y+1 -r*sin(theta));
         double c_2 = (r*cos(theta) - dist_x) * (dist_y+1 - r*sin(theta));
         double c_3 = (dist_x+1 - r*cos(theta)) * (r*sin(theta) - dist_y);
         double c_4 = (r*cos(theta) - dist_x) * (r*sin(theta) - dist_y);
+#endif
 
         #pragma omp parallel for collapse(2)
         for (unsigned int y = 0; y < image.rows; y++) {
             for (unsigned int x = 0; x < image.cols; x++) {
+                // TODO: gibt es nicht einen besseren Weg als einfach der nächste Schleifendurchlauf?
+                // TODO: ich weiss noch nicht genau wann und warum gray1-4 addiert grösser sein können als die Anzahl der Spalten!
+
                 unsigned int y1 = y + dist_y;
+                if (y1 < 0 || y1 >= image.rows) continue;
+
                 unsigned int x1 = x + dist_x;
+                if (x1 < 0 || x1 >= image.cols) continue;
 
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x1 < 0 || x1 >= image.cols || y1 < 0 || y1 >= image.rows) continue;
+                unsigned int y2 = y + dist_y + 1;
+                if (y2 < 0 || y2 >= image.rows) continue;
 
-                unsigned int y2 = y + dist_y;
                 unsigned int x2 = x + dist_x + 1;
-
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x2 < 0 || x2 >= image.cols || y2 < 0 || y2 >= image.rows) continue;
-
-                unsigned int y3 = y + dist_y + 1;
-                unsigned int x3 = x + dist_x;
-
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x3 < 0 || x3 >= image.cols || y3 < 0 || y3 >= image.rows) continue;
-
-                unsigned int y4 = y + dist_y + 1;
-                unsigned int x4 = x + dist_x + 1;
-
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x4 < 0 || x4 >= image.cols || y4 < 0 || y4 >= image.rows) continue;
+                if (x2 < 0 || x2 >= image.cols) continue;
 
                 unsigned int gray_1, gray_2, gray_3, gray_4;
                 switch (image.type() & CV_MAT_DEPTH_MASK) {
                     case CV_8SC1:
                         gray_1 = c_1 * image.at<char>(y1, x1);
-                        gray_2 = c_2 * image.at<char>(y2, x2);
-                        gray_3 = c_3 * image.at<char>(y3, x3);
-                        gray_4 = c_4 * image.at<char>(y4, x4);
+                        gray_2 = c_2 * image.at<char>(y1, x2);
+                        gray_3 = c_3 * image.at<char>(y2, x1);
+                        gray_4 = c_4 * image.at<char>(y2, x2);
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-                            #if DEBUG_GLCM_SCHEME_2
+#if SCHEME2_DEBUG_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-                            #endif
+#endif
 
                             continue;
                         }
@@ -86,19 +90,19 @@ namespace Scheme2 {
                         break;
                     case CV_8UC1:
                         gray_1 = c_1 * image.at<uchar>(y1, x1);
-                        gray_2 = c_2 * image.at<uchar>(y2, x2);
-                        gray_3 = c_3 * image.at<uchar>(y3, x3);
-                        gray_4 = c_4 * image.at<uchar>(y4, x4);
+                        gray_2 = c_2 * image.at<uchar>(y1, x2);
+                        gray_3 = c_3 * image.at<uchar>(y2, x1);
+                        gray_4 = c_4 * image.at<uchar>(y2, x2);
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-                            #if DEBUG_GLCM_SCHEME_2
+#if SCHEME2_DEBUG_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-                            #endif
+#endif
 
                             continue;
                         }
@@ -107,19 +111,19 @@ namespace Scheme2 {
                         break;
                     case CV_16SC1:
                         gray_1 = c_1 * image.at<short>(y1, x1);
-                        gray_2 = c_2 * image.at<short>(y2, x2);
-                        gray_3 = c_3 * image.at<short>(y3, x3);
-                        gray_4 = c_4 * image.at<short>(y4, x4);
+                        gray_2 = c_2 * image.at<short>(y1, x2);
+                        gray_3 = c_3 * image.at<short>(y2, x1);
+                        gray_4 = c_4 * image.at<short>(y2, x2);
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-                            #if DEBUG_GLCM_SCHEME_2
+#if SCHEME2_DEBUG_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-                            #endif
+#endif
 
                             continue;
                         }
@@ -128,19 +132,19 @@ namespace Scheme2 {
                         break;
                     case CV_16UC1:
                         gray_1 = c_1 * image.at<ushort>(y1, x1);
-                        gray_2 = c_2 * image.at<ushort>(y2, x2);
-                        gray_3 = c_3 * image.at<ushort>(y3, x3);
-                        gray_4 = c_4 * image.at<ushort>(y4, x4);
+                        gray_2 = c_2 * image.at<ushort>(y1, x2);
+                        gray_3 = c_3 * image.at<ushort>(y2, x1);
+                        gray_4 = c_4 * image.at<ushort>(y2, x2);
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-                            #if DEBUG_GLCM_SCHEME_2
+#if SCHEME2_DEBUG_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-                            #endif
+#endif
 
                             continue;
                         }
@@ -149,19 +153,19 @@ namespace Scheme2 {
                         break;
                     case CV_32SC1:
                         gray_1 = c_1 * image.at<int>(y1, x1);
-                        gray_2 = c_2 * image.at<int>(y2, x2);
-                        gray_3 = c_3 * image.at<int>(y3, x3);
-                        gray_4 = c_4 * image.at<int>(y4, x4);
+                        gray_2 = c_2 * image.at<int>(y1, x2);
+                        gray_3 = c_3 * image.at<int>(y2, x1);
+                        gray_4 = c_4 * image.at<int>(y2, x2);
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-                            #if DEBUG_GLCM_SCHEME_2
+#if SCHEME2_DEBUG_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
                                             << " , glcm.cols: " << glcm.cols << std::endl;
                             };
-                            #endif
+#endif
 
                             continue;
                         }
@@ -175,7 +179,7 @@ namespace Scheme2 {
         }
 
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = Standard::Q(image, r, theta);
+        unsigned int q = Standard::norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int i = 0; i < glcm.cols; i++) {
@@ -202,51 +206,60 @@ namespace Scheme2 {
         unsigned int dist_x = floor(r*cos(theta));
         unsigned int dist_y = floor(r*sin(theta));
 
+#if SCHEME2_TEST_CT
+        // Using this "version": a, b, c, d should only be calculated once
+        double c_1, c_2, c_3, c_4;
+        {
+            double a = (dist_x+1 - r*cos(theta));
+            double b = (r*cos(theta) - dist_x);
+            double c = (dist_y+1 -r*sin(theta));
+            double d = (r*sin(theta) - dist_y);
+
+            c_1 = a*c;
+            c_2 = b*c;
+            c_3 = a*d;
+            c_4 = b*d;
+        }
+#else
+        // Using this "version": c_1-4 are calculated (possible extra calculations)
         double c_1 = (dist_x+1 - r*cos(theta)) * (dist_y+1 -r*sin(theta));
         double c_2 = (r*cos(theta) - dist_x) * (dist_y+1 - r*sin(theta));
         double c_3 = (dist_x+1 - r*cos(theta)) * (r*sin(theta) - dist_y);
         double c_4 = (r*cos(theta) - dist_x) * (r*sin(theta) - dist_y);
+#endif
 
         #pragma omp parallel for collapse(2)
         for (unsigned int y = 0; y < image.rows; y++) {
             for (unsigned int x = 0; x < image.cols; x++) {
+                // TODO: gibt es nicht einen besseren Weg als einfach der nächste Schleifendurchlauf?
+                // TODO: ich weiss noch nicht genau wann und warum gray1-4 addiert grösser sein können als die Anzahl der Spalten!
+
                 unsigned int y1 = y + dist_y;
+                if (y1 < 0 || y1 >= image.rows) continue;
+
                 unsigned int x1 = x + dist_x;
+                if (x1 < 0 || x1 >= image.cols) continue;
 
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x1 < 0 || x1 >= image.cols || y1 < 0 || y1 >= image.rows) continue;
+                unsigned int y2 = y + dist_y + 1;
+                if (y2 < 0 || y2 >= image.rows) continue;
 
-                unsigned int y2 = y + dist_y;
                 unsigned int x2 = x + dist_x + 1;
-
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x2 < 0 || x2 >= image.cols || y2 < 0 || y2 >= image.rows) continue;
-
-                unsigned int y3 = y + dist_y + 1;
-                unsigned int x3 = x + dist_x;
-
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x3 < 0 || x3 >= image.cols || y3 < 0 || y3 >= image.rows) continue;
-
-                unsigned int y4 = y + dist_y + 1;
-                unsigned int x4 = x + dist_x + 1;
-
-                // TODO: gibt es nicht einen besseren Weg?
-                if (x4 < 0 || x4 >= image.cols || y4 < 0 || y4 >= image.rows) continue;
+                if (x2 < 0 || x2 >= image.cols) continue;
 
                 unsigned int gray_1 = c_1 * image(y1, x1);
-                unsigned int gray_2 = c_2 * image(y2, x2);
-                unsigned int gray_3 = c_3 * image(y3, x3);
-                unsigned int gray_4 = c_4 * image(y4, x4);
+                unsigned int gray_2 = c_2 * image(y1, x2);
+                unsigned int gray_3 = c_3 * image(y2, x1);
+                unsigned int gray_4 = c_4 * image(y2, x2);
 
                 if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-                    #if DEBUG_GLCM_CT_SCHEME_2
+#if SCHEME2_DEBUG_GLCM_CT
                     #pragma omp critical
                     {
-                        std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4 << " , glcm.cols: " << glcm.cols << std::endl;
+                        std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
+                                    << " , glcm.cols: " << glcm.cols << std::endl;
                     };
-                    #endif
+#endif
 
                     continue;
                 }
@@ -256,7 +269,7 @@ namespace Scheme2 {
         }
 
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = Standard::Q(image, r, theta);
+        unsigned int q = Standard::norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int i = 0; i < glcm.cols; i++) {

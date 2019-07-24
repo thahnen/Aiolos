@@ -11,7 +11,7 @@
 
 namespace Scheme3 {
     /**
-     *  Adjusted Normalization factor for the GLCM used by Scheme 3
+     *  Adjusted Normalization factor for the GLCM used by Scheme 3 (equals the Scheme 3 Q-function from the paper)
      *
      *  @param image        the given image, to test the condition
      *  @param r            the radius, part of the condition
@@ -21,8 +21,8 @@ namespace Scheme3 {
      *  REVIEW: Usage does not depend on specific Mat-Type
      */
     [[deprecated("[Scheme3::Q] Not implemented yet!")]]
-    unsigned int Q(const cv::Mat& image, double r, double theta) {
-        return 0;
+    unsigned int norm(const cv::Mat& image, double r, double theta) {
+        throw std::runtime_error("[Scheme1::norm] Not implemented yet!");
     }
 
 
@@ -36,9 +36,8 @@ namespace Scheme3 {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    [[deprecated("[Scheme3::GLCM] Not implemented yet!")]]
     void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
-        return;
+        throw std::runtime_error("[Scheme3::GLCM] Not implemented yet!");
     }
 
 
@@ -54,9 +53,8 @@ namespace Scheme3 {
      *  REVIEW: Use when T is known by compile time!
      */
     template <typename T>
-    [[deprecated("[Scheme3::GLCM_] Not implemented yet!")]]
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
-        return;
+        throw std::runtime_error("[Scheme3::GLCM_] Not implemented yet!");
     }
 }
 

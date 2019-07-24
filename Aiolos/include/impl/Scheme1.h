@@ -20,9 +20,8 @@ namespace Scheme1 {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    [[deprecated("[Scheme1::GLCM] Not implemented yet!")]]
     void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
-        return;
+        throw std::runtime_error("[Scheme1::GLCM] Not implemented yet!");
     }
 
 
@@ -38,9 +37,8 @@ namespace Scheme1 {
      *  REVIEW: Use when T is known by compile time!
      */
     template <typename T>
-    [[deprecated("[Scheme3::GLCM_] Not implemented yet!")]]
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
-        return;
+        throw std::runtime_error("[Scheme1::GLCM_] Not implemented yet!");
     }
 }
 

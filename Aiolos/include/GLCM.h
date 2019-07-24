@@ -10,14 +10,11 @@
 #include <omp.h>
 #include <opencv2/opencv.hpp>
 
-#include "BasicFunctions.h"
-#include "implementations/Standard.h"
-#include "implementations/Scheme1.h"
-#include "implementations/Scheme2.h"
-#include "implementations/Scheme3.h"
-
-#define DEBUG_THETA_MIN     false
-#define DEBUG_CT_THETA_MIN  false
+#include "util/BasicFunctions.h"
+#include "impl/Standard.h"
+#include "impl/Scheme1.h"
+#include "impl/Scheme2.h"
+#include "impl/Scheme3.h"
 
 
 /**
@@ -33,7 +30,7 @@ enum Implementation {
 
 namespace GLCM {
     /**
-     *  Calculates the degree of concentration of a GLCM
+     *  Calculates the degree of concentration of a GLCM (equals the Z-function from the paper)
      *
      *  @param glcm         the GLCM, to work on
      *  @return             the degree of concentration
@@ -41,7 +38,7 @@ namespace GLCM {
      *  NOBUG: Do not change x/y to unsigned => would break everything!
      *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
      */
-    double Z(const cv::Mat1d& glcm) {
+    double concentration_degree(const cv::Mat1d& glcm) {
         double value = 0;
 
         #pragma omp parallel for collapse(2) reduction(+:value)
@@ -56,7 +53,7 @@ namespace GLCM {
 
 
     /**
-     *  Calculates values for all the given angles of Z(GLCM)
+     *  Calculates values for all the given angles of Z(GLCM) (equals the Z'-function from the paper)
      *
      *  @param image                    the given image
      *  @param angle_distribution       all possible orientation angles
@@ -65,7 +62,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    void Z_(const cv::Mat& image, std::vector<double>& angle_distribution, unsigned int max_radius, Implementation impl) {
+    void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distribution, unsigned int max_radius, Implementation impl) {
         #pragma omp parallel for
         for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
             double theta_rad = theta * CV_PI / 180;
@@ -92,7 +89,7 @@ namespace GLCM {
                         break;
                 }
 
-                value += Z(glcm);
+                value += concentration_degree(glcm);
             }
 
             angle_distribution[theta] = value;
@@ -101,7 +98,7 @@ namespace GLCM {
 
 
     /**
-     *  Calculates the dominant texture orientation of an image
+     *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper)
      *
      *  @param image        the given image
      *  @param impl         which implementation of the GLCM shall be used
@@ -110,17 +107,17 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    unsigned int theta_min(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
+    unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
         std::vector<double> orientation_distribution(180);
-        Z_(image, orientation_distribution, max_radius, impl);
+        calc_angle_dist(image, orientation_distribution, max_radius, impl);
 
-        #if DEBUG_THETA_MIN
+#if GLCM_DEBUG_MAIN_ANGLE
         for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
             std::cout << "Winkel " << i << "°: " << orientation_distribution[i] << std::endl;
         }
-        #endif
+#endif
 
         return std::distance(
                 orientation_distribution.begin(),
@@ -136,7 +133,7 @@ namespace GLCM {
      *******************************************************************************************************************/
     namespace CT {
         /**
-         *  Calculates values for all the given angles of Z(cv::Mat1d&)
+         *  Calculates values for all the given angles of Z(cv::Mat1d&) (equals the Z'-function from the paper)
          *
          *  @tparam T                       single channel type: char/uchar, short/ushort, int
          *  @param image                    the given image
@@ -147,7 +144,7 @@ namespace GLCM {
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
         template <typename T>
-        void Z__(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, unsigned int max_radius, Implementation impl) {
+        void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, unsigned int max_radius, Implementation impl) {
             #pragma omp parallel for
             for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
                 double theta_rad = theta * CV_PI / 180;
@@ -174,7 +171,7 @@ namespace GLCM {
                             break;
                     }
 
-                    value += Z(glcm);
+                    value += concentration_degree(glcm);
                 }
 
                 angle_distribution[theta] = value;
@@ -183,7 +180,7 @@ namespace GLCM {
 
 
         /**
-         *  Calculates the dominant texture orientation of an image
+         *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper)
          *
          *  @param image        the given image
          *  @param impl         which implementation of the GLCM shall be used
@@ -192,36 +189,36 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        unsigned int theta_min(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
+        unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
             unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
             std::vector<double> orientation_distribution(180);
 
             switch (image.type() & CV_MAT_DEPTH_MASK) {
                 case CV_8SC1:
-                    Z__((cv::Mat_<char>&) image, orientation_distribution, max_radius, impl);
+                    calc_angle_dist_((cv::Mat_<char>&) image, orientation_distribution, max_radius, impl);
                     break;
                 case CV_8UC1:
-                    Z__((cv::Mat_<uchar>&) image, orientation_distribution, max_radius, impl);
+                    calc_angle_dist_((cv::Mat_<uchar>&) image, orientation_distribution, max_radius, impl);
                     break;
                 case CV_16SC1:
-                    Z__((cv::Mat_<short>&) image, orientation_distribution, max_radius, impl);
+                    calc_angle_dist_((cv::Mat_<short>&) image, orientation_distribution, max_radius, impl);
                     break;
                 case CV_16UC1:
-                    Z__((cv::Mat_<ushort>&) image, orientation_distribution, max_radius, impl);
+                    calc_angle_dist_((cv::Mat_<ushort>&) image, orientation_distribution, max_radius, impl);
                     break;
                 case CV_32SC1:
-                    Z__((cv::Mat_<int>&) image, orientation_distribution, max_radius, impl);
+                    calc_angle_dist_((cv::Mat_<int>&) image, orientation_distribution, max_radius, impl);
                     break;
                 default:
                     throw std::runtime_error("[GLCM::CT::theta_min] Unsupported Mat-type!");
             }
 
-            #if DEBUG_CT_THETA_MIN
+#if GLCM_DEBUG_MAIN_ANGLE_CT
             for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
                 std::cout << "Winkel " << i << "°: " << orientation_distribution[i] << std::endl;
             }
-            #endif
+#endif
 
             return std::distance(
                     orientation_distribution.begin(),

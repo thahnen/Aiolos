@@ -3,11 +3,13 @@ project(Aiolos)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# OpenMP required for parallized working (astonishing speed increase!)
 find_package(OpenMP REQUIRED)
+# OpenCV required for the rest
 find_package(OpenCV REQUIRED)
 
 include_directories(./include)
+add_executable(Aiolos main.cpp include/util/BasicFunctions.h include/GLCM.h include/impl/Scheme1.h include/impl/Scheme2.h include/impl/Scheme3.h include/impl/Standard.h)
 
-add_executable(Aiolos main.cpp include/BasicFunctions.h include/GLCM.h include/implementations/Scheme1.h include/implementations/Scheme2.h include/implementations/Scheme3.h include/implementations/Standard.h)
 target_link_libraries(Aiolos OpenMP::OpenMP_CXX)
 target_link_libraries(Aiolos ${OpenCV_LIBS})

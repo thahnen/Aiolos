@@ -11,7 +11,7 @@
 
 namespace Standard {
     /**
-     *  Standard normalization factor for the GLCM based on a condition
+     *  Standard normalization factor for the GLCM based on a condition (equals the standard Q-function from the paper)
      *
      *  @param image        the given image, to test the condition
      *  @param r            the radius, part of the condition
@@ -20,10 +20,9 @@ namespace Standard {
      *
      *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
      */
-    unsigned int Q(const cv::Mat& image, double r, double theta) {
+    unsigned int norm(const cv::Mat& image, double r, double theta) {
         unsigned int value = 0;
 
-        // Only calculated once!
         double dist_x = r*cos(theta);
         double dist_y = r*sin(theta);
 
@@ -52,7 +51,6 @@ namespace Standard {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
     void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
-        // Only calculated once!
         double dist_x = r*cos(theta);
         double dist_y = r*sin(theta);
 
@@ -87,7 +85,7 @@ namespace Standard {
         }
 
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = Q(image, r, theta);
+        unsigned int q = norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int i = 0; i < glcm.cols; i++) {
@@ -111,7 +109,6 @@ namespace Standard {
      */
     template <typename T>
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
-        // Only calculated once! -> maybe put as parameter instead of r and theta!
         double dist_x = r*cos(theta);
         double dist_y = r*sin(theta);
 
@@ -128,7 +125,7 @@ namespace Standard {
         }
 
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = Q(image, r, theta);
+        unsigned int q = norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int i = 0; i < glcm.cols; i++) {
