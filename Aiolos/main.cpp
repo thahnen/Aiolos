@@ -14,7 +14,7 @@ using namespace cv;
  *      MAIN FUNCTIONS FOR TESTING
  *
  **************************************************************************************************/
-int main2() {
+int main1() {
     /** Vergleich der Compile- + Runtime-Time Implementierung */
 
     // Sea 400x400
@@ -181,8 +181,8 @@ int main2() {
 
 
 
-int main3() {
-    Mat image = imread("../../test_images/zebrastreifen.jpg");
+int main() {
+    Mat image = imread("../../test_images/sar_landebahn.png");
     if (!image.data) {
         cout << "Image not found or could not be loaded!" << endl;
         return 1;
@@ -196,6 +196,9 @@ int main3() {
     auto begin = chrono::steady_clock::now();
     unsigned int main_angle = GLCM::CT::main_angle(gray_image, STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+
+    // TODO: Auskommentieren, bisher bricht das Progamm danach bei "Run" ab, aber nicht bei "Debug"
+    return 0;
 
     begin = chrono::steady_clock::now();
     unsigned int main_angle2 = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
@@ -233,7 +236,7 @@ int main3() {
 }
 
 
-int main() {
+int main3() {
     //Mat image = imread("../../test_images/maps_texel_sea.png");
     //Mat image = imread("../../test_images/sar_highway.jpg");
     //Mat image = imread("../../test_images/sar_landebahn.png");
