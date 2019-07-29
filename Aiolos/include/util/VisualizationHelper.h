@@ -42,7 +42,6 @@ void showAngle(const cv::Mat& image, unsigned int main_angle, bool referenceCoor
 
     // Bild anzeigen
     cv::imshow("Winkel: " + std::to_string(main_angle) + "°", canvas);
-    cv::waitKey(0);
 }
 
 
@@ -58,7 +57,7 @@ void showAngles(const cv::Mat& image, std::vector<unsigned int> main_angles, boo
     if (canvas.channels() == 1) cv::cvtColor(canvas, canvas, cv::COLOR_GRAY2BGR);
 
     unsigned int middle_x = canvas.cols % 2 == 0 ? canvas.cols/2 : ceil(canvas.cols/2);
-    unsigned int middle_y = canvas.rows % 2 == 0 ? canvas.cols/2 : ceil(canvas.rows/2);
+    unsigned int middle_y = canvas.rows % 2 == 0 ? canvas.rows/2 : ceil(canvas.rows/2);
     unsigned int length = std::min(middle_x, middle_y) / 2;
 
     if (referenceCoords) {
@@ -82,7 +81,6 @@ void showAngles(const cv::Mat& image, std::vector<unsigned int> main_angles, boo
 
     // Bild anzeigen
     cv::imshow("Mehrere Winkel:", canvas);
-    cv::waitKey(0);
 }
 
 

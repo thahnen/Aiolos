@@ -40,4 +40,7 @@ unsigned int max_gray_value(const cv::Mat& image) {
 }
 
 
+// TODO: mathematische Funktionen hier einfügen!
+
+
 #endif //AIOLOS_BASICFUNCTIONS_H

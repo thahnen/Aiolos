@@ -23,10 +23,10 @@
  *  Just to differentiate the possible implementations from the paper!
  */
 enum Implementation {
-    STANDARD = 0,
-    SCHEME1,
-    SCHEME2,
-    SCHEME3
+    STANDARD = 0,           // Standard implementation => some values exist and some do not
+    SCHEME1,                // Scheme 1 => image gets rotated
+    SCHEME2,                // Scheme 2 => interpolation of nearby points
+    SCHEME3                 // Scheme 3 => interpolation and summary (?)
 };
 
 
@@ -34,9 +34,11 @@ enum Implementation {
  *  Method to use for getting multiple dominant angles!
  */
 enum Method {
-    SPLIT_IMAGE = 0,
-    MEDIAN,
-    MEAN
+    SPLIT_IMAGE = 0,        // splits the image in smaller images, work on their (one) dominant angle
+    TOP_2,                  // just returns the 2 most dominant angles
+    TOP_3,                  // just returns the 3 most dominant angles
+    MEDIAN,                 // works using the Median (in work)
+    MEAN                    // works using the mean value (in work)
 };
 
 
@@ -236,12 +238,34 @@ namespace GLCM {
         std::vector<double> orientation_dist = getAngleDistribution(image, impl, max_radius);
         unsigned int len = orientation_dist.size();
 
+        // TODO: das hier kann noch um einiges eleganter gemacht werden!
         std::vector<unsigned int> angles;
+        std::vector<double>::iterator top;
         switch (meth) {
             case SPLIT_IMAGE:
                 throw std::runtime_error("[GLCM::main_angles] SPLIT_IMAGE not implemented yet!");
                 break;
+            case TOP_2:
+            case TOP_3:
+                // 1) höchstes setzen
+                top = min_element(orientation_dist.begin(), orientation_dist.end());
+                angles.push_back(std::distance(orientation_dist.begin(), top));
+                angles.at(std::distance(orientation_dist.begin(), top)) = *max_element(orientation_dist.begin(), orientation_dist.end());
+
+                // 2) zweithöchstes setzen
+                top = min_element(orientation_dist.begin(), orientation_dist.end());
+                angles.push_back(std::distance(orientation_dist.begin(), top));
+                angles.at(std::distance(orientation_dist.begin(), top)) = *max_element(orientation_dist.begin(), orientation_dist.end());
+
+                if (meth == TOP_3) {
+                    // 3) dritthöchstes setzen
+                    top = min_element(orientation_dist.begin(), orientation_dist.end());
+                    angles.push_back(std::distance(orientation_dist.begin(), top));
+                }
+
+                break;
             case MEDIAN:
+                // TODO: auslagern, damit es einfacher ist zu bearbeiten!
                 // Everything under average shall be considered!
                 double median;
 
@@ -271,6 +295,7 @@ namespace GLCM {
 
                 break;
             case MEAN:
+                // TODO: auslagern, damit es einfacher ist zu bearbeiten!
                 // Everything under average shall be considered!
                 double mean = std::accumulate(
                         orientation_dist.begin(), orientation_dist.end(), 0.0/orientation_dist.size()
