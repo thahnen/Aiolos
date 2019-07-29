@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Implementation of the Texture Orientation Estimation Method described in this [Paper](paper.pdf) by the [IEEE](https://ieeexplore.ieee.org/abstract/document/8331276).
+Implementation of the Texture Orientation Estimation Method described in this [Paper](Paper.pdf) by the [IEEE](https://ieeexplore.ieee.org/abstract/document/8331276).
 Uses a [GLCM](https://de.wikipedia.org/wiki/Grauwertematrix) to find the main orientation(s) in a given image.
 
 ### Usability
