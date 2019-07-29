@@ -30,9 +30,12 @@ namespace Standard {
         for (unsigned int x = 0; x < image.cols; x++) {
             for (unsigned int y = 0; y < image.rows; y++) {
                 unsigned int x2 = x + dist_x;
-                unsigned int y2 = y + dist_y;
+                if (x2 < 0 || x2 >= image.cols) continue;
 
-                if (x2 >= 0 && x2 < image.cols && y2 >= 0 && y2 < image.rows) value++;
+                unsigned int y2 = y + dist_y;
+                if (y2 < 0 || y2 >= image.rows) continue;
+
+                value++;
             }
         }
 
@@ -57,10 +60,11 @@ namespace Standard {
         #pragma omp parallel for collapse(2)
         for (unsigned int y = 0; y < image.cols; y++) {
             for (unsigned int x = 0; x < image.rows; x++) {
-                unsigned int y2 = y + dist_y;
                 unsigned int x2 = x + dist_x;
+                if (x2 < 0 || x2 >= image.cols) continue;
 
-                if (x2 < 0 || x2 >= image.cols || y2 < 0 || y2 >= image.rows) continue;
+                unsigned int y2 = y + dist_y;
+                if (y2 < 0 || y2 >= image.rows) continue;
 
                 switch (image.type() & CV_MAT_DEPTH_MASK) {
                     case CV_8SC1:
@@ -115,10 +119,11 @@ namespace Standard {
         #pragma omp parallel for collapse(2)
         for (unsigned int y = 0; y < image.cols; y++) {
             for (unsigned int x = 0; x < image.rows; x++) {
-                unsigned int y2 = y + dist_y;
                 unsigned int x2 = x + dist_x;
+                if (x2 < 0 || x2 >= image.cols) continue;
 
-                if (x2 < 0 || x2 >= image.cols || y2 < 0 || y2 >= image.rows) continue;
+                unsigned int y2 = y + dist_y;
+                if (y2 < 0 || y2 >= image.rows) continue;
 
                 glcm(image(y, x), image(y2, x2))++;
             }

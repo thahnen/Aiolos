@@ -12,6 +12,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "util/BasicFunctions.h"
+#include "util/VisualizationHelper.h"
 #include "impl/Standard.h"
 #include "impl/Scheme1.h"
 #include "impl/Scheme2.h"
@@ -41,7 +42,11 @@ enum Method {
 
 namespace GLCM {
 
-    /** Private Namespace (functions shall not be used outside this file) */
+    /*******************************************************************************************************************
+     *
+     *          PRIVATE FUNCTIONS (used by the public functions but shall not be used outside)
+     *
+     *******************************************************************************************************************/
     namespace {
         /**
          *  Calculates the degree of concentration of a GLCM (equals the Z-function from the paper)
@@ -67,17 +72,17 @@ namespace GLCM {
 
 
         /**
-         *  Calculates values for all the given angles of Z(GLCM) (equals the Z'-function from the paper)
+         *  Calculates values for all the given angles of concentration_degree(GLCM) (equals the Z'-function from the paper)
          *
          *  @param image                    the given image
          *  @param angle_distribution       all possible orientation angles
-         *  @param max_radius               the given maximum radius
          *  @param impl                     which implementation of the GLCM shall be used
+         *  @param max_radius               the given maximum radius
          *
          *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
          */
         void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distribution,
-                                unsigned int max_radius, Implementation impl) {
+                             Implementation impl, unsigned int max_radius) {
             #pragma omp parallel for
             for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
                 double theta_rad = theta * CV_PI / 180;
@@ -110,7 +115,79 @@ namespace GLCM {
                 angle_distribution[theta] = value;
             }
         }
+
+
+        /**
+         *  Calculates values for all the given angles of Z(cv::Mat1d&) (equals the Z'-function from the paper)
+         *
+         *  @tparam T                       single channel type: char/uchar, short/ushort, int
+         *  @param image                    the given image
+         *  @param angle_distribution       all possible orientation angles
+         *  @param max_radius               the given maximum radius
+         *  @param impl                     which implementation of the GLCM shall be used
+         *
+         *  REVIEW: Use when Mat-Type is known by compile time!
+         */
+        template <typename T>
+        void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution,
+                              unsigned int max_radius, Implementation impl) {
+            #pragma omp parallel for
+            for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
+                double theta_rad = theta * CV_PI / 180;
+                double value = 0;
+
+                #pragma omp parallel for reduction(+:value)
+                for (unsigned int r = 1; r <= max_radius; r++) {
+                    unsigned int max_gray = max_gray_value(image);
+                    cv::Mat1d glcm(max_gray, max_gray, 0.0);
+
+                    // Unterscheiden, welche Implementierung genommen wurde
+                    switch (impl) {
+                        case SCHEME1:
+                            Scheme1::GLCM_(image, glcm, r, theta_rad);
+                            break;
+                        case SCHEME2:
+                            Scheme2::GLCM_(image, glcm, r, theta_rad);
+                            break;
+                        case SCHEME3:
+                            Scheme3::GLCM_(image, glcm, r, theta_rad);
+                            break;
+                        case STANDARD:
+                            Standard::GLCM_(image, glcm, r, theta_rad);
+                            break;
+                    }
+
+                    value += concentration_degree(glcm);
+                }
+
+                angle_distribution[theta] = value;
+            }
+        }
+
+
+        /**
+         *  Calculates for every angle 0-179° the distribution
+         *
+         *  @param image                    the given image
+         *  @param impl                     which implementation of the GLCM shall be used
+         *  @param max_radius               the given maximum radius
+         *  @return                         the filled vector of values
+         */
+        std::vector<double> getAngleDistribution(const cv::Mat& image, Implementation impl, unsigned int max_radius) {
+            std::vector<double> orientation_distribution(180);
+            calc_angle_dist(image, orientation_distribution, impl, max_radius);
+            return orientation_distribution;
+        }
     }
+
+
+
+    /*******************************************************************************************************************
+     *
+     *          PUBLIC FUNCTIONS (shall be used outside)
+     *          TODO: have to look which version I take at last (CT is faster but may use more memory)!
+     *
+     *******************************************************************************************************************/
 
 
     /**
@@ -119,15 +196,14 @@ namespace GLCM {
      *  @param image        the given image
      *  @param impl         which implementation of the GLCM shall be used
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
-     *  @return             the dominant angle (in degrees!)
+     *  @return             the one dominant angle (in degrees!)
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
     unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r = 0) {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
-        std::vector<double> orientation_distribution(180);
-        calc_angle_dist(image, orientation_distribution, max_radius, impl);
+        std::vector<double> orientation_distribution = getAngleDistribution(image, impl, max_radius);
 
 #if GLCM_DEBUG_MAIN_ANGLE
         for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
@@ -157,14 +233,13 @@ namespace GLCM {
     std::vector<unsigned int> main_angles(const cv::Mat& image, Implementation impl, Method meth, unsigned int max_r = 0) {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
-        std::vector<double> orientation_dist(180);
-        calc_angle_dist(image, orientation_dist, max_radius, impl);
+        std::vector<double> orientation_dist = getAngleDistribution(image, impl, max_radius);
         unsigned int len = orientation_dist.size();
 
         std::vector<unsigned int> angles;
         switch (meth) {
             case SPLIT_IMAGE:
-                throw std::runtime_error("[GLCM::main_angles] Not implemented yet!");
+                throw std::runtime_error("[GLCM::main_angles] SPLIT_IMAGE not implemented yet!");
                 break;
             case MEDIAN:
                 // Everything under average shall be considered!
@@ -218,65 +293,7 @@ namespace GLCM {
     }
 
 
-
-    /*******************************************************************************************************************
-     *
-     *      IMPLEMENTATION FOR USE AT COMPILETIME NOT RUNTIME! BY NOW STILL FOR TESTING!
-     *
-     *******************************************************************************************************************/
     namespace CT {
-
-        /** Private Namespace (functions shall not be used outside this file) */
-        namespace {
-            /**
-             *  Calculates values for all the given angles of Z(cv::Mat1d&) (equals the Z'-function from the paper)
-             *
-             *  @tparam T                       single channel type: char/uchar, short/ushort, int
-             *  @param image                    the given image
-             *  @param angle_distribution       all possible orientation angles
-             *  @param max_radius               the given maximum radius
-             *  @param impl                     which implementation of the GLCM shall be used
-             *
-             *  REVIEW: Use when Mat-Type is known by compile time!
-             */
-            template <typename T>
-            void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution,
-                                    unsigned int max_radius, Implementation impl) {
-                #pragma omp parallel for
-                for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
-                    double theta_rad = theta * CV_PI / 180;
-                    double value = 0;
-
-                    #pragma omp parallel for reduction(+:value)
-                    for (unsigned int r = 1; r <= max_radius; r++) {
-                        unsigned int max_gray = max_gray_value(image);
-                        cv::Mat1d glcm(max_gray, max_gray, 0.0);
-
-                        // Unterscheiden, welche Implementierung genommen wurde
-                        switch (impl) {
-                            case SCHEME1:
-                                Scheme1::GLCM_(image, glcm, r, theta_rad);
-                                break;
-                            case SCHEME2:
-                                Scheme2::GLCM_(image, glcm, r, theta_rad);
-                                break;
-                            case SCHEME3:
-                                Scheme3::GLCM_(image, glcm, r, theta_rad);
-                                break;
-                            case STANDARD:
-                                Standard::GLCM_(image, glcm, r, theta_rad);
-                                break;
-                        }
-
-                        value += concentration_degree(glcm);
-                    }
-
-                    angle_distribution[theta] = value;
-                }
-            }
-        }
-
-
         /**
          *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper)
          *

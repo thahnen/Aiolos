@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
@@ -181,8 +180,8 @@ int main1() {
 
 
 
-int main() {
-    Mat image = imread("../../test_images/sar_landebahn.png");
+int main2() {
+    Mat image = imread("../../test_images/zebrastreifen.jpg");
     if (!image.data) {
         cout << "Image not found or could not be loaded!" << endl;
         return 1;
@@ -197,9 +196,6 @@ int main() {
     unsigned int main_angle = GLCM::CT::main_angle(gray_image, STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
-    // TODO: Auskommentieren, bisher bricht das Progamm danach bei "Run" ab, aber nicht bei "Debug"
-    return 0;
-
     begin = chrono::steady_clock::now();
     unsigned int main_angle2 = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
     cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
@@ -208,35 +204,12 @@ int main() {
     cout << "Haupt-Orientierung: Std: " << main_angle << "°, Sc2: " << main_angle2 << "°" << endl;
 
 
-    // Einzeichnen der 0°-Linie, zur Orientierung!
-    Point o1(image.cols/2, image.rows/2);
-    Point o2(image.cols/2 - 40*cos(0), image.rows/2 - 40*sin(0));
-    line(image, o1, o2, Scalar(0, 255, 0));
-
-    // Einzeichnen der 90°-Linie, zur Orientierung!
-    Point o3(image.cols/2, image.rows/2);
-    Point o4(image.cols/2 - 40*cos(90*CV_PI/180), image.rows/2 - 40*sin(90*CV_PI/180));
-    line(image, o3, o4, Scalar(0, 128, 0));
-
-    // Vorherrschende Orientierung Standard-Implementierung!
-    Point p1(image.cols/2 + 40*cos(main_angle*CV_PI/180), image.rows/2 + 40*sin(main_angle*CV_PI/180));
-    Point p2(image.cols/2 - 40*cos(main_angle*CV_PI/180), image.rows/2 - 40*sin(main_angle*CV_PI/180));
-    line(image, p1, p2, Scalar(0, 0, 255), 5);
-
-    // Vorherrschende Orientierung Scheme-2-Implementierung!
-    Point p3(image.cols/2 + 40*cos(main_angle2*CV_PI/180), image.rows/2 + 40*sin(main_angle2*CV_PI/180));
-    Point p4(image.cols/2 - 40*cos(main_angle2*CV_PI/180), image.rows/2 - 40*sin(main_angle2*CV_PI/180));
-    line(image, p3, p4, Scalar(0, 0, 128), 5);
-
-
-    imshow("Graubild:", gray_image);
-    imshow("Farbbild mit Linie", image);
-    waitKey(0);
-
+    showAngle(image, main_angle, true);
+    showAngle(image, main_angle2, true);
 }
 
 
-int main3() {
+int main() {
     //Mat image = imread("../../test_images/maps_texel_sea.png");
     //Mat image = imread("../../test_images/sar_highway.jpg");
     //Mat image = imread("../../test_images/sar_landebahn.png");
@@ -276,4 +249,7 @@ int main3() {
 
     // Vegleich der beiden Möglichkeiten
     cout << "Haupt-Orientierung: Std (CT): " << main_angle << "°, Sc2 (RT): " << main_angle2 << "°, Sc2 (CT): " << main_angle4 << "°" << endl;
+
+
+    showAngle(image, main_angle, true);
 }
