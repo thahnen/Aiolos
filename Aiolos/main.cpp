@@ -2,6 +2,7 @@
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
+#include "util/VisualizationHelper.h"
 #include "GLCM.h"
 
 using namespace std;
@@ -215,7 +216,6 @@ int main2() {
 
     Mat gray_image = image.clone();
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
-    cout << "Graustufenbild mit höchstem Grauwert: " << max_gray_value(gray_image) << endl;
 
     // Haupt-Orientierung erhalten & Schemata vergleichen!
     auto begin = chrono::steady_clock::now();

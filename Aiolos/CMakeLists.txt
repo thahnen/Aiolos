@@ -1,14 +1,48 @@
 cmake_minimum_required(VERSION 3.14)
-project(Aiolos)
+project(Aiolos
+        VERSION 1.0.0
+        DESCRIPTION "GLCM-Based Texture Orientation Estimation Method")
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
-# OpenMP required for parallized working (astonishing speed increase!)
-find_package(OpenMP REQUIRED)
-# OpenCV required for the rest
-find_package(OpenCV REQUIRED)
+find_package(OpenMP REQUIRED)           # OpenMP required for parallized working (astonishing speed increase!)
+find_package(OpenCV REQUIRED)           # OpenCV required for the rest
 
 include_directories(./include)
-add_executable(Aiolos main.cpp include/util/BasicFunctions.h include/GLCM.h include/impl/Scheme1.h include/impl/Scheme2.h include/impl/Scheme3.h include/impl/Standard.h include/util/VisualizationHelper.h)
 
-target_link_libraries(Aiolos OpenMP::OpenMP_CXX ${OpenCV_LIBS})
+
+########################################################################################################################
+#       BUILD OPTIONS FOR CREATING A SHARED LIBRARY
+########################################################################################################################
+add_library(${PROJECT_NAME} SHARED
+        include/util/BasicFunctions.h
+        include/util/VisualizationHelper.h
+        include/impl/Scheme1.h
+        include/impl/Scheme2.h
+        include/impl/Scheme3.h
+        include/impl/Standard.h
+        src/GLCM.cpp)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+        VERSION ${PROJECT_VERSION}
+        PUBLIC_HEADER include/GLCM.h)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+        ${PROJECT_SOURCE_DIR}/include)
+
+
+########################################################################################################################
+#       BUILD OPTIONS FOR RUNNING THE TEST PROGRAM
+########################################################################################################################
+# TODO: Hier einfach die Bibliothek linken anstatt der ganzen Dateien!
+add_executable(Aiolos_Test main.cpp
+        include/util/BasicFunctions.h
+        include/GLCM.h
+        include/impl/Scheme1.h
+        include/impl/Scheme2.h
+        include/impl/Scheme3.h
+        include/impl/Standard.h
+        include/util/VisualizationHelper.h
+        src/GLCM.cpp)
+
+target_link_libraries(Aiolos_Test OpenMP::OpenMP_CXX ${OpenCV_LIBS})
