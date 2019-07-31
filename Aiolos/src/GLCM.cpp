@@ -193,82 +193,40 @@ namespace GLCM {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
         std::vector<double> orientation_dist = getAngleDistribution(image, impl, max_radius);
-        unsigned int len = orientation_dist.size();
 
-        // TODO: das hier kann noch um einiges eleganter gemacht werden!
         std::vector<unsigned int> angles;
-        std::vector<double>::iterator top;
         switch (meth) {
             case SPLIT_IMAGE:
                 throw std::runtime_error("[GLCM::main_angles] SPLIT_IMAGE not implemented yet!");
-                break;
             case TOP_2:
+                angles = getLowestIndizes(orientation_dist, 2);
+                break;
             case TOP_3:
-                // 1) höchstes setzen
-                top = min_element(orientation_dist.begin(), orientation_dist.end());
-                angles.push_back(std::distance(orientation_dist.begin(), top));
-                angles.at(std::distance(orientation_dist.begin(), top)) = *max_element(orientation_dist.begin(), orientation_dist.end());
-
-                // 2) zweithöchstes setzen
-                top = min_element(orientation_dist.begin(), orientation_dist.end());
-                angles.push_back(std::distance(orientation_dist.begin(), top));
-                angles.at(std::distance(orientation_dist.begin(), top)) = *max_element(orientation_dist.begin(), orientation_dist.end());
-
-                if (meth == TOP_3) {
-                    // 3) dritthöchstes setzen
-                    top = min_element(orientation_dist.begin(), orientation_dist.end());
-                    angles.push_back(std::distance(orientation_dist.begin(), top));
-                }
-
+                angles = getLowestIndizes(orientation_dist, 3);
                 break;
-            case MEDIAN:
-                // TODO: auslagern, damit es einfacher ist zu bearbeiten!
-                // Everything under average shall be considered!
-                double median;
+            default:
+                double value;
 
-                if (len % 2 == 0) {
-                    const auto median_it1 = orientation_dist.begin() + len/2 - 1;
-                    const auto median_it2 = orientation_dist.begin() + len/2;
-
-                    std::nth_element(orientation_dist.begin(), median_it1, orientation_dist.end());
-                    std::nth_element(orientation_dist.begin(), median_it2, orientation_dist.end());
-
-                    median = (*median_it1 + *median_it2) / 2;
+                if (meth == MEDIAN) {
+                    value = getMedianValue(orientation_dist);
+                } else if (meth == AVERAGE) {
+                    value = getAverageValue(orientation_dist);
+                } else if (meth == L_QUARTILE) {
+                    value = getQuantileValue(orientation_dist, LOWER_QUARTILE);
                 } else {
-                    const auto median_it = orientation_dist.begin() + len/2;
-                    std::nth_element(orientation_dist.begin(), median_it, orientation_dist.end());
-                    median = *median_it;
+                    // TODO: noch nicht eingefügte Möglichkeiten bedenken => kommen dann hier rein!
+                    throw std::runtime_error("[GLCM::main_angles] Other Options not implemented yet!");
                 }
 
                 #pragma omp parallel for ordered
                 for (auto it = orientation_dist.begin(); it < orientation_dist.end(); ++it) {
-                    if (*it < median) {
+                    if (*it < value) {
                         #pragma omp critical
                         {
                             angles.push_back(std::distance(orientation_dist.begin(), it));
                         };
                     }
                 }
-
-                break;
-            case MEAN:
-                // TODO: auslagern, damit es einfacher ist zu bearbeiten!
-                // Everything under average shall be considered!
-                double mean = std::accumulate(
-                        orientation_dist.begin(), orientation_dist.end(), 0.0/orientation_dist.size()
-                );
-
-                #pragma omp parallel for ordered
-                for (auto it = orientation_dist.begin(); it < orientation_dist.end(); ++it) {
-                    if (*it < mean) {
-                        #pragma omp critical
-                        {
-                            angles.push_back(std::distance(orientation_dist.begin(), it));
-                        };
-                    }
-                }
-
-                break;
         }
 
         return angles;

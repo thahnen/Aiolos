@@ -16,7 +16,6 @@ include_directories(./include)
 ########################################################################################################################
 add_library(${PROJECT_NAME} SHARED
         include/util/BasicFunctions.h
-        include/util/VisualizationHelper.h
         include/impl/Scheme1.h
         include/impl/Scheme2.h
         include/impl/Scheme3.h
@@ -33,16 +32,17 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 ########################################################################################################################
 #       BUILD OPTIONS FOR RUNNING THE TEST PROGRAM
+#       TODO: Bibliothek linken führt zu unbenannten Fehlern?
 ########################################################################################################################
-# TODO: Hier einfach die Bibliothek linken anstatt der ganzen Dateien!
 add_executable(Aiolos_Test main.cpp
         include/util/BasicFunctions.h
-        include/GLCM.h
         include/impl/Scheme1.h
         include/impl/Scheme2.h
         include/impl/Scheme3.h
         include/impl/Standard.h
-        include/util/VisualizationHelper.h
-        src/GLCM.cpp)
+        src/GLCM.cpp
+        include/util/VisualizationHelper.h)
 
-target_link_libraries(Aiolos_Test OpenMP::OpenMP_CXX ${OpenCV_LIBS})
+target_link_libraries(Aiolos_Test
+#        PUBLIC Aiolos
+        OpenMP::OpenMP_CXX ${OpenCV_LIBS})

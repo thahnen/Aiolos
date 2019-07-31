@@ -40,8 +40,9 @@ enum Method {
     SPLIT_IMAGE = 0,        // splits the image in smaller images, work on their (one) dominant angle
     TOP_2,                  // just returns the 2 most dominant angles
     TOP_3,                  // just returns the 3 most dominant angles
-    MEDIAN,                 // works using the Median (in work)
-    MEAN                    // works using the mean value (in work)
+    MEDIAN,                 // works using the Median
+    AVERAGE,                // works using the average value
+    L_QUARTILE              // works using the lower quartile
 };
 
 
