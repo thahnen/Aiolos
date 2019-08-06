@@ -138,7 +138,7 @@ std::vector<unsigned int> getLowestIndizes(const std::vector<T>& list, unsigned 
     std::vector<unsigned int> indizes;
 
     for (unsigned int i = 0; i < n; i++) {
-        auto min = min_element(copied.begin(), copied.end());                                               // get minimum values index
+        auto min = min_element(copied.begin(), copied.end());                                           // get minimum values index
         indizes.push_back(std::distance(copied.begin(), min));                                          // add index
         copied.at(std::distance(copied.begin(), min)) = *max_element(copied.begin(), copied.end());     // set value at index to maximum (to not find it again)
     }

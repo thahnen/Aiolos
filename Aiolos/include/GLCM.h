@@ -11,7 +11,7 @@
         #define DLL __declspec(dllimport)
     #endif
 #else
-    #error "Not suitable Compiler (GCC or MSVC)"
+    #error "No suitable Compiler (GCC or MSVC) used!"
 #endif
 
 

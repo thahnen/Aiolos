@@ -7,15 +7,15 @@ if [[ ! -d $VIDEO_DIR ]]; then
     exit 1
 fi
 
-## Values gatheres from the existing test videos!
+## Values gathered from the existing test videos!
 WIDTH=640
 HEIGHT=392
 
 ## Delete last "/" if exists!
 VIDEO_DIR=${VIDEO_DIR%*/}
 
+## For every file in the folder:
 for file in $VIDEO_DIR/*; do
-    
     ## Test if file is video!
     ENDING=${file##*.}
     ENDING=$(echo "$ENDING" | tr '[:upper:]' '[:lower:]')
@@ -32,6 +32,7 @@ for file in $VIDEO_DIR/*; do
         continue
     fi
 
+    ## Generate new filename
     FILENAME=($(echo "${file##*/}" | tr "." "\n"))
     NEU="c.$FILENAME.$ENDING"
 
