@@ -2,6 +2,7 @@
 // Created by thahnen on 29.07.19.
 //
 
+#pragma once
 #ifndef AIOLOS_VISUALIZATIONHELPER_H
 #define AIOLOS_VISUALIZATIONHELPER_H
 

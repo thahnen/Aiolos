@@ -1,50 +1,19 @@
 //
-// Created by thahnen on 24.06.19.
+// Created by Tobias Hahnen on 2019-08-06.
 //
 
-#ifndef AIOLOS_BASICFUNCTIONS_H
-#define AIOLOS_BASICFUNCTIONS_H
+#pragma once
+#ifndef AIOLOS_VECTORMATH_H
+#define AIOLOS_VECTORMATH_H
 
-#include <opencv2/opencv.hpp>
+#include <vector>
+#include <numeric>
 
 
 /**
- *  Returns the maximum gray value of the image
- *
- *  @param image        the given image
- *  @return             the value
- *
- *  REVIEW: Usage does not depend on specific Mat-Type
- *  REVIEW: Assertion only positive values used in image
+ *  To distinguish the different quantiles! (maybe put in another file with other enums)
  */
-unsigned int max_gray_value(const cv::Mat& image) {
-    switch (image.type() & CV_MAT_DEPTH_MASK) {
-        case CV_8S:
-            // (signed) char    -> 2^7 highest value
-            return 128;
-        case CV_8U:
-            // unsigned char    -> 2^8 highest value
-            return 256;
-        case CV_16S:
-            // (signed) short   -> 2^15 highest value
-            return 32768;
-        case CV_16U:
-            // unsigned short   -> 2^16 highest value
-            return 65536;
-        case CV_32S:
-            // (signed) int     -> 2^31 highest value
-            return 2147483648;
-        default:
-            throw std::runtime_error("[max_gray_value] Unsupported Mat-type!");
-    }
-}
-
-
-// TODO: die Datei ggf noch aufsplitten in zwei unterschiedliche (eine fuer Vector-Operationen/ eine für Matrix-Operationen)
-/**
- *  To distinguish the different quantiles!
- */
-enum Quantil {
+enum class Quantil : std::uint8_t {
     LOWER_QUARTILE = 0,
     MIDDLE_QUARTILE,
     UPPER_QUARTILE
@@ -72,12 +41,12 @@ T getQuantileValue(const std::vector<T>& list, Quantil q) {
 
     auto len = list.size();
     switch (q) {
-        case LOWER_QUARTILE:
+        case Quantil::LOWER_QUARTILE:
             pos = len/4;
             if (len % 2 == 1) return sorted.at(pos);
-        case MIDDLE_QUARTILE:
+        case Quantil::MIDDLE_QUARTILE:
             pos = len/2;
-        case UPPER_QUARTILE:
+        case Quantil::UPPER_QUARTILE:
             pos = len/2 + len/4;
     }
 
@@ -97,7 +66,7 @@ T getQuantileValue(const std::vector<T>& list, Quantil q) {
  */
 template <typename T>
 T getMedianValue(const std::vector<T>& list) {
-    return getQuantileValue(list, MIDDLE_QUARTILE);
+    return getQuantileValue(list, Quantil::MIDDLE_QUARTILE);
 }
 
 
@@ -147,4 +116,4 @@ std::vector<unsigned int> getLowestIndizes(const std::vector<T>& list, unsigned 
 }
 
 
-#endif //AIOLOS_BASICFUNCTIONS_H
+#endif //AIOLOS_VECTORMATH_H

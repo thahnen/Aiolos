@@ -26,10 +26,10 @@
  *  Just to differentiate the possible implementations from the paper!
  */
 enum Implementation {
-    STANDARD = 0,           // Standard implementation => some values exist and some do not
-    SCHEME1,                // Scheme 1 => image gets rotated
-    SCHEME2,                // Scheme 2 => interpolation of nearby points
-    SCHEME3                 // Scheme 3 => interpolation and summary (?)
+    STANDARD = 0,                   // Standard implementation => some values exist and some do not
+    SCHEME1,                        // Scheme 1 => image gets rotated
+    SCHEME2,                        // Scheme 2 => interpolation of nearby points
+    SCHEME3                         // Scheme 3 => interpolation and summary (?)
 };
 
 
@@ -37,16 +37,22 @@ enum Implementation {
  *  Method to use for getting multiple dominant angles!
  */
 enum Method {
-    SPLIT_IMAGE = 0,        // splits the image in smaller images, work on their (one) dominant angle
-    TOP_2,                  // just returns the 2 most dominant angles
-    TOP_3,                  // just returns the 3 most dominant angles
-    MEDIAN,                 // works using the Median
-    AVERAGE,                // works using the average value
-    L_QUARTILE              // works using the lower quartile
+    SPLIT_IMAGE = 0,                // splits the image in smaller images, work on their (one) dominant angle
+    TOP_2,                          // just returns the 2 most dominant angles
+    TOP_3,                          // just returns the 3 most dominant angles
+    MEDIAN,                         // works using the Median
+    AVERAGE,                        // works using the average value
+    L_QUARTILE                      // works using the lower quartile
 };
 
 
 namespace GLCM {
+    // Type alias for the intervall (of angles)
+    typedef std::pair<std::uint8_t,     // lower boundary (included)
+                      std::uint8_t>     // upper boundary (included)
+            Range;
+
+
     /**
      *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
      *
@@ -58,6 +64,7 @@ namespace GLCM {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
     DLL unsigned int main_angle(const cv::Mat &image, Implementation impl, unsigned int max_r = 0);
+
 
     /**
      *  Calculates the one dominant texture orientation of an image.
@@ -72,7 +79,7 @@ namespace GLCM {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
     DLL unsigned int main_angle_range(const cv::Mat &image, Implementation impl,
-                                        std::pair<unsigned int, unsigned int> range, unsigned int max_r = 0);
+                                        Range range, unsigned int max_r = 0);
 
 
     /**
@@ -88,6 +95,7 @@ namespace GLCM {
      */
     DLL std::vector<unsigned int> main_angles(const cv::Mat &image, Implementation impl, Method meth, unsigned int max_r = 0);
 
+
     /**
      *  Calculates the dominant texture orientations of the image (one or more possible).
      *  Range of angles can be restricted by setting range to an interval [A,B] := { x ∈ ℝ | A ≤ x ≤ B }
@@ -102,7 +110,7 @@ namespace GLCM {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
     DLL std::vector<unsigned int> main_angles_range(const cv::Mat &image, Implementation impl, Method meth,
-                                                    std::pair<unsigned int, unsigned int> range, unsigned int max_r = 0);
+                                                    Range range, unsigned int max_r = 0);
 
 
     namespace CT {
@@ -133,7 +141,7 @@ namespace GLCM {
          *  See also main_angle()
          */
         DLL unsigned int main_angle_range(const cv::Mat &image, Implementation impl,
-                                        std::pair<unsigned int, unsigned int> range, unsigned int max_r = 0);
+                                            Range range, unsigned int max_r = 0);
     }
 }
 

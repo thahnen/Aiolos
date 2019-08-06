@@ -19,7 +19,9 @@ include_directories(./include)
 ########################################################################################################################
 add_library(${PROJECT_NAME}
         SHARED
-            include/util/BasicFunctions.h
+            include/util/VectorMath.h
+            include/util/MatrixFunctions.h
+            include/impl/Distribution.h
             include/impl/Scheme1.h
             include/impl/Scheme2.h
             include/impl/Scheme3.h
