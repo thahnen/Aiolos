@@ -14,7 +14,7 @@ using namespace cv;
  *      MAIN 1) TESTING DIFFERENCES STANDARD + SCHEME 2 ON EVERY IMAGE
  *
  **************************************************************************************************/
-int main1() {
+int main() {
     // Sea 400x400
     cout << "\nSea 400x400" << endl;
     Mat image = imread("../../test_images/sea_400x400.jpg");
@@ -27,22 +27,22 @@ int main1() {
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
 
     auto begin = chrono::steady_clock::now();
-    unsigned int main_angle = GLCM::main_angle(gray_image, STANDARD, 50);
+    unsigned int main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
         << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    unsigned int main_angle_ct = GLCM::CT::main_angle(gray_image, STANDARD, 50);
+    unsigned int main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
         << " Sec -> " << main_angle_ct << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    unsigned int main_angle2 = GLCM::main_angle(gray_image, SCHEME2, 50);
+    unsigned int main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
         << " Sec -> " << main_angle2 << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    unsigned int main_angle2_ct = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
+    unsigned int main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
         << " Sec -> " << main_angle2_ct << "°" << endl;
 
@@ -63,22 +63,22 @@ int main1() {
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
 
     begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(gray_image, STANDARD, 50);
+    main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, STANDARD, 50);
+    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle_ct << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2 = GLCM::main_angle(gray_image, SCHEME2, 50);
+    main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
+    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2_ct << "°" << endl;
 
@@ -99,22 +99,22 @@ int main1() {
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
 
     begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(gray_image, STANDARD, 50);
+    main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, STANDARD, 50);
+    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle_ct << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2 = GLCM::main_angle(gray_image, SCHEME2, 50);
+    main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
+    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2_ct << "°" << endl;
 
@@ -135,22 +135,22 @@ int main1() {
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
 
     begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(gray_image, STANDARD, 50);
+    main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, STANDARD, 50);
+    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle_ct << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2 = GLCM::main_angle(gray_image, SCHEME2, 50);
+    main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
+    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2_ct << "°" << endl;
 
@@ -171,22 +171,22 @@ int main1() {
     cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
 
     begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(gray_image, STANDARD, 50);
+    main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, STANDARD, 50);
+    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle_ct << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2 = GLCM::main_angle(gray_image, SCHEME2, 50);
+    main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
+    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2_ct << "°" << endl;
 
@@ -219,25 +219,25 @@ int main2() {
 
     // Haupt-Orientierung erhalten & Schemata vergleichen!
     auto begin = chrono::steady_clock::now();
-    unsigned int main_angle = GLCM::CT::main_angle(gray_image, STANDARD, 50);
+    unsigned int main_angle = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     begin = chrono::steady_clock::now();
-    unsigned int main_angle2 = GLCM::main_angle(gray_image, SCHEME2, 50);
+    unsigned int main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (RT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
 #define SCHEME2_TEST true
     begin = chrono::steady_clock::now();
-    unsigned int main_angle3 = GLCM::main_angle(gray_image, SCHEME2, 50);
+    unsigned int main_angle3 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (RT) v2: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     begin = chrono::steady_clock::now();
-    unsigned int main_angle4 = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
+    unsigned int main_angle4 = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     begin = chrono::steady_clock::now();
 #define SCHEME2_TEST_CT true
-    unsigned int main_angle5 = GLCM::CT::main_angle(gray_image, SCHEME2, 50);
+    unsigned int main_angle5 = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer (CT) v2: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     // Vegleich der beiden Möglichkeiten
@@ -255,7 +255,7 @@ int main2() {
  *      TODO: da kommt bisher irgendwie nur Mumpitz raus!
  *
  ***********************************************************************************************************************/
-int main() {
+int main3() {
     //VideoCapture cap("../../test_images/c.1W.avi");
     VideoCapture cap("../../test_images/c.2R.avi");
     if (!cap.isOpened()) {
@@ -273,13 +273,13 @@ int main() {
 
         if (frame.channels() == 1) cvtColor(frame, frame, COLOR_BGR2GRAY);
 
-        unsigned int main_angle = GLCM::CT::main_angle(frame, STANDARD, 50);
-        unsigned int main_angle2 = GLCM::CT::main_angle(frame, SCHEME2, 50);
+        unsigned int main_angle = GLCM::CT::main_angle_range_(frame, GLCM::STANDARD, GLCM::Range(10, 90), 50);
+        unsigned int main_angle2 = GLCM::CT::main_angle_range_(frame, GLCM::SCHEME2, GLCM::Range(10, 90), 50);
 
         cout << "Haupt-Orientierung: Std (CT): " << main_angle << "°, Sc2 (CT): " << main_angle2 << "°" << endl;
 
         vector<unsigned int> values{main_angle, main_angle2};
-        //showAngles(frame, values, true);
-        //waitKey(0);
+        showAngles(frame, values, true);
+        waitKey(0);
     }
 }

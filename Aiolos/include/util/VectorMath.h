@@ -8,16 +8,7 @@
 
 #include <vector>
 #include <numeric>
-
-
-/**
- *  To distinguish the different quantiles! (maybe put in another file with other enums)
- */
-enum class Quantil : std::uint8_t {
-    LOWER_QUARTILE = 0,
-    MIDDLE_QUARTILE,
-    UPPER_QUARTILE
-};
+#include "../impl/Enumerations.h"
 
 
 /**
@@ -32,7 +23,7 @@ enum class Quantil : std::uint8_t {
  *  TODO: Assert the list is not empty!
  */
 template <typename T>
-T getQuantileValue(const std::vector<T>& list, Quantil q) {
+T getQuantileValue(const std::vector<T>& list, GLCM::Quantil q) {
     // Copy vector and sort
     std::vector<T> sorted(list);
     std::sort(sorted.begin(), sorted.end());
@@ -41,12 +32,12 @@ T getQuantileValue(const std::vector<T>& list, Quantil q) {
 
     auto len = list.size();
     switch (q) {
-        case Quantil::LOWER_QUARTILE:
+        case GLCM::LOWER_QUARTILE:
             pos = len/4;
             if (len % 2 == 1) return sorted.at(pos);
-        case Quantil::MIDDLE_QUARTILE:
+        case GLCM::MIDDLE_QUARTILE:
             pos = len/2;
-        case Quantil::UPPER_QUARTILE:
+        case GLCM::UPPER_QUARTILE:
             pos = len/2 + len/4;
     }
 
@@ -66,7 +57,7 @@ T getQuantileValue(const std::vector<T>& list, Quantil q) {
  */
 template <typename T>
 T getMedianValue(const std::vector<T>& list) {
-    return getQuantileValue(list, Quantil::MIDDLE_QUARTILE);
+    return getQuantileValue(list, GLCM::MIDDLE_QUARTILE);
 }
 
 
