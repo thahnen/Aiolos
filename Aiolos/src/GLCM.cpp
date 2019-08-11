@@ -20,7 +20,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
+    unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r) {
         return main_angle_range(image, impl, Range(0, 180), max_r);
     }
 
@@ -37,7 +37,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    unsigned int main_angle_range(const cv::Mat& image, Implementation impl, const GLCM::Range& range,
+    unsigned int main_angle_range(const cv::Mat& image, GLCM::Implementation impl, const GLCM::Range& range,
                                     unsigned int max_r) {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
@@ -61,7 +61,8 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    std::vector<unsigned int> main_angles(const cv::Mat& image, Implementation impl, Method meth, unsigned int max_r) {
+    std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, Method meth,
+                                            unsigned int max_r) {
         return main_angles_range(image, impl, meth, Range(0, 180), max_r);
     }
 
@@ -80,7 +81,7 @@ namespace GLCM {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      *  TODO: Schleifen wenn möglich parallelisieren (ich weiss nicht genau, ob das so richtig ist)
      */
-    std::vector<unsigned int> main_angles_range(const cv::Mat& image, Implementation impl, Method meth,
+    std::vector<unsigned int> main_angles_range(const cv::Mat& image, GLCM::Implementation impl, Method meth,
                                                     const GLCM::Range& range, unsigned int max_r) {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 
@@ -136,7 +137,7 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
+        unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r) {
             return main_angle_range_(image, impl, Range(0, 180), max_r);
         }
 
@@ -153,7 +154,7 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        unsigned int main_angle_range_(const cv::Mat& image, Implementation impl, const GLCM::Range& range,
+        unsigned int main_angle_range_(const cv::Mat& image, GLCM::Implementation impl, const GLCM::Range& range,
                                             unsigned int max_r) {
             unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
 

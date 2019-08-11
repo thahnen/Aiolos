@@ -55,7 +55,7 @@ void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distributi
 
         #pragma omp parallel for reduction(+:value)
         for (unsigned int r = 1; r <= max_radius; r++) {
-            unsigned int max_gray = max_gray_value(image);
+            int max_gray = max_gray_value(image);
             cv::Mat1d glcm(max_gray, max_gray, 0.0);
 
             // Unterscheiden, welche Implementierung genommen wurde
@@ -123,7 +123,7 @@ void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distr
 
         #pragma omp parallel for reduction(+:value)
         for (unsigned int r = 1; r <= max_radius; r++) {
-            unsigned int max_gray = max_gray_value(image);
+            int max_gray = max_gray_value(image);
             cv::Mat1d glcm(max_gray, max_gray, 0.0);
 
             // Unterscheiden, welche Implementierung genommen wurde
@@ -164,22 +164,23 @@ void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distr
 std::vector<double> getAngleDistribution_(const cv::Mat& image, GLCM::Implementation impl,
                                          unsigned int max_radius, const GLCM::Range& range) {
     std::vector<double> orientation_distribution(range.second - range.first);
+    auto begin = static_cast<unsigned int>(range.first);
 
     switch (image.type() & CV_MAT_DEPTH_MASK) {
         case CV_8SC1:
-            calc_angle_dist_((cv::Mat_<char>&) image, orientation_distribution, impl, max_radius, (unsigned int)range.first);
+            calc_angle_dist_((cv::Mat_<char>&) image, orientation_distribution, impl, max_radius, begin);
             break;
         case CV_8UC1:
-            calc_angle_dist_((cv::Mat_<uchar>&) image, orientation_distribution, impl, max_radius, (unsigned int)range.first);
+            calc_angle_dist_((cv::Mat_<uchar>&) image, orientation_distribution, impl, max_radius, begin);
             break;
         case CV_16SC1:
-            calc_angle_dist_((cv::Mat_<short>&) image, orientation_distribution, impl, max_radius, (unsigned int)range.first);
+            calc_angle_dist_((cv::Mat_<short>&) image, orientation_distribution, impl, max_radius, begin);
             break;
         case CV_16UC1:
-            calc_angle_dist_((cv::Mat_<ushort>&) image, orientation_distribution, impl, max_radius, (unsigned int)range.first);
+            calc_angle_dist_((cv::Mat_<ushort>&) image, orientation_distribution, impl, max_radius, begin);
             break;
         case CV_32SC1:
-            calc_angle_dist_((cv::Mat_<int>&) image, orientation_distribution, impl, max_radius, (unsigned int)range.first);
+            calc_angle_dist_((cv::Mat_<int>&) image, orientation_distribution, impl, max_radius, begin);
             break;
         default:
             throw std::runtime_error("[getAngleDistribution_] Unsupported Mat-type!");

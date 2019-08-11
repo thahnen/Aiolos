@@ -33,7 +33,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r = 0);
+    DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
 
 
     /**
@@ -48,7 +48,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL unsigned int main_angle_range(const cv::Mat& image, Implementation impl, const GLCM::Range& range,
+    DLL unsigned int main_angle_range(const cv::Mat& image, GLCM::Implementation impl, const GLCM::Range& range,
                                         unsigned int max_r = 0);
 
 
@@ -63,7 +63,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, Implementation impl, Method meth,
+    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, Method meth,
                                                 unsigned int max_r = 0);
 
 
@@ -80,7 +80,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL std::vector<unsigned int> main_angles_range(const cv::Mat& image, Implementation impl, Method meth,
+    DLL std::vector<unsigned int> main_angles_range(const cv::Mat& image, GLCM::Implementation impl, Method meth,
                                                     const GLCM::Range& range, unsigned int max_r = 0);
 
 
@@ -95,7 +95,7 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        DLL unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r = 0);
+        DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
 
         /**
          *  Calculates the dominant texture orientation of an image.
@@ -111,7 +111,7 @@ namespace GLCM {
          *
          *  See also main_angle()
          */
-        DLL unsigned int main_angle_range_(const cv::Mat& image, Implementation impl, const GLCM::Range& range,
+        DLL unsigned int main_angle_range_(const cv::Mat& image, GLCM::Implementation impl, const GLCM::Range& range,
                                             unsigned int max_r = 0);
     }
 }

@@ -15,7 +15,7 @@ include_directories(./include)
 
 ########################################################################################################################
 #       BUILD OPTIONS FOR CREATING A SHARED LIBRARY
-#       TODO: Runs into exit code 127 => no Problem!
+#       REVIEW: Exit code 127 is normal (because no "program" is run afterwards)
 ########################################################################################################################
 add_library(${PROJECT_NAME}
         SHARED

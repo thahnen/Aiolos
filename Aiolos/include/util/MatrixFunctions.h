@@ -6,6 +6,7 @@
 #ifndef AIOLOS_MATRIXFUNCTIONS_H
 #define AIOLOS_MATRIXFUNCTIONS_H
 
+#include <limits>
 #include <opencv2/opencv.hpp>
 
 
@@ -16,25 +17,25 @@
  *  @return             the value
  *
  *  REVIEW: Usage does not depend on specific Mat-Type
- *  REVIEW: Assertion only positive values used in image
+ *  REVIEW: Assertion: correct maximum values
  */
-unsigned int max_gray_value(const cv::Mat& image) {
+int max_gray_value(const cv::Mat& image) {
     switch (image.type() & CV_MAT_DEPTH_MASK) {
         case CV_8S:
             // (signed) char    -> 2^7 highest value
-            return 128;
+            return static_cast<int>(std::numeric_limits<char>::max());
         case CV_8U:
             // unsigned char    -> 2^8 highest value
-            return 256;
+            return static_cast<int>(std::numeric_limits<unsigned char>::max());
         case CV_16S:
             // (signed) short   -> 2^15 highest value
-            return 32768;
+            return static_cast<int>(std::numeric_limits<short>::max());
         case CV_16U:
             // unsigned short   -> 2^16 highest value
-            return 65536;
+            return static_cast<int>(std::numeric_limits<unsigned short>::max());
         case CV_32S:
             // (signed) int     -> 2^31 highest value
-            return 2147483648;
+            return std::numeric_limits<int>::max();
         default:
             throw std::runtime_error("[max_gray_value] Unsupported Mat-type!");
     }
