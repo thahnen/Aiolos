@@ -8,7 +8,7 @@
 
 
 namespace GLCM {
-    // Type alias for the intervall (of angles)
+    /** Type alias for the intervall (of angles) */
     typedef std::pair<std::uint8_t,     // lower boundary (included)
                       std::uint8_t>     // upper boundary (included)
             Range;
@@ -42,9 +42,9 @@ namespace GLCM {
      *  To distinguish the different quantiles! (maybe put in another file with other enums)
      */
     enum Quantil {
-        LOWER_QUARTILE = 0,
-        MIDDLE_QUARTILE,
-        UPPER_QUARTILE
+        LOWER_QUARTILE = 0,             // 0.25 quantile
+        MIDDLE_QUARTILE,                // 0.5 quantile
+        UPPER_QUARTILE                  // 0.75 quantile
     };
 }
 

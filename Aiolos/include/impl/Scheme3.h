@@ -22,7 +22,7 @@ namespace Scheme3 {
      */
     [[deprecated("[Scheme3::Q] Not implemented yet!")]]
     unsigned int norm(const cv::Mat& image, double r, double theta) {
-        throw std::runtime_error("[Scheme1::norm] Not implemented yet!");
+        throw std::runtime_error("[Scheme3::norm] Not implemented yet!");
     }
 
 

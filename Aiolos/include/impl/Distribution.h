@@ -48,6 +48,7 @@ double concentration_degree(const cv::Mat1d& glcm) {
  */
 void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distribution, GLCM::Implementation impl,
                         unsigned int max_radius, unsigned int begin) {
+    // Outer loop beginning with range.first, ending after range.second
     #pragma omp parallel for
     for (unsigned int theta = begin; theta < begin + angle_distribution.size(); theta++) {
         double theta_rad = theta * CV_PI / 180;
@@ -71,7 +72,6 @@ void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distributi
                     break;
                 case GLCM::STANDARD:
                     Standard::GLCM(image, glcm, r, theta_rad);
-                    break;
             }
 
             value += concentration_degree(glcm);
@@ -89,14 +89,21 @@ void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distributi
  *  @param impl                     which implementation of the GLCM shall be used
  *  @param max_radius               the given maximum radius
  *  @param range                    the range, which angles shall be considered
- *  @return                         the filled vector of values
+ *  @return                         the filled vector of values (size: range.second - range.first + 1)
  *
  *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
  */
-std::vector<double> getAngleDistribution(const cv::Mat& image, GLCM::Implementation impl,
-                                            unsigned int max_radius, const GLCM::Range& range) {
-    std::vector<double> orientation_distribution(range.second - range.first);
-    calc_angle_dist(image, orientation_distribution, impl, max_radius, (unsigned int)range.first);
+std::vector<double> getAngleDistribution(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_radius,
+                                            const GLCM::Range& range) {
+    std::vector<double> orientation_distribution(range.second - range.first + 1);
+    calc_angle_dist(image, orientation_distribution, impl, max_radius, static_cast<unsigned int>(range.first));
+
+#if GLCM_DEBUG_ANGLE_DISTRIBUTION
+    for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
+        std::cout << "Winkel " << range.first + i << "°: " << orientation_distribution[i] << std::endl;
+    }
+#endif
+
     return orientation_distribution;
 }
 
@@ -116,6 +123,7 @@ std::vector<double> getAngleDistribution(const cv::Mat& image, GLCM::Implementat
 template <typename T>
 void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, GLCM::Implementation impl,
                       unsigned int max_radius, unsigned int begin) {
+    // Outer loop beginning with range.first, ending after range.second
     #pragma omp parallel for
     for (unsigned int theta = begin; theta < begin + angle_distribution.size(); theta++) {
         double theta_rad = theta * CV_PI / 180;
@@ -139,7 +147,6 @@ void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distr
                     break;
                 case GLCM::STANDARD:
                     Standard::GLCM_(image, glcm, r, theta_rad);
-                    break;
             }
 
             value += concentration_degree(glcm);
@@ -157,13 +164,13 @@ void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distr
  *  @param impl                     which implementation of the GLCM shall be used
  *  @param max_radius               the given maximum radius
  *  @param range                    the range, which angles shall be considered
- *  @return                         the filled vector of values
+ *  @return                         the filled vector of values  (size: range.second - range.first + 1)
  *
  *  REVIEW: Use when Mat-Type is known by compile time!
  */
-std::vector<double> getAngleDistribution_(const cv::Mat& image, GLCM::Implementation impl,
-                                         unsigned int max_radius, const GLCM::Range& range) {
-    std::vector<double> orientation_distribution(range.second - range.first);
+std::vector<double> getAngleDistribution_(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_radius,
+                                            const GLCM::Range& range) {
+    std::vector<double> orientation_distribution(range.second - range.first + 1);
     auto begin = static_cast<unsigned int>(range.first);
 
     switch (image.type() & CV_MAT_DEPTH_MASK) {
@@ -185,6 +192,12 @@ std::vector<double> getAngleDistribution_(const cv::Mat& image, GLCM::Implementa
         default:
             throw std::runtime_error("[getAngleDistribution_] Unsupported Mat-type!");
     }
+
+#if GLCM_DEBUG_ANGLE_DISTRIBUTION_CT
+    for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
+        std::cout << "Winkel " << range.first + i << "°: " << orientation_distribution[i] << std::endl;
+    }
+#endif
 
     return orientation_distribution;
 }

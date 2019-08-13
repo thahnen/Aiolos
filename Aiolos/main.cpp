@@ -14,7 +14,7 @@ using namespace cv;
  *      MAIN 1) TESTING DIFFERENCES STANDARD + SCHEME 2 ON EVERY IMAGE
  *
  **************************************************************************************************/
-int main() {
+int main1() {
     // Sea 400x400
     cout << "\nSea 400x400" << endl;
     Mat image = imread("../../test_images/sea_400x400.jpg");
@@ -255,7 +255,7 @@ int main2() {
  *      TODO: da kommt bisher irgendwie nur Mumpitz raus!
  *
  ***********************************************************************************************************************/
-int main3() {
+int main() {
     //VideoCapture cap("../../test_images/c.1W.avi");
     VideoCapture cap("../../test_images/c.2R.avi");
     if (!cap.isOpened()) {
