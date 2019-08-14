@@ -24,7 +24,51 @@ Needs following software installed:
 ---
 
 ## Functions
-TODO: which functions can be used from outside!
+### Runtime:
+
+Use the given functions at runtime when the type of matrix is not known!
+
+To get a single dominant angle of a given image one of these functions can be used.
+The second one can be used to restrict the range of angles which should be considered in the computation as it is faster but the result may differs.
+> There are different implementations of the GLCM calculation to choose from!
+
+```cpp
+unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0)
+unsigned int GLCM::main_angle_range(const cv::Mat& image, GLCM::Implementaion impl, const GLCM::Range& range, unsigned int max_r = 0)
+```
+
+To get multiple (or one) dominant angles of a given image one of these functions should be used!
+The second one can be used to restrict the range of angles which should be considered in the computation as it is faster but the results may differ.
+> There are different implementations of the GLCM calculation to choose from!
+> There are different methods of calculating the dominant angles to choose from!
+
+```cpp
+std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, unsigned int max_r = 0)
+std::vector<unsigned int> GLCM::main_angles_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, const GLCM::Range& range, unsigned int max_r = 0);
+```
+
+### Compile time:
+
+Use the given functions at compile time when the type of matrix is definitely known!
+
+To get a single dominant angle of a given image one of these functions can be used.
+The second one can be used to restrict the range of angles which should be considered in the computation as it is faster but the result may differs.
+> There are different implementations of the GLCM calculation to choose from!
+
+```cpp
+unsigned int GLCM::CT::main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0)
+unsigned int GLCM::CT::main_angle_range(const cv::Mat& image, GLCM::Implementaion impl, const GLCM::Range& range, unsigned int max_r = 0)
+```
+
+To get multiple (or one) dominant angles of a given image one of these functions should be used!
+The second one can be used to restrict the range of angles which should be considered in the computation as it is faster but the results may differ.
+> There are different implementations of the GLCM calculation to choose from!
+> There are different methods of calculating the dominant angles to choose from!
+
+```cpp
+std::vector<unsigned int> GLCM::CT::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, unsigned int max_r = 0)
+std::vector<unsigned int> GLCM::CT::main_angles_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, const GLCM::Range& range, unsigned int max_r = 0);
+```
 
 ---
 

@@ -190,7 +190,7 @@ std::vector<double> getAngleDistribution_(const cv::Mat& image, GLCM::Implementa
             calc_angle_dist_((cv::Mat_<int>&) image, orientation_distribution, impl, max_radius, begin);
             break;
         default:
-            throw std::runtime_error("[getAngleDistribution_] Unsupported Mat-type!");
+            throw std::logic_error("[getAngleDistribution_] Unsupported Mat-type!");
     }
 
 #if GLCM_DEBUG_ANGLE_DISTRIBUTION_CT

@@ -22,7 +22,7 @@ namespace Scheme3 {
      */
     [[deprecated("[Scheme3::Q] Not implemented yet!")]]
     unsigned int norm(const cv::Mat& image, double r, double theta) {
-        throw std::runtime_error("[Scheme3::norm] Not implemented yet!");
+        throw std::logic_error("[Scheme3::norm] Not implemented yet!");
     }
 
 
@@ -37,7 +37,7 @@ namespace Scheme3 {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
     void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
-        throw std::runtime_error("[Scheme3::GLCM] Not implemented yet!");
+        throw std::logic_error("[Scheme3::GLCM] Not implemented yet!");
     }
 
 
@@ -54,7 +54,7 @@ namespace Scheme3 {
      */
     template <typename T>
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
-        throw std::runtime_error("[Scheme3::GLCM_] Not implemented yet!");
+        throw std::logic_error("[Scheme3::GLCM_] Not implemented yet!");
     }
 }
 

@@ -21,7 +21,7 @@ namespace Scheme1 {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
     void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
-        throw std::runtime_error("[Scheme1::GLCM] Not implemented yet!");
+        throw std::logic_error("[Scheme1::GLCM] Not implemented yet!");
     }
 
 
@@ -38,7 +38,7 @@ namespace Scheme1 {
      */
     template <typename T>
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
-        throw std::runtime_error("[Scheme1::GLCM_] Not implemented yet!");
+        throw std::logic_error("[Scheme1::GLCM_] Not implemented yet!");
     }
 }
 

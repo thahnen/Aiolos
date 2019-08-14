@@ -8,7 +8,9 @@
 
 
 namespace GLCM {
-    /** Type alias for the intervall (of angles) */
+    /**
+     * Type alias for the intervall (of angles)
+     */
     typedef std::pair<std::uint8_t,     // lower boundary (included)
                       std::uint8_t>     // upper boundary (included)
             Range;

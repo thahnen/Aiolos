@@ -19,6 +19,7 @@ namespace Standard {
      *  @return             the number of pixel pairs which fullfill the condition
      *
      *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
+     *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
     unsigned int norm(const cv::Mat& image, double r, double theta) {
         unsigned int value = 0;
@@ -52,6 +53,7 @@ namespace Standard {
      *  @param theta        the angle, the GLCM is based on (in radiant!)
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
+     *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
     void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
         double dist_x = r*cos(theta);
@@ -83,7 +85,7 @@ namespace Standard {
                         glcm(image.at<int>(y, x), image.at<int>(y2, x2))++;
                         break;
                     default:
-                        throw std::runtime_error("[Standard::GLCM] Unsupported Mat-type!");
+                        throw std::logic_error("[Standard::GLCM] Unsupported Mat-type!");
                 }
             }
         }
@@ -110,6 +112,7 @@ namespace Standard {
      *  @param theta        the angle, the GLCM is based on (in radiant!)
      *
      *  REVIEW: Use when T is known by compile time!
+     *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
     template <typename T>
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {

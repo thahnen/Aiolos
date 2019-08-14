@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 1.0.0
+        VERSION 1.5.0
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -15,7 +15,7 @@ include_directories(./include)
 
 ########################################################################################################################
 #       BUILD OPTIONS FOR CREATING A SHARED LIBRARY
-#       REVIEW: Exit code 127 is normal (because no "program" is run afterwards)
+#       REVIEW: Exit code 127 is normal (because no "program" is run after building)
 ########################################################################################################################
 add_library(${PROJECT_NAME}
         SHARED

@@ -17,7 +17,7 @@
  *  @return             the value
  *
  *  REVIEW: Usage does not depend on specific Mat-Type
- *  REVIEW: Assertion: correct maximum values
+ *  REVIEW: Assert correct maximum values using standard library!
  */
 int max_gray_value(const cv::Mat& image) {
     switch (image.type() & CV_MAT_DEPTH_MASK) {
