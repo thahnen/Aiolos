@@ -31,7 +31,7 @@ namespace GLCM {
      *  Method to use for getting multiple dominant angles!
      */
     enum Method {
-        SPLIT_IMAGE = 0,                // splits the image in smaller images, work on their (one) dominant angle
+        SPLIT_IMAGE_4 = 0,              // splits the image in smaller images, work on their (one) dominant angle
         TOP_2,                          // just returns the 2 most dominant angles
         TOP_3,                          // just returns the 3 most dominant angles
         MEDIAN,                         // works using the Median

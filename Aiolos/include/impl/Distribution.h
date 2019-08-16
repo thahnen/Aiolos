@@ -20,6 +20,8 @@
  *
  *  NOBUG: Do not change x/y to unsigned => would break everything!
  *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
+ *
+ *  TODO: add "double (*inc)(int, int)" as second parameter to make use of different increasing functions
  */
 double concentration_degree(const cv::Mat1d& glcm) {
     double value = 0;
@@ -48,6 +50,8 @@ double concentration_degree(const cv::Mat1d& glcm) {
  */
 void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distribution, GLCM::Implementation impl,
                         unsigned int max_radius, unsigned int begin) {
+    int max_gray = max_gray_value(image);
+
     // Outer loop beginning with range.first, ending after range.second
     #pragma omp parallel for
     for (unsigned int theta = begin; theta < begin + angle_distribution.size(); theta++) {
@@ -56,10 +60,9 @@ void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distributi
 
         #pragma omp parallel for reduction(+:value)
         for (unsigned int r = 1; r <= max_radius; r++) {
-            int max_gray = max_gray_value(image);
             cv::Mat1d glcm(max_gray, max_gray, 0.0);
 
-            // Unterscheiden, welche Implementierung genommen wurde
+            // Which implementation of the paper shall be used!
             switch (impl) {
                 case GLCM::SCHEME1:
                     Scheme1::GLCM(image, glcm, r, theta_rad);
@@ -123,6 +126,8 @@ std::vector<double> getAngleDistribution(const cv::Mat& image, GLCM::Implementat
 template <typename T>
 void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, GLCM::Implementation impl,
                       unsigned int max_radius, unsigned int begin) {
+    int max_gray = max_gray_value(image);
+
     // Outer loop beginning with range.first, ending after range.second
     #pragma omp parallel for
     for (unsigned int theta = begin; theta < begin + angle_distribution.size(); theta++) {
@@ -131,10 +136,9 @@ void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distr
 
         #pragma omp parallel for reduction(+:value)
         for (unsigned int r = 1; r <= max_radius; r++) {
-            int max_gray = max_gray_value(image);
             cv::Mat1d glcm(max_gray, max_gray, 0.0);
 
-            // Unterscheiden, welche Implementierung genommen wurde
+            // Which implementation of the paper shall be used!
             switch (impl) {
                 case GLCM::SCHEME1:
                     Scheme1::GLCM_(image, glcm, r, theta_rad);

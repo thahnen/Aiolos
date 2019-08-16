@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 1.5.0
+        VERSION 1.5.5
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -19,7 +19,7 @@ include_directories(./include)
 ########################################################################################################################
 add_library(${PROJECT_NAME}
         SHARED
-            include/util/VectorMath.h
+            include/util/VectorFunctions.h
             include/util/MatrixFunctions.h
             include/impl/Distribution.h
             include/impl/Scheme1.h
