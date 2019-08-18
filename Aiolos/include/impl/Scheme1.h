@@ -2,6 +2,7 @@
 // Created by thahnen on 28.06.19.
 //
 
+#pragma once
 #ifndef AIOLOS_SCHEME1_H
 #define AIOLOS_SCHEME1_H
 
@@ -9,7 +10,12 @@
 #include <opencv2/opencv.hpp>
 
 
-namespace Scheme1 {
+#if __cplusplus > 201402L
+namespace GLCM::Scheme1 {
+#else
+namespace GLCM { namespace Scheme1 {
+#endif
+
     /**
      *  Adjusted version for creating a single GLCM used by Scheme 1
      *
@@ -40,7 +46,12 @@ namespace Scheme1 {
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
         throw std::logic_error("[Scheme1::GLCM_] Not implemented yet!");
     }
+
+#if __cplusplus > 201402L
 }
+#else
+}}
+#endif
 
 
 #endif //AIOLOS_SCHEME1_H

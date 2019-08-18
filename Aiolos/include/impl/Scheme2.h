@@ -2,6 +2,7 @@
 // Created by thahnen on 28.06.19.
 //
 
+#pragma once
 #ifndef AIOLOS_SCHEME2_H
 #define AIOLOS_SCHEME2_H
 
@@ -11,7 +12,12 @@
 #include "Standard.h"
 
 
-namespace Scheme2 {
+#if __cplusplus > 201402L
+namespace GLCM::Scheme2 {
+#else
+namespace GLCM { namespace Scheme2 {
+#endif
+
     /**
      *  Adjusted version for creating a single GLCM used by Scheme 2
      *
@@ -280,7 +286,12 @@ namespace Scheme2 {
             }
         }
     }
+
+#if __cplusplus > 201402L
 }
+#else
+}}
+#endif
 
 
 #endif //AIOLOS_SCHEME2_H

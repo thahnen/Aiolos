@@ -2,6 +2,7 @@
 // Created by thahnen on 28.06.19.
 //
 
+#pragma once
 #ifndef AIOLOS_SCHEME3_H
 #define AIOLOS_SCHEME3_H
 
@@ -9,7 +10,12 @@
 #include <opencv2/opencv.hpp>
 
 
-namespace Scheme3 {
+#if __cplusplus > 201402L
+namespace GLCM::Scheme3 {
+#else
+namespace GLCM { namespace Scheme3 {
+#endif
+
     /**
      *  Adjusted Normalization factor for the GLCM used by Scheme 3 (equals the Scheme 3 Q-function from the paper)
      *
@@ -56,7 +62,12 @@ namespace Scheme3 {
     void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
         throw std::logic_error("[Scheme3::GLCM_] Not implemented yet!");
     }
+
+#if __cplusplus > 201402L
 }
+#else
+}}
+#endif
 
 
 #endif //AIOLOS_SCHEME3_H

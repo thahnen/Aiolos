@@ -2,22 +2,38 @@
 // Created by thahnen on 24.06.19.
 //
 
+#pragma once
 #ifndef AIOLOS_GLCM_H
 #define AIOLOS_GLCM_H
 
-#ifdef __GNUC__
-    #define DLL __attribute__ ((visibility("default")))
-#elif defined (WIN32)
-    #ifdef WIN_EXPORTS
-        #define DLL __declspec(dllexport)
-    #else
-        #define DLL __declspec(dllimport)
-    #endif
+#if defined (_WIN32) || defined (__CYGWIN__)
+#   if defined (WIN_EXPORT)
+#       if defined (__GNUC__)
+#           define DLL __attribute__ ((dllexport))
+#       elif defined (_MSC_VER)
+#           define DLL __declspec(dllexport)
+#       else
+#           error "No suitable Compiler (GCC / MSVC) used (Windows + WIN_EXPORT)!"
+#       endif
+#   else
+#       if defined (__GNUC__)
+#           define DLL __attribute__ ((dllimport))
+#       elif defined (_MSC_VER)
+#           define DLL __declspec(dllimport)
+#       else
+#           error "No suitable Compiler (GCC / MSVC) used (Windows)!"
+#       endif
+#   endif
 #else
-    #error "No suitable Compiler (GCC or MSVC) used!"
+#   if defined (__GNUC__)
+#       define DLL __attribute__ ((visibility("default")))
+#   else
+#       error "No suitable Compiler (GCC) used (non Windows)!"
+#   endif
 #endif
 
 #include <vector>
+
 #include <opencv2/opencv.hpp>
 #include "impl/Enumerations.h"
 

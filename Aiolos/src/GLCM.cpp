@@ -15,7 +15,7 @@ namespace GLCM {
      *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
      *  TODO: ggf inline vorschlagen?
      */
-    unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r) {
+    unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
         return main_angle_range(image, impl, Range(0, 179), max_r);
     }
 
@@ -23,8 +23,7 @@ namespace GLCM {
     /**
      *  Calculates the one dominant texture orientation of an image for specific angles.
      */
-    unsigned int main_angle_range(const cv::Mat& image, GLCM::Implementation impl, const GLCM::Range& range,
-                                    unsigned int max_r) {
+    unsigned int main_angle_range(const cv::Mat& image, Implementation impl, const Range& range, unsigned int max_r) {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
         std::vector<double> orientation_distribution = getAngleDistribution(image, impl, max_radius, range);
 
@@ -39,8 +38,7 @@ namespace GLCM {
      *  Calculates the dominant texture orientations of the image (one or more possible).
      *  TODO: ggf inline vorschlagen?
      */
-    std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
-                                            unsigned int max_r) {
+    std::vector<unsigned int> main_angles(const cv::Mat& image, Implementation impl, Method meth, unsigned int max_r) {
         return main_angles_range(image, impl, meth, Range(0, 179), max_r);
     }
 
@@ -51,8 +49,8 @@ namespace GLCM {
      *  TODO: Noch nicht eingefügte Möglichkeiten bedenken!
      *  TODO: Umstellen, da "orientation_dist" nicht in allen Fällen benötigt wird!
      */
-    std::vector<unsigned int> main_angles_range(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
-                                                    const GLCM::Range& range, unsigned int max_r) {
+    std::vector<unsigned int> main_angles_range(const cv::Mat& image, Implementation impl, Method meth,
+                                                    const Range& range, unsigned int max_r) {
         unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
         std::vector<unsigned int> angles;
 
@@ -79,7 +77,7 @@ namespace GLCM {
                 } else if (meth == AVERAGE) {
                     value = getAverageValue(orientation_dist);
                 } else if (meth == L_QUARTILE) {
-                    value = getQuantileValue(orientation_dist, GLCM::LOWER_QUARTILE);
+                    value = getQuantileValue(orientation_dist, LOWER_QUARTILE);
                 } else {
                     throw std::runtime_error("[GLCM::main_angles_range] Other Options not implemented yet!");
                 }
@@ -120,7 +118,7 @@ namespace GLCM {
          *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
          *  TODO: ggf inline vorschlagen?
          */
-        unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r) {
+        unsigned int main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
             return main_angle_range_(image, impl, Range(0, 179), max_r);
         }
 
@@ -128,8 +126,8 @@ namespace GLCM {
         /**
          *  Calculates the one dominant texture orientation of an image for specific angles.
          */
-        unsigned int main_angle_range_(const cv::Mat& image, GLCM::Implementation impl, const GLCM::Range& range,
-                                            unsigned int max_r) {
+        unsigned int main_angle_range_(const cv::Mat& image, Implementation impl, const Range& range,
+                                        unsigned int max_r) {
             unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
             std::vector<double> orientation_distribution = getAngleDistribution_(image, impl, max_radius, range);
 
@@ -144,8 +142,8 @@ namespace GLCM {
          *  Calculates the dominant texture orientations of the image (one or more possible).
          *  TODO: ggf inline vorschlagen?
          */
-        std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
-                                                  unsigned int max_r) {
+        std::vector<unsigned int> main_angles(const cv::Mat& image, Implementation impl, Method meth,
+                                                unsigned int max_r) {
             return main_angles_range_(image, impl, meth, Range(0, 179), max_r);
         }
 
@@ -156,8 +154,8 @@ namespace GLCM {
          *  TODO: Noch nicht eingefügte Möglichkeiten bedenken!
          *  TODO: Umstellen, da "orientation_dist" nicht in allen Fällen benötigt wird!
          */
-        std::vector<unsigned int> main_angles_range_(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
-                                                        const GLCM::Range& range, unsigned int max_r) {
+        std::vector<unsigned int> main_angles_range_(const cv::Mat& image, Implementation impl, Method meth,
+                                                        const Range& range, unsigned int max_r) {
             unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
             std::vector<unsigned int> angles;
 
@@ -184,7 +182,7 @@ namespace GLCM {
                     } else if (meth == AVERAGE) {
                         value = getAverageValue(orientation_dist);
                     } else if (meth == L_QUARTILE) {
-                        value = getQuantileValue(orientation_dist, GLCM::LOWER_QUARTILE);
+                        value = getQuantileValue(orientation_dist, LOWER_QUARTILE);
                     } else {
                         throw std::runtime_error("[GLCM::main_angles_range] Other Options not implemented yet!");
                     }

@@ -9,7 +9,16 @@
 #include <cmath>
 #include <vector>
 #include <numeric>
+
 #include "../impl/Enumerations.h"
+
+
+// TODO: add to namespace GLCM::Util?
+
+/**
+ *  CANNOT SPLIT FILE IN DEFINITION (.h) AND IMPLEMENTATION (.cpp)!
+ *  See: https://stackoverflow.com/questions/1724036/splitting-templated-c-classes-into-hpp-cpp-files-is-it-possible
+ */
 
 
 /**
@@ -59,7 +68,7 @@ T getQuantileValue(std::vector<T> list, GLCM::Quantil q) {
  *  @return             the median value
  */
 template <typename T>
-T getMedianValue(const std::vector<T>& list) {
+inline T getMedianValue(const std::vector<T>& list) {
     return getQuantileValue(list, GLCM::MIDDLE_QUARTILE);
 }
 

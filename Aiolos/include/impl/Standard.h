@@ -2,6 +2,7 @@
 // Created by thahnen on 01.07.19.
 //
 
+#pragma once
 #ifndef AIOLOS_STANDARD_H
 #define AIOLOS_STANDARD_H
 
@@ -9,7 +10,12 @@
 #include <opencv2/opencv.hpp>
 
 
-namespace Standard {
+#if __cplusplus > 201402L
+namespace GLCM::Standard {
+#else
+namespace GLCM { namespace Standard {
+#endif
+
     /**
      *  Standard normalization factor for the GLCM based on a condition (equals the standard Q-function from the paper)
      *
@@ -142,7 +148,12 @@ namespace Standard {
             }
         }
     }
+
+#if __cplusplus > 201402L
 }
+#else
+}}
+#endif
 
 
 #endif //AIOLOS_STANDARD_H

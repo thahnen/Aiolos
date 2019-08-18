@@ -6,6 +6,8 @@
 #ifndef AIOLOS_ENUMERATIONS_H
 #define AIOLOS_ENUMERATIONS_H
 
+#include <utility>
+
 
 namespace GLCM {
     /**

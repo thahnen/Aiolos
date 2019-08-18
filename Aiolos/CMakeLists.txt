@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 1.5.5
+        VERSION 1.6.5
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -15,13 +15,18 @@ include_directories(./include)
 
 ########################################################################################################################
 #       BUILD OPTIONS FOR CREATING A SHARED LIBRARY
+#       => Use "target_compile_definitions" to specify different build options!
+#
 #       REVIEW: Exit code 127 is normal (because no "program" is run after building)
 ########################################################################################################################
 add_library(${PROJECT_NAME}
         SHARED
             include/util/VectorFunctions.h
+            #src/util/VectorFunctions.cpp
             include/util/MatrixFunctions.h
+            src/util/MatrixFunctions.cpp
             include/impl/Distribution.h
+            #src/impl/Distribution.cpp
             include/impl/Scheme1.h
             include/impl/Scheme2.h
             include/impl/Scheme3.h
@@ -30,8 +35,8 @@ add_library(${PROJECT_NAME}
 
 set_target_properties(${PROJECT_NAME}
         PROPERTIES
-            CXX_VISIBILITY_PRESET hidden
             VERSION ${PROJECT_VERSION}
+            CXX_VISIBILITY_PRESET hidden
             PUBLIC_HEADER include/GLCM.h)
 
 target_include_directories(${PROJECT_NAME}
@@ -41,6 +46,8 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
         OpenMP::OpenMP_CXX
         ${OpenCV_LIBS})
+
+#target_compile_definitions(${PROJECT_NAME} ...)
 
 
 ########################################################################################################################
