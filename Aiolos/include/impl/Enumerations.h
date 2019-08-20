@@ -6,6 +6,10 @@
 #ifndef AIOLOS_ENUMERATIONS_H
 #define AIOLOS_ENUMERATIONS_H
 
+#ifndef __APPLE__
+    // on macOS, "std::uint8_t" is included in given files by default (no explicit include necessary)
+#   include <cstdint>
+#endif
 #include <utility>
 
 

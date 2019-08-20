@@ -58,7 +58,7 @@ namespace GLCM {
      */
     void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distribution, Implementation impl,
                          unsigned int max_radius, unsigned int begin) {
-        int max_gray = max_gray_value(image);
+        int max_gray = Util::max_gray_value(image);
 
         // Outer loop beginning with range.first, ending after range.second
         #pragma omp parallel for
@@ -134,7 +134,7 @@ namespace GLCM {
     template <typename T>
     void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, Implementation impl,
                           unsigned int max_radius, unsigned int begin) {
-        int max_gray = max_gray_value(image);
+        int max_gray = Util::max_gray_value(image);
 
         // Outer loop beginning with range.first, ending after range.second
         #pragma omp parallel for
@@ -148,16 +148,16 @@ namespace GLCM {
 
                 // Which implementation of the paper shall be used!
                 switch (impl) {
-                    case GLCM::SCHEME1:
+                    case SCHEME1:
                         Scheme1::GLCM_(image, glcm, r, theta_rad);
                         break;
-                    case GLCM::SCHEME2:
+                    case SCHEME2:
                         Scheme2::GLCM_(image, glcm, r, theta_rad);
                         break;
-                    case GLCM::SCHEME3:
+                    case SCHEME3:
                         Scheme3::GLCM_(image, glcm, r, theta_rad);
                         break;
-                    case GLCM::STANDARD:
+                    case STANDARD:
                         Standard::GLCM_(image, glcm, r, theta_rad);
                 }
 

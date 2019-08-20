@@ -14,7 +14,7 @@
  *  REVIEW: Usage does not depend on specific Mat-Type
  *  REVIEW: Assert correct maximum values using standard library!
  */
-int max_gray_value(const cv::Mat& image) {
+int GLCM::Util::max_gray_value(const cv::Mat& image) {
     switch (image.type() & CV_MAT_DEPTH_MASK) {
         case CV_8S:
             // (signed) char    -> 2^7 highest value
@@ -42,8 +42,8 @@ int max_gray_value(const cv::Mat& image) {
  *
  *  TODO: Parallelize for loop!
  */
-void split_image(const cv::Mat& image, std::vector<unsigned int>& angles, GLCM::Implementation impl,
-                 const GLCM::Range& range, unsigned int max_r, bool rt) {
+void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& angles, Implementation impl,
+                 const Range& range, unsigned int max_r, bool rt) {
     int middle_width = ceil(image.cols/2);
     int middle_height = ceil(image.rows/2);
 
