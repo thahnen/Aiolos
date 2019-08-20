@@ -15,6 +15,8 @@ using namespace cv;
  *
  **************************************************************************************************/
 int main1() {
+    cout << "OpenCV-Version: " << CV_VERSION << endl;
+
     // Sea 400x400
     cout << "\nSea 400x400" << endl;
     Mat image = imread("../../test_images/sea_400x400.jpg");
@@ -191,7 +193,7 @@ int main1() {
          << " Sec -> " << main_angle2_ct << "°" << endl;
 
     std::vector<unsigned int> values5{main_angle, main_angle_ct, main_angle2, main_angle2_ct};
-    showAngles(image, values5, true);
+    imshow("Main angles:", showAngles(image, values5, true));
     waitKey(0);
 
     return 0;
@@ -203,7 +205,10 @@ int main1() {
  *      MAIN 2) TESTING DIFFERENT IMPLEMENTATIONS OF STANDARD + SCHEME 2 (OPTIMIZING)
  *
  ***********************************************************************************************************************/
-int main2() {
+int main() {
+    cout << "OpenCV-Version: " << CV_VERSION << endl;
+    cout << "GCC-Version: " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << endl;
+
     //Mat image = imread("../../test_images/maps_texel_sea.png");
     //Mat image = imread("../../test_images/sar_highway.jpg");
     //Mat image = imread("../../test_images/sar_landebahn.png");
@@ -213,39 +218,33 @@ int main2() {
         cout << "Image not found or could not be loaded!" << endl;
         return 1;
     }
+    cout << "Image loaded!" << endl;
+
+    // Test works, does not work in Distribution.h !?
+    cv::Mat test(2500, 2500, CV_32F);
 
     Mat gray_image = image.clone();
-    cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
+    if (gray_image.channels() != 1) {
+        cvtColor(gray_image, gray_image, COLOR_BGR2GRAY);
+        cout << "Image changed to grayscale!" << endl;
+    }
 
     // Haupt-Orientierung erhalten & Schemata vergleichen!
     auto begin = chrono::steady_clock::now();
     unsigned int main_angle = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
     cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
-    begin = chrono::steady_clock::now();
-    unsigned int main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (RT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+    // Vegleich der beiden Möglichkeiten
+    cout << "Haupt-Orientierung: Std (CT): " << main_angle  << "°" << endl;
 
-#define SCHEME2_TEST true
-    begin = chrono::steady_clock::now();
-    unsigned int main_angle3 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (RT) v2: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
+    // Haupt-Orientierung erhalten & Schemata vergleichen!
     begin = chrono::steady_clock::now();
-    unsigned int main_angle4 = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-
-    begin = chrono::steady_clock::now();
-#define SCHEME2_TEST_CT true
-    unsigned int main_angle5 = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (CT) v2: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+    main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
+    cout << "Std-Dauer (RT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     // Vegleich der beiden Möglichkeiten
-    cout << "Haupt-Orientierung: Std (CT): " << main_angle << "°, Sc2 (RT): " << main_angle2 << "°, Sc2 (CT): " << main_angle4 << "°" << endl;
-
-
-    showAngle(image, main_angle, true);
-    waitKey(0);
+    cout << "Haupt-Orientierung: Std (RT): " << main_angle  << "°" << endl;
 }
 
 
@@ -255,7 +254,7 @@ int main2() {
  *      TODO: da kommt bisher irgendwie nur Mumpitz raus!
  *
  ***********************************************************************************************************************/
-int main() {
+int main3() {
     //VideoCapture cap("../../test_images/c.1W.avi");
     VideoCapture cap("../../test_images/c.2R.avi");
     if (!cap.isOpened()) {
@@ -271,7 +270,7 @@ int main() {
             break;
         }
 
-        if (frame.channels() == 1) cvtColor(frame, frame, COLOR_BGR2GRAY);
+        if (frame.channels() != 1) cvtColor(frame, frame, COLOR_BGR2GRAY);
 
         unsigned int main_angle = GLCM::CT::main_angle_range_(frame, GLCM::STANDARD, GLCM::Range(10, 90), 50);
         unsigned int main_angle2 = GLCM::CT::main_angle_range_(frame, GLCM::SCHEME2, GLCM::Range(10, 90), 50);
@@ -279,7 +278,7 @@ int main() {
         cout << "Haupt-Orientierung: Std (CT): " << main_angle << "°, Sc2 (CT): " << main_angle2 << "°" << endl;
 
         vector<unsigned int> values{main_angle, main_angle2};
-        showAngles(frame, values, true);
+        imshow("Main angles:" , showAngles(frame, values, true));
         waitKey(0);
     }
 }

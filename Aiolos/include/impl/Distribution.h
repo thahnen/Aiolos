@@ -58,17 +58,21 @@ namespace GLCM {
      */
     void calc_angle_dist(const cv::Mat& image, std::vector<double>& angle_distribution, Implementation impl,
                          unsigned int max_radius, unsigned int begin) {
-        int max_gray = Util::max_gray_value(image);
+        const int max_gray = Util::max_gray_value(image);
+
+        cv::Mat test1(40, 40, CV_64F);
+        cv::Mat test2(max_gray, max_gray, CV_64F); // works fine with 40x40
+
+        cv::Mat1d glcm(max_gray, max_gray);
 
         // Outer loop beginning with range.first, ending after range.second
-        #pragma omp parallel for
-        for (unsigned int theta = begin; theta < begin + angle_distribution.size(); theta++) {
-            double theta_rad = theta * CV_PI / 180;
+        #pragma omp parallel for private(glcm)
+        for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
+            double theta_rad = (begin + theta) * CV_PI / 180;
             double value = 0;
 
             #pragma omp parallel for reduction(+:value)
             for (unsigned int r = 1; r <= max_radius; r++) {
-                cv::Mat1d glcm(max_gray, max_gray, 0.0);
 
                 // Which implementation of the paper shall be used!
                 switch (impl) {
@@ -134,34 +138,36 @@ namespace GLCM {
     template <typename T>
     void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, Implementation impl,
                           unsigned int max_radius, unsigned int begin) {
-        int max_gray = Util::max_gray_value(image);
+        const int max_gray = Util::max_gray_value(image);
+        //cv::Mat1d glcm(max_gray, max_gray, 0.0);
+        auto glcm = new cv::Mat1d(max_gray, max_gray, 0.0);
+
 
         // Outer loop beginning with range.first, ending after range.second
         #pragma omp parallel for
-        for (unsigned int theta = begin; theta < begin + angle_distribution.size(); theta++) {
-            double theta_rad = theta * CV_PI / 180;
+        for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
+            const double theta_rad = (theta+begin) * CV_PI / 180;
             double value = 0;
 
             #pragma omp parallel for reduction(+:value)
             for (unsigned int r = 1; r <= max_radius; r++) {
-                cv::Mat1d glcm(max_gray, max_gray, 0.0);
 
                 // Which implementation of the paper shall be used!
                 switch (impl) {
                     case SCHEME1:
-                        Scheme1::GLCM_(image, glcm, r, theta_rad);
+                        Scheme1::GLCM_(image, *glcm, r, theta_rad);
                         break;
                     case SCHEME2:
-                        Scheme2::GLCM_(image, glcm, r, theta_rad);
+                        Scheme2::GLCM_(image, *glcm, r, theta_rad);
                         break;
                     case SCHEME3:
-                        Scheme3::GLCM_(image, glcm, r, theta_rad);
+                        Scheme3::GLCM_(image, *glcm, r, theta_rad);
                         break;
                     case STANDARD:
-                        Standard::GLCM_(image, glcm, r, theta_rad);
+                        Standard::GLCM_(image, *glcm, r, theta_rad);
                 }
 
-                value += concentration_degree(glcm);
+                value += concentration_degree(*glcm);
             }
 
             angle_distribution[theta] = value;

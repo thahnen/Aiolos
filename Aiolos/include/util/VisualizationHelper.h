@@ -16,7 +16,7 @@
  *  @param main_angle           the given angle to visualize
  *  @param referenceCoords      whether or not a coordinate system should be added
  */
-void showAngle(const cv::Mat& image, unsigned int main_angle, bool referenceCoords = false) {
+cv::Mat showAngle(const cv::Mat& image, unsigned int main_angle, bool referenceCoords = false) {
     cv::Mat canvas = image.clone();
     if (canvas.channels() == 1) cv::cvtColor(canvas, canvas, cv::COLOR_GRAY2BGR);
 
@@ -41,8 +41,7 @@ void showAngle(const cv::Mat& image, unsigned int main_angle, bool referenceCoor
     cv::Point p2(middle_x - length*cos(main_angle*CV_PI/180), middle_y - length*sin(main_angle*CV_PI/180));
     line(canvas, p1, p2, cv::Scalar(0, 0, 255), 5);
 
-    // Bild anzeigen
-    cv::imshow("Winkel: " + std::to_string(main_angle) + "°", canvas);
+    return canvas;
 }
 
 
@@ -53,7 +52,7 @@ void showAngle(const cv::Mat& image, unsigned int main_angle, bool referenceCoor
  *  @param main_angles          a vector of angles to visualize
  *  @param referenceCoords      whether or not a coordinate system should be added
  */
-void showAngles(const cv::Mat& image, std::vector<unsigned int> main_angles, bool referenceCoords = false) {
+cv::Mat showAngles(const cv::Mat& image, const std::vector<unsigned int>& main_angles, bool referenceCoords = false) {
     cv::Mat canvas = image.clone();
     if (canvas.channels() == 1) cv::cvtColor(canvas, canvas, cv::COLOR_GRAY2BGR);
 
@@ -80,8 +79,7 @@ void showAngles(const cv::Mat& image, std::vector<unsigned int> main_angles, boo
         line(canvas, p1, p2, cv::Scalar(0, 0, 255), 5);
     }
 
-    // Bild anzeigen
-    cv::imshow("Mehrere Winkel:", canvas);
+    return canvas;
 }
 
 

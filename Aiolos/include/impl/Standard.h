@@ -27,11 +27,11 @@ namespace GLCM { namespace Standard {
      *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
-    unsigned int norm(const cv::Mat& image, double r, double theta) {
+    unsigned int norm(const cv::Mat& image, const double r, const double theta) {
         unsigned int value = 0;
 
-        double dist_x = r*cos(theta);
-        double dist_y = r*sin(theta);
+        const double dist_x = r*cos(theta);
+        const double dist_y = r*sin(theta);
 
         #pragma omp parallel for collapse(2) reduction(+:value)
         for (unsigned int x = 0; x < image.cols; x++) {
@@ -61,9 +61,9 @@ namespace GLCM { namespace Standard {
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
-    void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
-        double dist_x = r*cos(theta);
-        double dist_y = r*sin(theta);
+    void GLCM(const cv::Mat& image, cv::Mat1d& glcm, const double r, const double theta) {
+        const double dist_x = r*cos(theta);
+        const double dist_y = r*sin(theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int y = 0; y < image.cols; y++) {
@@ -97,7 +97,7 @@ namespace GLCM { namespace Standard {
         }
 
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = norm(image, r, theta);
+        const unsigned int q = norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int i = 0; i < glcm.cols; i++) {
@@ -121,9 +121,9 @@ namespace GLCM { namespace Standard {
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
     template <typename T>
-    void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
-        double dist_x = r*cos(theta);
-        double dist_y = r*sin(theta);
+    void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, const double r, const double theta) {
+        const double dist_x = r*cos(theta);
+        const double dist_y = r*sin(theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int y = 0; y < image.cols; y++) {
@@ -139,7 +139,7 @@ namespace GLCM { namespace Standard {
         }
 
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = norm(image, r, theta);
+        const unsigned int q = norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
         for (unsigned int i = 0; i < glcm.cols; i++) {
