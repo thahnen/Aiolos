@@ -2,6 +2,7 @@
 // Created by Tobias Hahnen on 2019-08-07.
 //
 
+
 #pragma once
 #ifndef AIOLOS_ENUMERATIONS_H
 #define AIOLOS_ENUMERATIONS_H
@@ -10,7 +11,6 @@
     // on macOS, "std::uint8_t" is included in given files by default (no explicit include necessary)
 //#   include <cstdint>
 #endif
-//#include <utility> // auskommentiert, weil unter Linux nicht nötig!
 
 
 namespace GLCM {
@@ -18,9 +18,6 @@ namespace GLCM {
     typedef std::pair<std::uint8_t,     // lower boundary (included)
                       std::uint8_t>     // upper boundary (included)
             Range;
-
-    /// Type alias for a matrix containing only double
-    typedef std::vector<std::vector<double>> Matrix;
 
 
     /**

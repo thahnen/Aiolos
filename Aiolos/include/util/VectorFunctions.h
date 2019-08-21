@@ -2,11 +2,12 @@
 // Created by Tobias Hahnen on 2019-08-06.
 //
 
+
 #pragma once
 #ifndef AIOLOS_VECTORFUNCTIONS_H
 #define AIOLOS_VECTORFUNCTIONS_H
 
-#ifdef AIOLOS_BUILD_NO_ASSERT
+#ifdef AIOLOS_FEATURE_NO_ASSERT
     // use build option to disable assert!
 #   define NDEBUG
 #endif
@@ -17,11 +18,12 @@
 #   include <stdexcept>
 #   include <cassert>
 #endif
-#include <cmath> // auskommentiert, weil unter Linux nicht nötig!
+#include <cmath>
 #include <vector>
 #include <numeric>
 
 #include "../impl/Enumerations.h"
+
 
 /**
  *  CANNOT SPLIT FILE IN DEFINITION (.h) AND IMPLEMENTATION (.cpp)!

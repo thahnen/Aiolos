@@ -2,7 +2,6 @@
 // Created by thahnen on 30.07.19.
 //
 
-//#include <numeric>
 
 #include "util/VectorFunctions.h"
 #include "util/MatrixFunctions.h"
@@ -12,9 +11,9 @@
 
 /**
  *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
- *  TODO: ggf inline vorschlagen?
+ *  REVIEW: inline suggested!
  */
-unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
+inline unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
     return main_angle_range(image, impl, Range(0, 179), max_r);
 }
 
@@ -35,9 +34,10 @@ unsigned int GLCM::main_angle_range(const cv::Mat& image, Implementation impl, c
 
 /**
  *  Calculates the dominant texture orientations of the image (one or more possible).
- *  TODO: ggf inline vorschlagen?
+ *  REVIEW: inline suggested!
  */
-std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation impl, Method meth, unsigned int max_r) {
+inline std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation impl, Method meth,
+                                                    unsigned int max_r) {
     return main_angles_range(image, impl, meth, Range(0, 179), max_r);
 }
 
@@ -114,9 +114,9 @@ std::vector<unsigned int> GLCM::main_angles_range(const cv::Mat& image, Implemen
 
 /**
  *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
- *  TODO: ggf inline vorschlagen?
+ *  REVIEW: inline suggested!
  */
-unsigned int GLCM::CT::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
+inline unsigned int GLCM::CT::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
     return main_angle_range_(image, impl, Range(0, 179), max_r);
 }
 
@@ -138,9 +138,9 @@ unsigned int GLCM::CT::main_angle_range_(const cv::Mat& image, Implementation im
 
 /**
  *  Calculates the dominant texture orientations of the image (one or more possible).
- *  TODO: ggf inline vorschlagen?
+ *  REVIEW: inline suggested!
  */
-std::vector<unsigned int> GLCM::CT::main_angles(const cv::Mat& image, Implementation impl, Method meth,
+inline std::vector<unsigned int> GLCM::CT::main_angles(const cv::Mat& image, Implementation impl, Method meth,
                                                     unsigned int max_r) {
     return main_angles_range_(image, impl, meth, Range(0, 179), max_r);
 }

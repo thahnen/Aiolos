@@ -270,10 +270,10 @@ int main() {
         if (frame.channels() != 1) cvtColor(frame, frame, COLOR_BGR2GRAY);
 
         auto begin = chrono::steady_clock::now();
-        unsigned int main_angle = GLCM::CT::main_angle_range_(frame, GLCM::STANDARD, GLCM::Range(10, 90), 50);
+        unsigned int main_angle = GLCM::CT::main_angle_range_(frame, GLCM::STANDARD, GLCM::Range(10, 70), 50);
         cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
-        //unsigned int main_angle2 = GLCM::CT::main_angle_range_(frame, GLCM::SCHEME2, GLCM::Range(10, 90), 50);
+        //unsigned int main_angle2 = GLCM::CT::main_angle_range_(frame, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
 
         cout << "Haupt-Orientierung: Std (CT): " << main_angle << /*"°, Sc2 (CT): " << main_angle2 <<*/ "°" << endl;
 

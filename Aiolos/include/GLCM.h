@@ -2,6 +2,7 @@
 // Created by thahnen on 24.06.19.
 //
 
+
 #pragma once
 #ifndef AIOLOS_GLCM_H
 #define AIOLOS_GLCM_H
@@ -32,9 +33,6 @@
 #   endif
 #endif
 
-//#include <vector> // auskommentiert, weil unter Linux nicht nötig!
-
-//#include <opencv2/opencv.hpp> // auskommentiert, weil unter Linux nicht nötig!
 #include "impl/Enumerations.h"
 
 
@@ -49,7 +47,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
+    DLL inline unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
 
 
     /**
@@ -79,7 +77,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+    DLL inline std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
                                                 unsigned int max_r = 0);
 
 
@@ -111,7 +109,7 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
+        DLL inline unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
 
         /**
          *  Calculates the one dominant texture orientation of an image for specific angles.
@@ -140,8 +138,8 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        DLL std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
-                                                    unsigned int max_r = 0);
+        DLL inline std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl,
+                                                            GLCM::Method meth, unsigned int max_r = 0);
 
 
         /**

@@ -13,6 +13,8 @@
  *
  *  REVIEW: Usage does not depend on specific Mat-Type
  *  REVIEW: Assert correct maximum values using standard library!
+ *
+ *  TODO: change to unsigned int again (?)
  */
 int GLCM::Util::max_gray_value(const cv::Mat& image) {
     switch (image.type() & CV_MAT_DEPTH_MASK) {

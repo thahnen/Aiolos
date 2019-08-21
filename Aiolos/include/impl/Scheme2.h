@@ -2,12 +2,10 @@
 // Created by thahnen on 28.06.19.
 //
 
+
 #pragma once
 #ifndef AIOLOS_SCHEME2_H
 #define AIOLOS_SCHEME2_H
-
-//#include <omp.h> // auskommentiert, weil unter Linux nicht nötig!
-//#include <opencv2/opencv.hpp> // auskommentiert, weil unter Linux nicht nötig!
 
 #include "Standard.h"
 
@@ -33,7 +31,7 @@ namespace GLCM { namespace Scheme2 {
         unsigned int dist_x = floor(r*cos(theta));
         unsigned int dist_y = floor(r*sin(theta));
 
-#if SCHEME2_TEST
+#if AIOLOS_TEST_SCHEME2_GLCM
         double c_1, c_2, c_3, c_4;
         {
             double a = (dist_x+1 - r*cos(theta));
@@ -82,7 +80,7 @@ namespace GLCM { namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if SCHEME2_DEBUG_GLCM
+#if AIOLOS_DEBUG_SCHEME2_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
@@ -103,7 +101,7 @@ namespace GLCM { namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if SCHEME2_DEBUG_GLCM
+#if AIOLOS_DEBUG_SCHEME2_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
@@ -124,7 +122,7 @@ namespace GLCM { namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if SCHEME2_DEBUG_GLCM
+#if AIOLOS_DEBUG_SCHEME2_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
@@ -145,7 +143,7 @@ namespace GLCM { namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if SCHEME2_DEBUG_GLCM
+#if AIOLOS_DEBUG_SCHEME2_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
@@ -166,7 +164,7 @@ namespace GLCM { namespace Scheme2 {
 
                         if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if SCHEME2_DEBUG_GLCM
+#if AIOLOS_DEBUG_SCHEME2_GLCM
                             #pragma omp critical
                             {
                                 std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
@@ -214,7 +212,7 @@ namespace GLCM { namespace Scheme2 {
         unsigned int dist_x = floor(r*cos(theta));
         unsigned int dist_y = floor(r*sin(theta));
 
-#if SCHEME2_TEST_CT
+#if AIOLOS_TEST_SCHEME2_GLCM_CT
         // Using this "version": a, b, c, d should only be calculated once
         double c_1, c_2, c_3, c_4;
         {
@@ -261,7 +259,7 @@ namespace GLCM { namespace Scheme2 {
 
                 if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if SCHEME2_DEBUG_GLCM_CT
+#if AIOLOS_DEBUG_SCHEME2_GLCM_CT
                     #pragma omp critical
                     {
                         std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4

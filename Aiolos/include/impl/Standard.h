@@ -2,12 +2,10 @@
 // Created by thahnen on 01.07.19.
 //
 
+
 #pragma once
 #ifndef AIOLOS_STANDARD_H
 #define AIOLOS_STANDARD_H
-
-//#include <omp.h> // auskommentiert, weil unter Linux nicht nötig!
-//#include <opencv2/opencv.hpp> // auskommentiert, weil unter Linux nicht nötig!
 
 
 #if __cplusplus > 201402L

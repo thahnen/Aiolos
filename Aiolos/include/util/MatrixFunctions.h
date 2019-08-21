@@ -2,11 +2,11 @@
 // Created by thahnen on 24.06.19.
 //
 
+
 #pragma once
 #ifndef AIOLOS_MATRIXFUNCTIONS_H
 #define AIOLOS_MATRIXFUNCTIONS_H
 
-//#include <vector> // auskommentiert, weil unter Linux nicht nötig!
 #include <opencv2/opencv.hpp>
 
 #include "impl/Enumerations.h"

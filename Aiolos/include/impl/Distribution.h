@@ -2,12 +2,11 @@
 // Created by Tobias Hahnen on 2019-08-06.
 //
 
+
 #pragma once
 #ifndef AIOLOS_DISTRIBUTION_H
 #define AIOLOS_DISTRIBUTION_H
 
-//#include "Enumerations.h" // auskommentiert, weil unter Linux nicht nötig!
-//#include "Standard.h" // auskommentiert, weil unter Linux nicht nötig!
 #include "Scheme1.h"
 #include "Scheme2.h"
 #include "Scheme3.h"
@@ -131,7 +130,7 @@ namespace GLCM {
         std::vector<double> orientation_distribution(range.second - range.first + 1);
         calc_angle_dist(image, orientation_distribution, impl, max_radius, static_cast<unsigned int>(range.first));
 
-#if GLCM_DEBUG_ANGLE_DISTRIBUTION
+#if AIOLOS_DEBUG_ANGLE_DISTRIBUTION
         for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
         std::cout << "Winkel " << range.first + i << "°: " << orientation_distribution[i] << std::endl;
     }
@@ -227,7 +226,7 @@ namespace GLCM {
                 throw std::logic_error("[getAngleDistribution_] Unsupported Mat-type!");
         }
 
-#if GLCM_DEBUG_ANGLE_DISTRIBUTION_CT
+#if AIOLOS_DEBUG_ANGLE_DISTRIBUTION_CT
         for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
         std::cout << "Winkel " << range.first + i << "°: " << orientation_distribution[i] << std::endl;
     }
