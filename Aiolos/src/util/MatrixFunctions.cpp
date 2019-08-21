@@ -18,19 +18,24 @@ int GLCM::Util::max_gray_value(const cv::Mat& image) {
     switch (image.type() & CV_MAT_DEPTH_MASK) {
         case CV_8S:
             // (signed) char    -> 2^7 highest value
-            return static_cast<int>(std::numeric_limits<char>::max());
+            //return static_cast<int>(std::numeric_limits<char>::max());
+            return 128;
         case CV_8U:
             // unsigned char    -> 2^8 highest value
-            return static_cast<int>(std::numeric_limits<unsigned char>::max());
+            //return static_cast<int>(std::numeric_limits<unsigned char>::max());
+            return 256;
         case CV_16S:
             // (signed) short   -> 2^15 highest value
-            return static_cast<int>(std::numeric_limits<short>::max());
+            //return static_cast<int>(std::numeric_limits<short>::max());
+            return 32768;
         case CV_16U:
             // unsigned short   -> 2^16 highest value
-            return static_cast<int>(std::numeric_limits<unsigned short>::max());
+            //return static_cast<int>(std::numeric_limits<unsigned short>::max());
+            return 65536;
         case CV_32S:
             // (signed) int     -> 2^31 highest value
-            return std::numeric_limits<int>::max();
+            //return std::numeric_limits<int>::max();
+            return 2147483648;
         default:
             throw std::runtime_error("[max_gray_value] Unsupported Mat-type!");
     }

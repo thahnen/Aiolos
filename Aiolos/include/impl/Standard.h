@@ -6,8 +6,8 @@
 #ifndef AIOLOS_STANDARD_H
 #define AIOLOS_STANDARD_H
 
-#include <omp.h>
-#include <opencv2/opencv.hpp>
+//#include <omp.h> // auskommentiert, weil unter Linux nicht nötig!
+//#include <opencv2/opencv.hpp> // auskommentiert, weil unter Linux nicht nötig!
 
 
 #if __cplusplus > 201402L
@@ -100,9 +100,9 @@ namespace GLCM { namespace Standard {
         const unsigned int q = norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
-        for (unsigned int i = 0; i < glcm.cols; i++) {
-            for (unsigned int j = 0; j < glcm.rows; j++) {
-                glcm(j, i) /= q;
+        for (unsigned int x = 0; x < glcm.cols; x++) {
+            for (unsigned int y = 0; y < glcm.rows; y++) {
+                glcm(y, x) /= q;
             }
         }
     }
@@ -142,9 +142,9 @@ namespace GLCM { namespace Standard {
         const unsigned int q = norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
-        for (unsigned int i = 0; i < glcm.cols; i++) {
-            for (unsigned int j = 0; j < glcm.rows; j++) {
-                glcm(j, i) /= q;
+        for (unsigned int x = 0; x < glcm.rows; x++) {
+            for (unsigned int y = 0; y < glcm.cols; y++) {
+                glcm(y, x) /= q;
             }
         }
     }

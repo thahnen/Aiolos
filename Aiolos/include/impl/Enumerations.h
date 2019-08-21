@@ -8,18 +8,19 @@
 
 #ifndef __APPLE__
     // on macOS, "std::uint8_t" is included in given files by default (no explicit include necessary)
-#   include <cstdint>
+//#   include <cstdint>
 #endif
-#include <utility>
+//#include <utility> // auskommentiert, weil unter Linux nicht nötig!
 
 
 namespace GLCM {
-    /**
-     * Type alias for the intervall (of angles)
-     */
+    /// Type alias for the intervall (of angles)
     typedef std::pair<std::uint8_t,     // lower boundary (included)
                       std::uint8_t>     // upper boundary (included)
             Range;
+
+    /// Type alias for a matrix containing only double
+    typedef std::vector<std::vector<double>> Matrix;
 
 
     /**

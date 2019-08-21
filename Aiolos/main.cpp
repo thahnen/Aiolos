@@ -205,8 +205,9 @@ int main1() {
  *      MAIN 2) TESTING DIFFERENT IMPLEMENTATIONS OF STANDARD + SCHEME 2 (OPTIMIZING)
  *
  ***********************************************************************************************************************/
-int main() {
+int main2() {
     cout << "OpenCV-Version: " << CV_VERSION << endl;
+    cout << "OpenMP-Version: " << _OPENMP << endl;
     cout << "GCC-Version: " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << endl;
 
     //Mat image = imread("../../test_images/maps_texel_sea.png");
@@ -219,9 +220,6 @@ int main() {
         return 1;
     }
     cout << "Image loaded!" << endl;
-
-    // Test works, does not work in Distribution.h !?
-    cv::Mat test(2500, 2500, CV_32F);
 
     Mat gray_image = image.clone();
     if (gray_image.channels() != 1) {
@@ -251,10 +249,9 @@ int main() {
 /***********************************************************************************************************************
  *
  *      MAIN 3) TESTING ON ACTUAL DATA (VIDEO)
- *      TODO: da kommt bisher irgendwie nur Mumpitz raus!
  *
  ***********************************************************************************************************************/
-int main3() {
+int main() {
     //VideoCapture cap("../../test_images/c.1W.avi");
     VideoCapture cap("../../test_images/c.2R.avi");
     if (!cap.isOpened()) {
@@ -272,13 +269,16 @@ int main3() {
 
         if (frame.channels() != 1) cvtColor(frame, frame, COLOR_BGR2GRAY);
 
+        auto begin = chrono::steady_clock::now();
         unsigned int main_angle = GLCM::CT::main_angle_range_(frame, GLCM::STANDARD, GLCM::Range(10, 90), 50);
-        unsigned int main_angle2 = GLCM::CT::main_angle_range_(frame, GLCM::SCHEME2, GLCM::Range(10, 90), 50);
+        cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
-        cout << "Haupt-Orientierung: Std (CT): " << main_angle << "°, Sc2 (CT): " << main_angle2 << "°" << endl;
+        //unsigned int main_angle2 = GLCM::CT::main_angle_range_(frame, GLCM::SCHEME2, GLCM::Range(10, 90), 50);
 
-        vector<unsigned int> values{main_angle, main_angle2};
-        imshow("Main angles:" , showAngles(frame, values, true));
-        waitKey(0);
+        cout << "Haupt-Orientierung: Std (CT): " << main_angle << /*"°, Sc2 (CT): " << main_angle2 <<*/ "°" << endl;
+
+        //vector<unsigned int> values{main_angle, main_angle2};
+        //imshow("Main angles:" , showAngles(frame, values, true));
+        //waitKey(0);
     }
 }

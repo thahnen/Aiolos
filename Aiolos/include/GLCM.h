@@ -32,9 +32,9 @@
 #   endif
 #endif
 
-#include <vector>
+//#include <vector> // auskommentiert, weil unter Linux nicht nötig!
 
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp> // auskommentiert, weil unter Linux nicht nötig!
 #include "impl/Enumerations.h"
 
 

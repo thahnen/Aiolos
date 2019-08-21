@@ -6,8 +6,8 @@
 #ifndef AIOLOS_DISTRIBUTION_H
 #define AIOLOS_DISTRIBUTION_H
 
-#include "Enumerations.h"
-#include "Standard.h"
+//#include "Enumerations.h" // auskommentiert, weil unter Linux nicht nötig!
+//#include "Standard.h" // auskommentiert, weil unter Linux nicht nötig!
 #include "Scheme1.h"
 #include "Scheme2.h"
 #include "Scheme3.h"
@@ -28,8 +28,6 @@ namespace GLCM {
      *
      *  NOBUG: Do not change x/y to unsigned => would break everything!
      *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
-     *
-     *  TODO: add "double (*inc)(int, int)" as second parameter to make use of different increasing functions
      */
     double concentration_degree(const cv::Mat1d& glcm) {
         double value = 0;
@@ -38,6 +36,30 @@ namespace GLCM {
         for (int x = 0; x < glcm.cols; x++) {
             for (int y = 0; y < glcm.rows; y++) {
                 value += ( pow((y+1)-(x+1), 2) * glcm(y, x) );
+            }
+        }
+
+        return value;
+    }
+
+
+    /**
+     *  Calculates the degree of concentration of a GLCM using an increasing function (equals the Z-function from the paper)
+     *
+     *  @param glcm         the GLCM, to work on
+     *  @param inc          the incresing function
+     *  @return             the degree of concentration
+     *
+     *  NOBUG: Do not change x/y to unsigned => would break everything!
+     *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
+     */
+    double concentration_degree(const cv::Mat1d& glcm, double (*inc)(int, int)) {
+        double value = 0;
+
+        #pragma omp parallel for collapse (2) reduction(+:value)
+        for (int x = 0; x < glcm.cols; x++) {
+            for (int y = 0; y < glcm.rows; y++) {
+                value += ( inc(x, y) * glcm(y, x) );
             }
         }
 
@@ -60,19 +82,15 @@ namespace GLCM {
                          unsigned int max_radius, unsigned int begin) {
         const int max_gray = Util::max_gray_value(image);
 
-        cv::Mat test1(40, 40, CV_64F);
-        cv::Mat test2(max_gray, max_gray, CV_64F); // works fine with 40x40
-
-        cv::Mat1d glcm(max_gray, max_gray);
-
         // Outer loop beginning with range.first, ending after range.second
-        #pragma omp parallel for private(glcm)
+        #pragma omp parallel for
         for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
             double theta_rad = (begin + theta) * CV_PI / 180;
             double value = 0;
 
             #pragma omp parallel for reduction(+:value)
             for (unsigned int r = 1; r <= max_radius; r++) {
+                cv::Mat1d glcm(max_gray, max_gray);
 
                 // Which implementation of the paper shall be used!
                 switch (impl) {
@@ -139,35 +157,33 @@ namespace GLCM {
     void calc_angle_dist_(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, Implementation impl,
                           unsigned int max_radius, unsigned int begin) {
         const int max_gray = Util::max_gray_value(image);
-        //cv::Mat1d glcm(max_gray, max_gray, 0.0);
-        auto glcm = new cv::Mat1d(max_gray, max_gray, 0.0);
-
 
         // Outer loop beginning with range.first, ending after range.second
         #pragma omp parallel for
         for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
-            const double theta_rad = (theta+begin) * CV_PI / 180;
-            double value = 0;
+            const double theta_rad = (begin + theta) * CV_PI / 180;
+            double value = 0.0;
 
             #pragma omp parallel for reduction(+:value)
             for (unsigned int r = 1; r <= max_radius; r++) {
+                cv::Mat1d glcm(max_gray, max_gray);
 
                 // Which implementation of the paper shall be used!
                 switch (impl) {
                     case SCHEME1:
-                        Scheme1::GLCM_(image, *glcm, r, theta_rad);
+                        Scheme1::GLCM_(image, glcm, r, theta_rad);
                         break;
                     case SCHEME2:
-                        Scheme2::GLCM_(image, *glcm, r, theta_rad);
+                        Scheme2::GLCM_(image, glcm, r, theta_rad);
                         break;
                     case SCHEME3:
-                        Scheme3::GLCM_(image, *glcm, r, theta_rad);
+                        Scheme3::GLCM_(image, glcm, r, theta_rad);
                         break;
                     case STANDARD:
-                        Standard::GLCM_(image, *glcm, r, theta_rad);
+                        Standard::GLCM_(image, glcm, r, theta_rad);
                 }
 
-                value += concentration_degree(*glcm);
+                value += concentration_degree(glcm);
             }
 
             angle_distribution[theta] = value;

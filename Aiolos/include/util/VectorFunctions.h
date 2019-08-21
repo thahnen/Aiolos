@@ -17,14 +17,11 @@
 #   include <stdexcept>
 #   include <cassert>
 #endif
-#include <cmath>
+#include <cmath> // auskommentiert, weil unter Linux nicht nötig!
 #include <vector>
 #include <numeric>
 
 #include "../impl/Enumerations.h"
-
-
-// TODO: add to namespace GLCM::Util?
 
 /**
  *  CANNOT SPLIT FILE IN DEFINITION (.h) AND IMPLEMENTATION (.cpp)!

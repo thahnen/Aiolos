@@ -6,13 +6,10 @@
 #ifndef AIOLOS_MATRIXFUNCTIONS_H
 #define AIOLOS_MATRIXFUNCTIONS_H
 
-#include <vector>
+//#include <vector> // auskommentiert, weil unter Linux nicht nötig!
 #include <opencv2/opencv.hpp>
 
 #include "impl/Enumerations.h"
-
-
-// TODO: add to namespace GLCM::Util?
 
 
 #if __cplusplus > 201402L

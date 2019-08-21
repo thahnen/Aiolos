@@ -6,8 +6,8 @@
 #ifndef AIOLOS_SCHEME2_H
 #define AIOLOS_SCHEME2_H
 
-#include <omp.h>
-#include <opencv2/opencv.hpp>
+//#include <omp.h> // auskommentiert, weil unter Linux nicht nötig!
+//#include <opencv2/opencv.hpp> // auskommentiert, weil unter Linux nicht nötig!
 
 #include "Standard.h"
 
