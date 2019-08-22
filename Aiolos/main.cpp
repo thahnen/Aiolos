@@ -1,8 +1,8 @@
 #include <iostream>
 #include <chrono>
 #include <opencv2/opencv.hpp>
-
 #include <GLCM.h>
+
 #include "util/VisualizationHelper.h"
 
 using namespace std;
@@ -252,8 +252,24 @@ int main2() {
  *
  ***********************************************************************************************************************/
 int main() {
-    //VideoCapture cap("../../test_images/c.1W.avi");
-    VideoCapture cap("../../test_images/c.2R.avi");
+    GLCM::FEATURES f = GLCM::getFeatures();
+    cout << "Aiolos library features: " << f.size() << endl;
+    if (f.size() > 0) {
+        for (auto ff : f) {
+            cout << "Feature: " << ff.first << " -> " << ff.second << endl;
+        }
+    }
+
+    GLCM::DEBUGS d = GLCM::getDebugs();
+    cout << "Aioloos library debug symbols: " << d.size() << endl;
+    if (d.size() > 0) {
+        for (auto dd : d) {
+            cout << "Debug symbol: " << dd.first << " -> " << dd.second << endl;
+        }
+    }
+
+    VideoCapture cap("../../test_videos/c.1W.avi");
+    //VideoCapture cap("../../test_videos/c.2R.avi");
     if (!cap.isOpened()) {
         cerr << "Video kann nicht wiedergegeben werden!" << endl;
         return 1;
@@ -278,7 +294,7 @@ int main() {
         cout << "Haupt-Orientierung: Std (CT): " << main_angle << /*"°, Sc2 (CT): " << main_angle2 <<*/ "°" << endl;
 
         //vector<unsigned int> values{main_angle, main_angle2};
-        //imshow("Main angles:" , showAngles(frame, values, true));
-        //waitKey(0);
+        imshow("Main angles:" , showAngle(frame, main_angle, true));
+        waitKey(0);
     }
 }

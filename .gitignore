@@ -10,3 +10,4 @@ CTestTestfile.cmake
 
 Aiolos/.idea/
 Aiolos/cmake-build-*/
+test_videos/keyframes/

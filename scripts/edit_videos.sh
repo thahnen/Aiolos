@@ -7,7 +7,7 @@ if [[ ! -d $VIDEO_DIR ]]; then
     exit 1
 fi
 
-## Values gathered from the existing test videos!
+## Values gathered from the existing test video (1W.avi)
 WIDTH=640
 HEIGHT=392
 

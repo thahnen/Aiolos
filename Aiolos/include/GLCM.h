@@ -47,7 +47,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL inline unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
+    DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
 
 
     /**
@@ -77,7 +77,7 @@ namespace GLCM {
      *
      *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
      */
-    DLL inline std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
                                                 unsigned int max_r = 0);
 
 
@@ -109,7 +109,8 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        DLL inline unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
+        DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
+
 
         /**
          *  Calculates the one dominant texture orientation of an image for specific angles.
@@ -138,8 +139,8 @@ namespace GLCM {
          *
          *  REVIEW: Use when Mat-Type is known by compile time!
          */
-        DLL inline std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl,
-                                                            GLCM::Method meth, unsigned int max_r = 0);
+        DLL std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+                                                    unsigned int max_r = 0);
 
 
         /**
@@ -159,6 +160,25 @@ namespace GLCM {
                                                             GLCM::Method meth, const GLCM::Range& range,
                                                             unsigned int max_r = 0);
     }
+
+
+    /**
+     *  Returns a list of all the preprocessor macros the library is compiled with
+     *  => which features can be expected from the library
+     *  => possible tests for future (or other implementations)
+     *
+     *  @return             vector with all feature macros set as string (can be empty)
+     */
+    DLL FEATURES getFeatures();
+
+
+    /**
+     *  Returns a list of all the preprocessor macros the library is compiled with
+     *  => which debug symbols are used to debug the functions
+     *
+     *  @return             vector with all debug symbols set as string (can be empty)
+     */
+    DLL DEBUGS getDebugs();
 }
 
 

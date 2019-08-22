@@ -3,6 +3,8 @@
 //
 
 
+#define MACRO(x) #x
+
 #include "util/VectorFunctions.h"
 #include "util/MatrixFunctions.h"
 #include "impl/Distribution.h"
@@ -11,9 +13,8 @@
 
 /**
  *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
- *  REVIEW: inline suggested!
  */
-inline unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
+unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
     return main_angle_range(image, impl, Range(0, 179), max_r);
 }
 
@@ -34,10 +35,8 @@ unsigned int GLCM::main_angle_range(const cv::Mat& image, Implementation impl, c
 
 /**
  *  Calculates the dominant texture orientations of the image (one or more possible).
- *  REVIEW: inline suggested!
  */
-inline std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation impl, Method meth,
-                                                    unsigned int max_r) {
+std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation impl, Method meth, unsigned int max_r) {
     return main_angles_range(image, impl, meth, Range(0, 179), max_r);
 }
 
@@ -53,7 +52,7 @@ std::vector<unsigned int> GLCM::main_angles_range(const cv::Mat& image, Implemen
     unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
     std::vector<unsigned int> angles;
 
-    if (meth == SPLIT_IMAGE_4) {
+    if (meth == SPLIT_IMAGE_2x2) {
         Util::split_image(image, angles, impl, range, max_radius);
         return angles;
     }
@@ -114,9 +113,8 @@ std::vector<unsigned int> GLCM::main_angles_range(const cv::Mat& image, Implemen
 
 /**
  *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
- *  REVIEW: inline suggested!
  */
-inline unsigned int GLCM::CT::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
+unsigned int GLCM::CT::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
     return main_angle_range_(image, impl, Range(0, 179), max_r);
 }
 
@@ -138,9 +136,8 @@ unsigned int GLCM::CT::main_angle_range_(const cv::Mat& image, Implementation im
 
 /**
  *  Calculates the dominant texture orientations of the image (one or more possible).
- *  REVIEW: inline suggested!
  */
-inline std::vector<unsigned int> GLCM::CT::main_angles(const cv::Mat& image, Implementation impl, Method meth,
+std::vector<unsigned int> GLCM::CT::main_angles(const cv::Mat& image, Implementation impl, Method meth,
                                                     unsigned int max_r) {
     return main_angles_range_(image, impl, meth, Range(0, 179), max_r);
 }
@@ -157,7 +154,7 @@ std::vector<unsigned int> GLCM::CT::main_angles_range_(const cv::Mat& image, Imp
     unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
     std::vector<unsigned int> angles;
 
-    if (meth == SPLIT_IMAGE_4) {
+    if (meth == SPLIT_IMAGE_2x2) {
         Util::split_image(image, angles, impl, range, max_radius, false);
         return angles;
     }
@@ -213,4 +210,65 @@ std::vector<unsigned int> GLCM::CT::main_angles_range_(const cv::Mat& image, Imp
     }
 
     return angles;
+}
+
+
+/**
+ *  Which features activated in library (support for multiple versions)
+ */
+GLCM::FEATURES GLCM::getFeatures() {
+    GLCM::FEATURES features{};
+    std::pair<std::string, std::string> f{};
+
+#ifdef AIOLOS_FEATURE_NO_ASSERT
+    f.first = MACRO(AIOLOS_FEATURE_NO_ASSERT);
+    f.second = "Disables all assertions using 'assert'!";
+    features.emplace_back(f);
+#endif
+
+#ifdef AIOLOS_TEST_SCHEME2_GLCM
+    f.first = MACRO(AIOLOS_TEST_SCHEME2_GLCM);
+    f.second = "Uses a slightly alternative calculation inside the (private) SCHEME2::GLCM (RT) function!";
+    features.emplace_back(f);
+#endif
+
+#ifdef AIOLOS_TEST_SCHEME2_GLCM_CT
+    f.first = MACRO(AIOLOS_TEST_SCHEME2_GLCM_CT);
+    f.second = "Uses a slightly alternative calculation inside the (private) SCHEME2::GLCM_ (CT) function!";
+    features.emplace_back(f);
+#endif
+
+    return features;
+}
+
+
+GLCM::DEBUGS GLCM::getDebugs() {
+    GLCM::DEBUGS debugs{};
+    std::pair<std::string, std::string> d{};
+
+#ifdef AIOLOS_DEBUG_ANGLE_DISTRIBUTION
+    d.first = MACRO(AIOLOS_DEBUG_ANGLE_DISTRIBUTION);
+    d.second = "Prints out the calculated value for every angle to debug the (private) GLCM::getAngleDistribution (RT) function";
+    debugs.emplace_back(d);
+#endif
+
+#ifdef AIOLOS_DEBUG_ANGLE_DISTRIBUTION_CT
+    d.first = MACRO(AIOLOS_DEBUG_ANGLE_DISTRIBUTION_CT);
+    d.second = "Prints out the calculated value for every angle to debug the (private) GLCM::getAngleDistribution_ (CT) function";
+    debugs.emplace_back(d)
+#endif
+
+#ifdef AIOLOS_DEBUG_SCHEME2_GLCM
+    d.first = MACRO(AIOLOS_DEBUG_SCHEME2_GLCM);
+    d.second = "Prints out the calculated G-values in comparison to the GLCM-Matrix-Size to debug the (private) SCHEME2::GLCM (RT) function";
+    debugs.emplace_back(d)
+#endif
+
+#ifdef AIOLOS_DEBUG_SCHEME2_GLCM_CT
+    d.first = MACRO(AIOLOS_DEBUG_SCHEME2_GLCM_CT);
+    d.second = "Prints out the calculated G-values in comparison to the GLCM-Matrix-Size to debug the (private) SCHEME2::GLCM_ (CT) function";
+    debugs.emplace_back(d)
+#endif
+
+    return debugs;
 }

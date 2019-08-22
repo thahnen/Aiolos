@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 1.8.0
+        VERSION 1.8.5
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -47,14 +47,16 @@ target_link_libraries(${PROJECT_NAME}
         OpenMP::OpenMP_CXX
         ${OpenCV_LIBS})
 
-#target_compile_definitions(${PROJECT_NAME} ...)
+#target_compile_definitions(${PROJECT_NAME} PUBLIC AIOLOS_FEATURE_NO_ASSERT)
+
+
+# After library is build, find it!
+find_library(Aiolos REQUIRED)
 
 
 ########################################################################################################################
 #       BUILD OPTIONS FOR RUNNING THE TEST PROGRAM
 ########################################################################################################################
-find_library(Aiolos REQUIRED)
-
 add_executable(Aiolos_Test
         include/util/VisualizationHelper.h
         main.cpp)
@@ -64,3 +66,33 @@ target_link_libraries(Aiolos_Test
             Aiolos
             OpenMP::OpenMP_CXX
             ${OpenCV_LIBS})
+
+
+########################################################################################################################
+#       BUILD OPTIONS FOR RUNNING THE TEST:
+#
+#           - target name:      Aiolos_test_keyframes_main_angle_range_
+#           - file:             keyframes.main_angle_range_.cpp
+#           - input type:       image (png), keyframes from video c.1W.avi
+#           - function:         main_angle_range_
+#           - implementation:   STANDARD + SCHEME2
+#           - methods:          -/-
+########################################################################################################################
+add_executable(Aiolos_test_keyframes_main_angle_range_
+        tests/keyframes.main_angle_range_.cpp)
+
+target_link_libraries(Aiolos_test_keyframes_main_angle_range_
+        PUBLIC
+            Aiolos)
+
+
+########################################################################################################################
+#       BUILD OPTIONS FOR RUNNING THE TEST:
+#
+#           - target name:      Aiolos_test_keyframes_main_angles_range_
+#           - file:             keyframes.main_angles_range_.cpp
+#           - input type:       image (png), keyframes from video c.1W.avi
+#           - function:         main_angles_range_
+#           - implementation:   STANDARD + SCHEME2
+#           - methods:          SPLIT_IMAGE_2x1 + SPLIT_IMAGE_3x1 + SPLIT_IMAGE_4x1
+########################################################################################################################
