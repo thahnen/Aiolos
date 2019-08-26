@@ -33,11 +33,12 @@ namespace GLCM { namespace Util {
      *  @param image        the given image
      *  @param angles       the returned vector of found angles
      *  @param impl         which implementation of the GLCM shall be used
+     *  @param meth         which of the splitting methods is used!
      *  @param range        interval of angles to consider!
      *  @param max_r        maximum radius
      */
-    void split_image(const cv::Mat& image, std::vector<unsigned int>& angles, Implementation impl, const Range& range,
-                        unsigned int max_r);
+    void split_image(const cv::Mat& image, std::vector<unsigned int>& angles, Implementation impl, Method meth,
+                        const Range& range, unsigned int max_r);
 
 #if __cplusplus > 201402L
 }

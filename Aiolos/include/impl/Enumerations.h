@@ -43,11 +43,13 @@ namespace GLCM {
         SPLIT_IMAGE_4x1,                // 4    ->  4 in width, 1 in height
 
                                         // statistical methods:
-        TOP_2,                          // just returns the 2 most dominant angles
-        TOP_3,                          // just returns the 3 most dominant angles
         MEDIAN,                         // works using the Median
         AVERAGE,                        // works using the average value
-        L_QUARTILE                      // works using the lower quartile
+        L_QUARTILE,                     // works using the lower quartile
+
+                                        // get the top N dominant angles:
+        TOP_2,                          // returns the 2 most dominant angles
+        TOP_3                           // returns the 3 most dominant angles
     };
 
 

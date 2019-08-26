@@ -11,17 +11,13 @@
 #include "GLCM.h"
 
 
-/**
- *  Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
- */
+/// Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
 unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
     return main_angle(image, impl, Range(0, 179), max_r);
 }
 
 
-/**
- *  Calculates the one dominant texture orientation of an image for specific angles.
- */
+/// Calculates the one dominant texture orientation of an image for specific angles.
 unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, const Range& range, unsigned int max_r) {
     unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
     std::vector<double> orientation_distribution = getAngleDistribution(image, impl, max_radius, range);
@@ -33,9 +29,7 @@ unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, const R
 }
 
 
-/**
- *  Calculates the dominant texture orientations of the image (one or more possible).
- */
+/// Calculates the dominant texture orientations of the image (one or more possible).
 std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation impl, Method meth, unsigned int max_r) {
     return main_angles(image, impl, meth, Range(0, 179), max_r);
 }
@@ -43,7 +37,6 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
 
 /**
  *  Calculates the dominant texture orientations of the image (one or more possible) for specific angles.
- *  TODO: Zusammenfassen GLCM::main_angles_range + GLCM::CT::main_angles_range_
  *  TODO: Noch nicht eingefügte Möglichkeiten bedenken!
  *  TODO: Umstellen, da "orientation_dist" nicht in allen Fällen benötigt wird!
  */
@@ -52,8 +45,11 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
     unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
     std::vector<unsigned int> angles;
 
-    if (meth == SPLIT_IMAGE_2x2) {
-        Util::split_image(image, angles, impl, range, max_radius);
+    // Test for image splitting method!
+    if (meth == SPLIT_IMAGE_2x2 || meth == SPLIT_IMAGE_3x3 || meth == SPLIT_IMAGE_4x4
+        || meth == SPLIT_IMAGE_1x2 || meth == SPLIT_IMAGE_1x3 || meth == SPLIT_IMAGE_1x4
+        || meth == SPLIT_IMAGE_2x1 || meth == SPLIT_IMAGE_3x1 || meth == SPLIT_IMAGE_4x1) {
+        Util::split_image(image, angles, impl, meth, range, max_radius);
         return angles;
     }
 
@@ -77,7 +73,7 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
             } else if (meth == L_QUARTILE) {
                 value = Util::getQuantileValue(orientation_dist, LOWER_QUARTILE);
             } else {
-                throw std::runtime_error("[GLCM::main_angles_range] Other Options not implemented yet!");
+                throw std::runtime_error("[GLCM::main_angles] Other Options not implemented yet!");
             }
 
             // TODO: Better parallelization -> see: https://stackoverflow.com/a/18671256
@@ -111,9 +107,7 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
 }
 
 
-/**
- *  Which features activated in library (support for multiple versions)
- */
+/// Which features activated in library (support for multiple versions)
 GLCM::FEATURES GLCM::getFeatures() {
     GLCM::FEATURES features{};
     std::pair<std::string, std::string> f{};
@@ -140,6 +134,7 @@ GLCM::FEATURES GLCM::getFeatures() {
 }
 
 
+/// Which debug symbols are set in library (for debugging)
 GLCM::DEBUGS GLCM::getDebugs() {
     GLCM::DEBUGS debugs{};
     std::pair<std::string, std::string> d{};

@@ -58,7 +58,7 @@ namespace GLCM {
         #pragma omp parallel for collapse (2) reduction(+:value)
         for (int x = 0; x < glcm.cols; x++) {
             for (int y = 0; y < glcm.rows; y++) {
-                value += ( inc(x, y) * glcm(y, x) );
+                value += ( inc(x+1, y+1) * glcm(y, x) );
             }
         }
 
@@ -75,7 +75,6 @@ namespace GLCM {
      *  @param impl                     which implementation of the GLCM shall be used
      *  @param max_radius               the given maximum radius
      *  @param begin                    the lowest angle, a GLCM shall be calculated for
-     *
      */
     template <typename T>
     void calc_angle_dist(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, Implementation impl,
@@ -146,7 +145,7 @@ namespace GLCM {
                 calc_angle_dist((cv::Mat_<int>&) image, orientation_distribution, impl, max_radius, begin);
                 break;
             default:
-                throw std::logic_error("[getAngleDistribution_] Unsupported Mat-type!");
+                throw std::logic_error("[GLCM::getAngleDistribution_] Unsupported Mat-type!");
         }
 
 #if AIOLOS_DEBUG_ANGLE_DISTRIBUTION_CT
