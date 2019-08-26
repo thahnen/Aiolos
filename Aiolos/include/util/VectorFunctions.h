@@ -18,6 +18,7 @@
 #   include <stdexcept>
 #   include <cassert>
 #endif
+
 #include <cmath>
 #include <vector>
 #include <numeric>

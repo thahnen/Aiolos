@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 1.8.5
+        VERSION 2.0.0
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -71,17 +71,17 @@ target_link_libraries(Aiolos_Test
 ########################################################################################################################
 #       BUILD OPTIONS FOR RUNNING THE TEST:
 #
-#           - target name:      Aiolos_test_keyframes_main_angle_range_
-#           - file:             keyframes.main_angle_range_.cpp
+#           - target name:      Aiolos_test_keyframes_main_angle
+#           - file:             keyframes.main_angle.cpp
 #           - input type:       image (png), keyframes from video c.1W.avi
-#           - function:         main_angle_range_
+#           - function:         main_angle
 #           - implementation:   STANDARD + SCHEME2
 #           - methods:          -/-
 ########################################################################################################################
-add_executable(Aiolos_test_keyframes_main_angle_range_
-        tests/keyframes.main_angle_range_.cpp)
+add_executable(Aiolos_test_keyframes_main_angle
+        tests/keyframes.main_angle.cpp)
 
-target_link_libraries(Aiolos_test_keyframes_main_angle_range_
+target_link_libraries(Aiolos_test_keyframes_main_angle
         PUBLIC
             Aiolos)
 
@@ -89,10 +89,10 @@ target_link_libraries(Aiolos_test_keyframes_main_angle_range_
 ########################################################################################################################
 #       BUILD OPTIONS FOR RUNNING THE TEST:
 #
-#           - target name:      Aiolos_test_keyframes_main_angles_range_
-#           - file:             keyframes.main_angles_range_.cpp
+#           - target name:      Aiolos_test_keyframes_main_angles
+#           - file:             keyframes.main_angles.cpp
 #           - input type:       image (png), keyframes from video c.1W.avi
-#           - function:         main_angles_range_
+#           - function:         main_angles
 #           - implementation:   STANDARD + SCHEME2
 #           - methods:          SPLIT_IMAGE_2x1 + SPLIT_IMAGE_3x1 + SPLIT_IMAGE_4x1
 ########################################################################################################################

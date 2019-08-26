@@ -34,21 +34,11 @@ int main1() {
         << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    unsigned int main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
-    cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-        << " Sec -> " << main_angle_ct << "°" << endl;
-
-    begin = chrono::steady_clock::now();
     unsigned int main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
         << " Sec -> " << main_angle2 << "°" << endl;
 
-    begin = chrono::steady_clock::now();
-    unsigned int main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-        << " Sec -> " << main_angle2_ct << "°" << endl;
-
-    std::vector<unsigned int> values{main_angle, main_angle_ct, main_angle2, main_angle2_ct};
+    std::vector<unsigned int> values{main_angle, main_angle2};
     showAngles(image, values, true);
     waitKey(0);
 
@@ -70,21 +60,11 @@ int main1() {
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
-    cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle_ct << "°" << endl;
-
-    begin = chrono::steady_clock::now();
     main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
-    begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle2_ct << "°" << endl;
-
-    std::vector<unsigned int> values2{main_angle, main_angle_ct, main_angle2, main_angle2_ct};
+    std::vector<unsigned int> values2{main_angle, main_angle2};
     showAngles(image, values2, true);
     waitKey(0);
 
@@ -106,21 +86,11 @@ int main1() {
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
-    cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle_ct << "°" << endl;
-
-    begin = chrono::steady_clock::now();
     main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
-    begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle2_ct << "°" << endl;
-
-    std::vector<unsigned int> values3{main_angle, main_angle_ct, main_angle2, main_angle2_ct};
+    std::vector<unsigned int> values3{main_angle, main_angle2};
     showAngles(image, values3, true);
     waitKey(0);
 
@@ -142,21 +112,11 @@ int main1() {
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
-    cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle_ct << "°" << endl;
-
-    begin = chrono::steady_clock::now();
     main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
-    begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle2_ct << "°" << endl;
-
-    std::vector<unsigned int> values4{main_angle, main_angle_ct, main_angle2, main_angle2_ct};
+    std::vector<unsigned int> values4{main_angle, main_angle2};
     showAngles(image, values4, true);
     waitKey(0);
 
@@ -178,21 +138,11 @@ int main1() {
          << " Sec -> " << main_angle << "°" << endl;
 
     begin = chrono::steady_clock::now();
-    main_angle_ct = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
-    cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle_ct << "°" << endl;
-
-    begin = chrono::steady_clock::now();
     main_angle2 = GLCM::main_angle(gray_image, GLCM::SCHEME2, 50);
     cout << "Sc2-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
          << " Sec -> " << main_angle2 << "°" << endl;
 
-    begin = chrono::steady_clock::now();
-    main_angle2_ct = GLCM::CT::main_angle(gray_image, GLCM::SCHEME2, 50);
-    cout << "Sc2-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count()
-         << " Sec -> " << main_angle2_ct << "°" << endl;
-
-    std::vector<unsigned int> values5{main_angle, main_angle_ct, main_angle2, main_angle2_ct};
+    std::vector<unsigned int> values5{main_angle, main_angle2};
     imshow("Main angles:", showAngles(image, values5, true));
     waitKey(0);
 
@@ -229,20 +179,11 @@ int main2() {
 
     // Haupt-Orientierung erhalten & Schemata vergleichen!
     auto begin = chrono::steady_clock::now();
-    unsigned int main_angle = GLCM::CT::main_angle(gray_image, GLCM::STANDARD, 50);
-    cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+    unsigned int main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
+    cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
     // Vegleich der beiden Möglichkeiten
-    cout << "Haupt-Orientierung: Std (CT): " << main_angle  << "°" << endl;
-
-
-    // Haupt-Orientierung erhalten & Schemata vergleichen!
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(gray_image, GLCM::STANDARD, 50);
-    cout << "Std-Dauer (RT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-
-    // Vegleich der beiden Möglichkeiten
-    cout << "Haupt-Orientierung: Std (RT): " << main_angle  << "°" << endl;
+    cout << "Haupt-Orientierung: Std: " << main_angle  << "°" << endl;
 }
 
 
@@ -286,12 +227,10 @@ int main() {
         if (frame.channels() != 1) cvtColor(frame, frame, COLOR_BGR2GRAY);
 
         auto begin = chrono::steady_clock::now();
-        unsigned int main_angle = GLCM::CT::main_angle_range_(frame, GLCM::STANDARD, GLCM::Range(10, 70), 50);
-        cout << "Std-Dauer (CT): " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
+        unsigned int main_angle = GLCM::main_angle(frame, GLCM::STANDARD, GLCM::Range(10, 70), 50);
+        cout << "Std-Dauer: " << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
 
-        //unsigned int main_angle2 = GLCM::CT::main_angle_range_(frame, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
-
-        cout << "Haupt-Orientierung: Std (CT): " << main_angle << /*"°, Sc2 (CT): " << main_angle2 <<*/ "°" << endl;
+        cout << "Haupt-Orientierung: Std: " << main_angle << "°" << endl;
 
         //vector<unsigned int> values{main_angle, main_angle2};
         imshow("Main angles:" , showAngle(frame, main_angle, true));

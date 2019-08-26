@@ -36,7 +36,7 @@ void paintBoxWithAngleAndText(Mat& image, unsigned int main_angle, unsigned int 
 }
 
 
-/// Case 1: Get dominant angles through 3x GLCM::CT::main_angle_range_(GLCM::STANDARD)
+/// Case 1: Get dominant angles through 3x GLCM::main_angle_range(GLCM::STANDARD)
 int main1() {
     Mat image = imread("../../test_videos/keyframes/c.1W.0001.png");    // ausgewählter Bereich: X: 0-510, Y: 55-160
     //Mat image = imread("../../test_videos/keyframes/c.1W.0002.png");    // ausgewählter Bereich: X: 0-510, Y: 55-160
@@ -62,17 +62,17 @@ int main1() {
     int s1_x1 = 0, s1_x2 = 169;
     int s1_y1 = 55, s1_y2 = 160;
     Mat sub1 = gray_image(Range(s1_y1, s1_y2), Range(s1_x1, s1_x2));
-    unsigned int s1_main_angle = GLCM::CT::main_angle_range_(sub1, GLCM::STANDARD, GLCM::Range(10, 70), 50);
+    unsigned int s1_main_angle = GLCM::main_angle(sub1, GLCM::STANDARD, GLCM::Range(10, 70), 50);
 
     int s2_x1 = 170, s2_x2 = 339;
     int s2_y1 = 55, s2_y2 = 160;
     Mat sub2 = gray_image(Range(s2_y1, s2_y2), Range(s2_x1, s2_x2));
-    unsigned int s2_main_angle = GLCM::CT::main_angle_range_(sub2, GLCM::STANDARD, GLCM::Range(10, 70), 50);
+    unsigned int s2_main_angle = GLCM::main_angle(sub2, GLCM::STANDARD, GLCM::Range(10, 70), 50);
 
     int s3_x1 = 340, s3_x2 = 509;
     int s3_y1 = 55, s3_y2 = 160;
     Mat sub3 = gray_image(Range(s3_y1, s3_y2), Range(s3_x1, s3_x2));
-    unsigned int s3_main_angle = GLCM::CT::main_angle_range_(sub3, GLCM::STANDARD, GLCM::Range(10, 70), 50);
+    unsigned int s3_main_angle = GLCM::main_angle(sub3, GLCM::STANDARD, GLCM::Range(10, 70), 50);
 
     cout << "Mehrere dominante Winkel über 3x main_angle (CT, STANDARD, Range(10, 70)) - Dauer: "
             << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
@@ -101,7 +101,7 @@ int main1() {
 }
 
 
-/// Case 2: Get dominant angles through 3x GLCM::CT::main_angle_range_(GLCM::SCHEME2)
+/// Case 2: Get dominant angles through 3x GLCM::main_angle_range(GLCM::SCHEME2)
 int main() {
     //Mat image = imread("../../test_videos/keyframes/c.1W.0001.png");    // ausgewählter Bereich: X: 0-510, Y: 55-160
     Mat image = imread("../../test_videos/keyframes/c.1W.0002.png");    // ausgewählter Bereich: X: 0-510, Y: 55-160
@@ -127,17 +127,17 @@ int main() {
     int s1_x1 = 0, s1_x2 = 169;
     int s1_y1 = 55, s1_y2 = 160;
     Mat sub1 = gray_image(Range(s1_y1, s1_y2), Range(s1_x1, s1_x2));
-    unsigned int s1_main_angle = GLCM::CT::main_angle_range_(sub1, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
+    unsigned int s1_main_angle = GLCM::main_angle(sub1, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
 
     int s2_x1 = 170, s2_x2 = 339;
     int s2_y1 = 55, s2_y2 = 160;
     Mat sub2 = gray_image(Range(s2_y1, s2_y2), Range(s2_x1, s2_x2));
-    unsigned int s2_main_angle = GLCM::CT::main_angle_range_(sub2, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
+    unsigned int s2_main_angle = GLCM::main_angle(sub2, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
 
     int s3_x1 = 340, s3_x2 = 509;
     int s3_y1 = 55, s3_y2 = 160;
     Mat sub3 = gray_image(Range(s3_y1, s3_y2), Range(s3_x1, s3_x2));
-    unsigned int s3_main_angle = GLCM::CT::main_angle_range_(sub3, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
+    unsigned int s3_main_angle = GLCM::main_angle(sub3, GLCM::SCHEME2, GLCM::Range(10, 70), 50);
 
     cout << "Mehrere dominante Winkel über 3x main_angle (CT, SCHEME2, Range(10, 70)) - Dauer: "
          << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;

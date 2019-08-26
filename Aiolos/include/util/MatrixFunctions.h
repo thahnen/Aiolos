@@ -35,10 +35,9 @@ namespace GLCM { namespace Util {
      *  @param impl         which implementation of the GLCM shall be used
      *  @param range        interval of angles to consider!
      *  @param max_r        maximum radius
-     *  @param rt           if function uses runtime implementation or not (runtime is default)
      */
     void split_image(const cv::Mat& image, std::vector<unsigned int>& angles, Implementation impl, const Range& range,
-                        unsigned int max_r, bool rt = true);
+                        unsigned int max_r);
 
 #if __cplusplus > 201402L
 }

@@ -26,24 +26,8 @@ namespace GLCM { namespace Scheme3 {
      *
      *  REVIEW: Usage does not depend on specific Mat-Type
      */
-    [[deprecated("[Scheme3::Q] Not implemented yet!")]]
     unsigned int norm(const cv::Mat& image, double r, double theta) {
-        throw std::logic_error("[Scheme3::norm] Not implemented yet!");
-    }
-
-
-    /**
-     *  Adjusted version for creating a single GLCM used by Scheme 3
-     *
-     *  @param image        the given image
-     *  @param glcm         the matrix, the GLCM is stored to
-     *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on (in radiant!)
-     *
-     *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
-     */
-    void GLCM(const cv::Mat& image, cv::Mat1d& glcm, double r, double theta) {
-        throw std::logic_error("[Scheme3::GLCM] Not implemented yet!");
+        throw std::logic_error("[GLCM::Scheme3::norm] Not implemented yet!");
     }
 
 
@@ -55,12 +39,10 @@ namespace GLCM { namespace Scheme3 {
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
      *  @param theta        the angle, the GLCM is based on (in radiant!)
-     *
-     *  REVIEW: Use when T is known by compile time!
      */
     template <typename T>
-    void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
-        throw std::logic_error("[Scheme3::GLCM_] Not implemented yet!");
+    void GLCM(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
+        throw std::logic_error("[GLCM::Scheme3::GLCM] Not implemented yet!");
     }
 
 #if __cplusplus > 201402L

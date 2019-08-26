@@ -23,7 +23,7 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-## Verify if you want (nm + objdump)
+## Verify if you want (nm)
 read -n 1 -p "Verify -> nm + objdump (y|n): " ANSWER
 case $ANSWER in
 	  N|n)	printf "\nDone!\n"
@@ -38,6 +38,16 @@ if [[ $? -ne 0 ]]; then
 fi
 printf "\nRunning: nm -Ca $LIB | grep GLCM\n"
 nm -Ca $LIB | grep GLCM
+
+
+## Verify if you want (objdump)
+read -n 1 -p "Verify -> nm + objdump (y|n): " ANSWER
+case $ANSWER in
+	  N|n)	printf "\nDone!\n"
+          exit 1 ;;
+	  *)		;;
+esac
+
 
 command -v objdump &>/dev/null
 if [[ $? -ne 0 ]]; then

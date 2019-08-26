@@ -22,7 +22,7 @@ namespace GLCM { namespace Standard {
      *  @param theta        the angle, part of the condition (in radiants!)
      *  @return             the number of pixel pairs which fullfill the condition
      *
-     *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
+     *  REVIEW: Usage does not depend on specific Mat-Type
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
     unsigned int norm(const cv::Mat& image, const double r, const double theta) {
@@ -51,75 +51,16 @@ namespace GLCM { namespace Standard {
     /**
      *  Creates the standard GLCM based on the given parameters
      *
-     *  @param image        the given image
-     *  @param glcm         the matrix, the GLCM is stored to
-     *  @param r            the radius, the GLCM is based on
-     *  @param theta        the angle, the GLCM is based on (in radiant!)
-     *
-     *  REVIEW: Use when Mat-Type is not known by compile time -> usage at runtime!
-     *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
-     */
-    void GLCM(const cv::Mat& image, cv::Mat1d& glcm, const double r, const double theta) {
-        const double dist_x = r*cos(theta);
-        const double dist_y = r*sin(theta);
-
-        #pragma omp parallel for collapse(2)
-        for (unsigned int y = 0; y < image.cols; y++) {
-            for (unsigned int x = 0; x < image.rows; x++) {
-                unsigned int x2 = x + dist_x;
-                if (x2 < 0 || x2 >= image.cols) continue;
-
-                unsigned int y2 = y + dist_y;
-                if (y2 < 0 || y2 >= image.rows) continue;
-
-                switch (image.type() & CV_MAT_DEPTH_MASK) {
-                    case CV_8SC1:
-                        glcm(image.at<char>(y, x), image.at<char>(y2, x2))++;
-                        break;
-                    case CV_8UC1:
-                        glcm(image.at<uchar>(y, x), image.at<uchar>(y2, x2))++;
-                        break;
-                    case CV_16SC1:
-                        glcm(image.at<short>(y, x), image.at<short>(y2, x2))++;
-                        break;
-                    case CV_16UC1:
-                        glcm(image.at<ushort>(y, x), image.at<ushort>(y2, x2))++;
-                        break;
-                    case CV_32SC1:
-                        glcm(image.at<int>(y, x), image.at<int>(y2, x2))++;
-                        break;
-                    default:
-                        throw std::logic_error("[Standard::GLCM] Unsupported Mat-type!");
-                }
-            }
-        }
-
-        // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        const unsigned int q = norm(image, r, theta);
-
-        #pragma omp parallel for collapse(2)
-        for (unsigned int x = 0; x < glcm.cols; x++) {
-            for (unsigned int y = 0; y < glcm.rows; y++) {
-                glcm(y, x) /= q;
-            }
-        }
-    }
-
-
-    /**
-     *  Creates the standard GLCM based on the given parameters
-     *
      *  @tparam T           single channel type: char/uchar, short/ushort, int
      *  @param image        the given image
      *  @param glcm         the matrix, the GLCM is stored to
      *  @param r            the radius, the GLCM is based on
      *  @param theta        the angle, the GLCM is based on (in radiant!)
      *
-     *  REVIEW: Use when T is known by compile time!
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
     template <typename T>
-    void GLCM_(const cv::Mat_<T>& image, cv::Mat1d& glcm, const double r, const double theta) {
+    void GLCM(const cv::Mat_<T>& image, cv::Mat1d& glcm, const double r, const double theta) {
         const double dist_x = r*cos(theta);
         const double dist_y = r*sin(theta);
 

@@ -14,7 +14,7 @@
  *  REVIEW: Usage does not depend on specific Mat-Type
  *  REVIEW: Assert correct maximum values using standard library!
  *
- *  TODO: change to unsigned int again (?)
+ *  TODO: change to unsigned int again to support CV_32S (?)
  */
 int GLCM::Util::max_gray_value(const cv::Mat& image) {
     switch (image.type() & CV_MAT_DEPTH_MASK) {
@@ -34,10 +34,12 @@ int GLCM::Util::max_gray_value(const cv::Mat& image) {
             // unsigned short   -> 2^16 highest value
             //return static_cast<int>(std::numeric_limits<unsigned short>::max());
             return 65536;
+        /*
         case CV_32S:
             // (signed) int     -> 2^31 highest value
             //return std::numeric_limits<int>::max();
             return 2147483648;
+        */
         default:
             throw std::runtime_error("[max_gray_value] Unsupported Mat-type!");
     }
@@ -50,7 +52,7 @@ int GLCM::Util::max_gray_value(const cv::Mat& image) {
  *  TODO: Parallelize for loop!
  */
 void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& angles, Implementation impl,
-                 const Range& range, unsigned int max_r, bool rt) {
+                 const Range& range, unsigned int max_r) {
     int middle_width = ceil(image.cols/2);
     int middle_height = ceil(image.rows/2);
 
@@ -61,17 +63,10 @@ void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& an
     cv::Mat m3 = image(cv::Range(middle_height + 1, image.rows), cv::Range(0, middle_width));
     cv::Mat m4 = image(cv::Range(middle_height + 1, image.rows), cv::Range(middle_width + 1, image.cols));
 
-    if (rt) {
-        values.insert(GLCM::main_angle_range(m1, impl, range, max_r));
-        values.insert(GLCM::main_angle_range(m2, impl, range, max_r));
-        values.insert(GLCM::main_angle_range(m3, impl, range, max_r));
-        values.insert(GLCM::main_angle_range(m4, impl, range, max_r));
-    } else {
-        values.insert(GLCM::CT::main_angle_range_(m1, impl, range, max_r));
-        values.insert(GLCM::CT::main_angle_range_(m2, impl, range, max_r));
-        values.insert(GLCM::CT::main_angle_range_(m3, impl, range, max_r));
-        values.insert(GLCM::CT::main_angle_range_(m4, impl, range, max_r));
-    }
+    values.insert(GLCM::main_angle(m1, impl, range, max_r));
+    values.insert(GLCM::main_angle(m2, impl, range, max_r));
+    values.insert(GLCM::main_angle(m3, impl, range, max_r));
+    values.insert(GLCM::main_angle(m4, impl, range, max_r));
 
     /*#pragma omp parallel for ordered
     for (std::set<unsigned int>::const_iterator it = values.begin(); it < values.end(); it++) {
