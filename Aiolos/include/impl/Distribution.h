@@ -55,7 +55,7 @@ namespace GLCM {
     double concentration_degree(const cv::Mat1d& glcm, double (*inc)(int, int)) {
         double value = 0;
 
-        #pragma omp parallel for collapse (2) reduction(+:value)
+        #pragma omp parallel for collapse(2) reduction(+:value)
         for (int x = 0; x < glcm.cols; x++) {
             for (int y = 0; y < glcm.rows; y++) {
                 value += ( inc(x+1, y+1) * glcm(y, x) );
@@ -79,15 +79,15 @@ namespace GLCM {
     template <typename T>
     void calc_angle_dist(const cv::Mat_<T>& image, std::vector<double>& angle_distribution, Implementation impl,
                           unsigned int max_radius, unsigned int begin) {
-        const int max_gray = Util::max_gray_value(image);
+        int max_gray = Util::max_gray_value(image);
 
         // Outer loop beginning with range.first, ending after range.second
-        #pragma omp parallel for
+        #pragma omp parallel for shared(max_gray)
         for (unsigned int theta = 0; theta < angle_distribution.size(); theta++) {
-            const double theta_rad = (begin + theta) * CV_PI / 180;
+            double theta_rad = (begin + theta) * CV_PI / 180;
             double value = 0.0;
 
-            #pragma omp parallel for reduction(+:value)
+            #pragma omp parallel for shared(max_gray, theta_rad) reduction(+:value)
             for (unsigned int r = 1; r <= max_radius; r++) {
                 cv::Mat1d glcm(max_gray, max_gray);
 

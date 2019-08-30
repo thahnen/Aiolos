@@ -55,7 +55,7 @@ namespace GLCM { namespace Scheme2 {
         double c_4 = (r*cos(theta) - dist_x) * (r*sin(theta) - dist_y);
 #endif
 
-        #pragma omp parallel for collapse(2)
+        #pragma omp parallel for collapse(2) shared(dist_x, dist_y, c_1, c_2, c_3, c_4)
         for (unsigned int y = 0; y < image.rows; y++) {
             for (unsigned int x = 0; x < image.cols; x++) {
                 // TODO: gibt es nicht einen besseren Weg als einfach der nächste Schleifendurchlauf?

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 2.0.5
+        VERSION 2.1.0
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -66,6 +66,25 @@ target_link_libraries(Aiolos_Test
             Aiolos
             OpenMP::OpenMP_CXX
             ${OpenCV_LIBS})
+
+
+########################################################################################################################
+#       BUILD OPTIONS FOR THE BENCHMARKS:
+#
+#           - target name:      Aiolos_benchmark_main_angle
+#           - file:             benchmark.main_angle.cpp
+#           - input type:       test images
+#           - function:         main_angle
+#           - implementation:   STANDARD + SCHEME2
+#           - methods:          -/-
+########################################################################################################################
+add_executable(Aiolos_benchmark_main_angle
+        tests/benchmark.main_angle.cpp)
+
+target_link_libraries(Aiolos_benchmark_main_angle
+        PUBLIC
+            Aiolos)
+
 
 
 ########################################################################################################################

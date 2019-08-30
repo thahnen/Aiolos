@@ -25,13 +25,13 @@ namespace GLCM { namespace Standard {
      *  REVIEW: Usage does not depend on specific Mat-Type
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
-    unsigned int norm(const cv::Mat& image, const double r, const double theta) {
+    unsigned int norm(const cv::Mat& image, double r, double theta) {
         unsigned int value = 0;
 
-        const double dist_x = r*cos(theta);
-        const double dist_y = r*sin(theta);
+        double dist_x = r*cos(theta);
+        double dist_y = r*sin(theta);
 
-        #pragma omp parallel for collapse(2) reduction(+:value)
+        #pragma omp parallel for collapse(2) shared(dist_x, dist_y) reduction(+:value)
         for (unsigned int x = 0; x < image.cols; x++) {
             for (unsigned int y = 0; y < image.rows; y++) {
                 unsigned int x2 = x + dist_x;
@@ -60,11 +60,11 @@ namespace GLCM { namespace Standard {
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
     template <typename T>
-    void GLCM(const cv::Mat_<T>& image, cv::Mat1d& glcm, const double r, const double theta) {
-        const double dist_x = r*cos(theta);
-        const double dist_y = r*sin(theta);
+    void GLCM(const cv::Mat_<T>& image, cv::Mat1d& glcm, double r, double theta) {
+        double dist_x = r*cos(theta);
+        double dist_y = r*sin(theta);
 
-        #pragma omp parallel for collapse(2)
+        #pragma omp parallel for collapse(2) shared(dist_x, dist_y)
         for (unsigned int y = 0; y < image.cols; y++) {
             for (unsigned int x = 0; x < image.rows; x++) {
                 unsigned int x2 = x + dist_x;

@@ -47,7 +47,18 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implemen
 
 ## Results
 
-I am sorry there are none to show yet! I will add some when I am back at the office!
+![Screenfetch of benchmarking machine](/assets/Screenfetch.png)
+
+### Images with **max_r = 50**:
+
+Image | Function | Implementation | Dominant Angle | Time
+------|----------|----------------|----------------|-----
+[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Standard* | - | **Zeit**
+[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Scheme 2* | - | **Zeit**
+[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Standard* | - | **Zeit**
+[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Scheme 2* | - | **Zeit**
+[SAR Tracks](/assets/test_images/sar_tracks.png) | *GLCM::main_angle* | *Standard* | - | **Zeit**
+[SAR Tracks](/assets/test_images/sar_tracks.png) | *GLCM::main_angle* | *Scheme 2* | - | **Zeit**
 
 ---
 
