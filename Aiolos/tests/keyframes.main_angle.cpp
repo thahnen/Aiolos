@@ -8,32 +8,10 @@
 #include <opencv2/opencv.hpp>
 #include <GLCM.h>
 
+#include "util/VisualizationHelper.h"
+
 using namespace std;
 using namespace cv;
-
-
-/// Outsource this to util/VisualizationHelper
-void paintBoxWithAngleAndText(Mat& image, unsigned int main_angle, unsigned int x1, unsigned int x2, unsigned int y1,
-                                unsigned int y2, const Scalar& color) {
-    unsigned int mx = (x1 + x2) / 2;
-    unsigned int my = (y1 + y2) / 2;
-    unsigned int len = min(mx, my) / 2;
-
-    // Dominanten Winkel einzeichnen
-    Point p1(mx + len*cos(main_angle*CV_PI/180), my + len*sin(main_angle*CV_PI/180));
-    Point p2(mx - len*cos(main_angle*CV_PI/180), my - len*sin(main_angle*CV_PI/180));
-    line(image, p1, p2, color, 3);
-
-    // Box einzeichnen
-    line(image, Point(x1, y1), Point(x2, y1), color, 1);
-    line(image, Point(x1, y1), Point(x1, y2), color, 1);
-    line(image, Point(x2, y1), Point(x2, y2), color, 1);
-    line(image, Point(x1, y2), Point(x2, y2), color, 1);
-
-    // Winkel als Text aufschreiben
-    putText(image, to_string(main_angle) + " Grad", Point(x1 + 10, y2 + 30),
-            FONT_HERSHEY_SIMPLEX, 1, color, 2);
-}
 
 
 /// Case 1: Get dominant angles through 3x GLCM::main_angle_range(GLCM::STANDARD)

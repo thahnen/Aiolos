@@ -78,11 +78,13 @@ namespace GLCM { namespace Standard {
         }
 
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        const unsigned int q = norm(image, r, theta);
+        unsigned int q = norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
-        for (unsigned int x = 0; x < glcm.rows; x++) {
-            for (unsigned int y = 0; y < glcm.cols; y++) {
+        for (unsigned int x = 0; x < glcm.cols; x++) {
+            for (unsigned int y = 0; y < glcm.rows; y++) {
+                if (glcm(y, x) == 0) continue;
+
                 glcm(y, x) /= q;
             }
         }

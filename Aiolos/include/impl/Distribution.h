@@ -89,7 +89,7 @@ namespace GLCM {
 
             #pragma omp parallel for shared(max_gray, theta_rad) reduction(+:value)
             for (unsigned int r = 1; r <= max_radius; r++) {
-                cv::Mat1d glcm(max_gray, max_gray);
+                cv::Mat1d glcm(max_gray, max_gray, 0.0);
 
                 // Which implementation of the paper shall be used!
                 switch (impl) {
@@ -148,7 +148,7 @@ namespace GLCM {
                 throw std::logic_error("[GLCM::getAngleDistribution_] Unsupported Mat-type!");
         }
 
-#if AIOLOS_DEBUG_ANGLE_DISTRIBUTION_CT
+#if AIOLOS_DEBUG_ANGLE_DISTRIBUTION
         for (unsigned int i = 0; i < orientation_distribution.size(); i++) {
         std::cout << "Winkel " << range.first + i << "°: " << orientation_distribution[i] << std::endl;
     }

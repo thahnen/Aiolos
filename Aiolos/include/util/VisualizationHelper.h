@@ -83,4 +83,28 @@ cv::Mat showAngles(const cv::Mat& image, const std::vector<unsigned int>& main_a
 }
 
 
+/// Outsource this to util/VisualizationHelper
+void paintBoxWithAngleAndText(cv::Mat& image, unsigned int main_angle, unsigned int x1, unsigned int x2, unsigned int y1,
+                              unsigned int y2, const cv::Scalar& color) {
+    unsigned int mx = (x1 + x2) / 2;
+    unsigned int my = (y1 + y2) / 2;
+    unsigned int len = std::min(mx, my) / 2;
+
+    // Dominanten Winkel einzeichnen
+    cv::Point p1(mx + len*cos(main_angle*CV_PI/180), my + len*sin(main_angle*CV_PI/180));
+    cv::Point p2(mx - len*cos(main_angle*CV_PI/180), my - len*sin(main_angle*CV_PI/180));
+    line(image, p1, p2, color, 3);
+
+    // Box einzeichnen
+    line(image, cv::Point(x1, y1), cv::Point(x2, y1), color, 1);
+    line(image, cv::Point(x1, y1), cv::Point(x1, y2), color, 1);
+    line(image, cv::Point(x2, y1), cv::Point(x2, y2), color, 1);
+    line(image, cv::Point(x1, y2), cv::Point(x2, y2), color, 1);
+
+    // Winkel als Text aufschreiben
+    putText(image, std::to_string(main_angle) + " Grad", cv::Point(x1 + 10, y2 + 30),
+            cv::FONT_HERSHEY_SIMPLEX, 1, color, 2);
+}
+
+
 #endif //AIOLOS_VISUALIZATIONHELPER_H

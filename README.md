@@ -33,7 +33,7 @@ unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementation impl, u
 unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementaion impl, const GLCM::Range& range, unsigned int max_r = 0);
 ```
 
-To get multiple (or one) dominant angles of a given image one of these functions should be used!
+To get multiple (or one) dominant angles of a given image one of these functions should be used! There is a possibility that some duplicate angles exist in the vector.
 The second one can be used to restrict the range of angles which should be considered in the computation as it is faster but the results may differ.
 > There are different implementations of the GLCM calculation to choose from!
 > There are different methods of calculating the dominant angles to choose from!
@@ -41,6 +41,13 @@ The second one can be used to restrict the range of angles which should be consi
 ```cpp
 std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, unsigned int max_r = 0);
 std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, const GLCM::Range& range, unsigned int max_r = 0);
+```
+
+As an alternative to get unique angles only this two functions can be used! Everything else is same as the two functions above!
+
+```cpp
+std::set<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, unsigned int max_r = 0);
+std::set<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth, const GLCM::Range& range, unsigned int max_r = 0);
 ```
 
 ---
@@ -53,12 +60,20 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implemen
 
 Image | Function | Implementation | Dominant Angle | Time
 ------|----------|----------------|----------------|-----
-[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Standard* | - | **Zeit**
-[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Scheme 2* | - | **Zeit**
-[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Standard* | - | **Zeit**
-[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Scheme 2* | - | **Zeit**
-[SAR Tracks](/assets/test_images/sar_tracks.png) | *GLCM::main_angle* | *Standard* | - | **Zeit**
-[SAR Tracks](/assets/test_images/sar_tracks.png) | *GLCM::main_angle* | *Scheme 2* | - | **Zeit**
+[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Standard* | **159°** | **4s**
+[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Scheme 2* | **155°** | **6s**
+[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Standard* | **126°** | **7s**
+[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Scheme 2* | **127°** | **13s**
+[SAR Tracks](/assets/test_images/sar_tracks.jpg) | *GLCM::main_angle* | *Standard* | **141°** | **14s**
+[SAR Tracks](/assets/test_images/sar_tracks.jpg) | *GLCM::main_angle* | *Scheme 2* | **142°** | **26s**
+[Sea 400x400](/assets/test_images/sea_400x400.jpg) | *GLCM::main_angle* | *Standard* | **84°** | **6s**
+[Sea 400x400](/assets/test_images/sea_400x400.jpg) | *GLCM::main_angle* | *Scheme 2* | **100°** | **9s**
+[Sea Texel](/assets/test_images/maps_texel_sea.png) | *GLCM::main_angle* | *Standard* | **124°** | **4s**
+[Sea Texel](/assets/test_images/maps_texel_sea.png) | *GLCM::main_angle* | *Scheme 2* | **127°** | **7s**
+[Zebrasteifen](/assets/test_images/zebrastreifen.jpg) | *GLCM::main_angle* | *Standard* | **179°** | **16s**
+[Zebrastreifen](/assets/test_images/zebrastreifen.jpg) | *GLCM::main_angle* | *Scheme 2* | **179°** | **30s**
+
+### More are done ...
 
 ---
 

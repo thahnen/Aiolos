@@ -99,9 +99,11 @@ namespace GLCM { namespace Scheme2 {
         unsigned int q = Standard::norm(image, r, theta);
 
         #pragma omp parallel for collapse(2)
-        for (unsigned int i = 0; i < glcm.cols; i++) {
-            for (unsigned int j = 0; j < glcm.rows; j++) {
-                glcm(j, i) /= q;
+        for (unsigned int x = 0; x < glcm.cols; x++) {
+            for (unsigned int y = 0; y < glcm.rows; y++) {
+                if (glcm(y, x) == 0) continue;
+
+                glcm(y, x) /= q;
             }
         }
     }
