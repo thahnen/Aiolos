@@ -15,12 +15,6 @@ namespace GLCM {
             Range;
 
 
-    /// Type alias for the sub-image boundaries
-    typedef std::pair<Range,            // Boundaries x coordinates (X1, X2)
-                      Range>            // Boundaries y coordinates (Y2, Y2)
-            Boundaries;
-
-
     /// Type alias for the feature (debug) vector + their info
     typedef std::vector<std::pair<std::string, std::string>> FEATURES;
     typedef FEATURES DEBUGS;

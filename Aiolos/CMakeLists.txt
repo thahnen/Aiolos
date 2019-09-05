@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 2.1.5
+        VERSION 2.2.0
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)

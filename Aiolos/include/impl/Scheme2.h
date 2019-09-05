@@ -33,7 +33,7 @@ namespace GLCM { namespace Scheme2 {
         unsigned int dist_x = floor(r*cos(theta));
         unsigned int dist_y = floor(r*sin(theta));
 
-#if AIOLOS_TEST_SCHEME2_GLCM_CT
+#if AIOLOS_TEST_SCHEME2_GLCM
         // Using this "version": a, b, c, d should only be calculated once
         double c_1, c_2, c_3, c_4;
         {
@@ -80,7 +80,7 @@ namespace GLCM { namespace Scheme2 {
 
                 if (gray_1+gray_2+gray_3+gray_4 > glcm.cols) {
 
-#if AIOLOS_DEBUG_SCHEME2_GLCM_CT
+#if AIOLOS_DEBUG_SCHEME2_GLCM
                     #pragma omp critical
                     {
                         std::cout << "G1-4: " << gray_1+gray_2+gray_3+gray_4
