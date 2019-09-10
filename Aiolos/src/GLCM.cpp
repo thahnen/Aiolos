@@ -19,20 +19,20 @@
 
 /// Calculates the dominant texture orientation of an image (equals the "min_theta"-function from the paper).
 unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, unsigned int max_r) {
-    return main_angle(image, impl, Range(0, 179), max_r);
+    return main_angle(image, impl, GLCM::Range(0, 179), max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the image (one or more + duplicates possible).
 std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation impl, Method meth, unsigned int max_r) {
-    return main_angles(image, impl, meth, Range(0, 179), max_r);
+    return main_angles(image, impl, meth, GLCM::Range(0, 179), max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the image (one or more possible).
 std::set<unsigned int> GLCM::main_angles_set(const cv::Mat &image, GLCM::Implementation impl, GLCM::Method meth,
                                                 unsigned int max_r) {
-    return main_angles_set(image, impl, meth, Range(0, 179), max_r);
+    return main_angles_set(image, impl, meth, GLCM::Range(0, 179), max_r);
 }
 
 
@@ -134,6 +134,35 @@ std::set<unsigned int> GLCM::main_angles_set(const cv::Mat &image, GLCM::Impleme
 
 
 
+#ifdef AIOLOS_FEATURE_MORE_TYPE_SUPPORT
+/***********************************************************************************************************************
+ *
+ *      Functions calling other functions (with other type support)
+ *
+ ***********************************************************************************************************************/
+
+/// Calculates the one dominant texture orientation of an image for specific angles.
+unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementation impl, const cv::Range& range, unsigned int max_r) {
+    return main_angle(image, impl, GLCM::Range(range.start, range.end), max_r);
+}
+
+
+/// Calculates the dominant texture orientations of the image (one or more + duplicates possible) for specific angles.
+std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+                                          const cv::Range& range, unsigned int max_r) {
+    return main_angles(image, impl, meth, GLCM::Range(range.start, range.end), max_r);
+}
+
+
+/// Calculates the dominant texture orientations of the image (one or more possible) for specific angles.
+std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+                                           const cv::Range& range, unsigned int max_r) {
+    return main_angles_set(image, impl, meth, GLCM::Range(range.start, range.end), max_r);
+}
+#endif
+
+
+
 #ifdef AIOLOS_FEATURE_SUB_IMAGE
 /***********************************************************************************************************************
  *
@@ -142,13 +171,13 @@ std::set<unsigned int> GLCM::main_angles_set(const cv::Mat &image, GLCM::Impleme
  ***********************************************************************************************************************/
 
 /// Calculates the dominant texture orientation of a sub-image (equals the "min_theta"-function from the paper).
-unsigned int GLCM::main_angle(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl, unsigned int max_r) {
+unsigned int GLCM::main_angle(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl, unsigned int max_r) {
     return main_angle(image(boundaries), impl, max_r);
 }
 
 
 /// Calculates the one dominant texture orientation of a sub-image for specific angles.
-unsigned int GLCM::main_angle(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+unsigned int GLCM::main_angle(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                 const GLCM::Range& range, unsigned int max_r) {
     return main_angle(image(boundaries), impl, range, max_r);
 }
@@ -156,31 +185,54 @@ unsigned int GLCM::main_angle(const cv::Mat& image, cv::Rect& boundaries, GLCM::
 
 
 /// Calculates the dominant texture orientations of the sub-image (one or more + duplicates possible).
-std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                                 GLCM::Method meth, unsigned int max_r) {
     return main_angles(image(boundaries), impl, meth, max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the sub-image (one or more + duplicates possible) for specific angles.
-std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                                 GLCM::Method meth, const GLCM::Range& range, unsigned int max_r) {
     return main_angles(image(boundaries), impl, meth, range, max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the sub-image (one or more possible).
-std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                                 GLCM::Method meth, unsigned int max_r) {
     return main_angles_set(image(boundaries), impl, meth, max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the sub-image (one or more possible) for specific angles.
-std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                            GLCM::Method meth, const GLCM::Range& range, unsigned int max_r) {
     return main_angles_set(image(boundaries), impl, meth, range, max_r);
 }
+
+
+#ifdef AIOLOS_FEATURE_MORE_TYPE_SUPPORT
+/// Calculates the one dominant texture orientation of a sub-image for specific angles.
+unsigned int GLCM::main_angle(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
+                            const cv::Range& range, unsigned int max_r) {
+    return main_angle(image(boundaries), impl, GLCM::Range(range.start, range.end), max_r);
+}
+
+
+/// Calculates the dominant texture orientations of the sub-image (one or more + duplicates possible) for specific angles.
+std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
+                                          GLCM::Method meth, const cv::Range& range, unsigned int max_r) {
+    return main_angles(image(boundaries), impl, meth, GLCM::Range(range.start, range.end), max_r);
+}
+
+
+/// Calculates the dominant texture orientations of the sub-image (one or more possible) for specific angles.
+std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
+                                           GLCM::Method meth, const cv::Range& range, unsigned int max_r) {
+    return main_angles_set(image(boundaries), impl, meth, GLCM::Range(range.start, range.end), max_r);
+}
+#endif
 #endif
 
 
@@ -195,6 +247,12 @@ std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, cv::Rect& bou
 GLCM::FEATURES GLCM::getFeatures() {
     GLCM::FEATURES features{};
     std::pair<std::string, std::string> f{};
+
+#ifdef AIOLOS_FEATURE_MORE_TYPE_SUPPORT
+    f.first = MACRO(AIOLOS_FEATURE_MORE_TYPE_SUPPORT);
+    f.second = "Enables support for more types, just for more convenience!";
+    features.emplace_back(f);
+#endif
 
 #ifdef AIOLOS_FEATURE_SUB_IMAGE
     f.first = MACRO(AIOLOS_FEATURE_SUB_IMAGE);
@@ -232,7 +290,13 @@ GLCM::DEBUGS GLCM::getDebugs() {
 #ifdef AIOLOS_DEBUG_SCHEME2_GLCM
     d.first = MACRO(AIOLOS_DEBUG_SCHEME2_GLCM);
     d.second = "Prints out the calculated G-values in comparison to the GLCM-Matrix-Size to debug the (private) SCHEME2::GLCM function";
-    debugs.emplace_back(d)
+    debugs.emplace_back(d);
+#endif
+
+#ifdef AIOLOS_TEST_SCHEME2_GLCM
+    d.first = MACRO(AIOLOS_TEST_SCHEME2_GLCM);
+    d.second = "Test a different implementation for the c-values in the (private) SCHEME2::GLCM function";
+    debugs.emplace_back(d);
 #endif
 
     return debugs;

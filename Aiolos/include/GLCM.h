@@ -118,6 +118,40 @@ namespace GLCM {
                                                 const GLCM::Range& range, unsigned int max_r = 0);
 
 
+
+#ifdef AIOLOS_FEATURE_MORE_TYPE_SUPPORT
+    /**
+     *  Calculates the one dominant texture orientation of an image for specific angles.
+     *  Range of angles can be restricted by setting range to an interval [A,B] := { x ∈ ℝ | A ≤ x ≤ B }
+     *
+     *  @see    GLCM::main_angle(const cv::Mat&, GLCM::Implementation, const GLCM::Range&, unsigned int)
+     */
+    DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, const cv::Range& range,
+                                    unsigned int max_r = 0);
+
+
+    /**
+     *  Calculates the dominant texture orientations of the image (one or more + duplicates possible) for specific angles.
+     *  Range of angles can be restricted by setting range to an interval [A,B] := { x ∈ ℝ | A ≤ x ≤ B }
+     *
+     *  @see    GLCM::main_angles(const cv::Mat&, GLCM::Implementation, GLCM::Method, const GLCM::Range&, unsigned int)
+     */
+    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+                                                const cv::Range& range, unsigned int max_r = 0);
+
+
+    /**
+     *  Calculates the dominant texture orientations of the image (one or more possible) for specific angles.
+     *  Range of angles can be restricted by setting range to an interval [A,B] := { x ∈ ℝ | A ≤ x ≤ B }
+     *
+     *  @see    GLCM::main_angles_set(const cv::Mat&, GLCM::Implementation, GLCM::Method, const GLCM::Range&, unsigned int)
+     */
+    DLL std::set<unsigned int> main_angles_set(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+                                                const cv::Range& range, unsigned int max_r = 0);
+#endif
+
+
+
 #ifdef AIOLOS_FEATURE_SUB_IMAGE
     /**
      *  Calculates the dominant texture orientation of a sub-image (equals the "min_theta"-function from the paper).
@@ -128,7 +162,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle (in degrees!)
      */
-    DLL unsigned int main_angle(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+    DLL unsigned int main_angle(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                     unsigned int max_r = 0);
 
 
@@ -143,7 +177,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle (in degrees!)
      */
-    DLL unsigned int main_angle(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+    DLL unsigned int main_angle(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                     const GLCM::Range& range, unsigned int max_r = 0);
 
 
@@ -157,7 +191,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle(s) (in degrees!)
      */
-    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                                 GLCM::Method meth, unsigned int max_r = 0);
 
 
@@ -173,7 +207,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle(s) (in degrees!)
      */
-    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                                 GLCM::Method meth, const GLCM::Range& range, unsigned int max_r = 0);
 
 
@@ -187,7 +221,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle(s) (in degrees!)
      */
-    DLL std::set<unsigned int> main_angles_set(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+    DLL std::set<unsigned int> main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                                 GLCM::Method meth, unsigned int max_r = 0);
 
 
@@ -203,9 +237,42 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle(s) (in degrees!)
      */
-    DLL std::set<unsigned int> main_angles_set(const cv::Mat& image, cv::Rect& boundaries, GLCM::Implementation impl,
+    DLL std::set<unsigned int> main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
                                                 GLCM::Method meth, const GLCM::Range& range, unsigned int max_r = 0);
+
+
+#ifdef AIOLOS_FEATURE_MORE_TYPE_SUPPORT
+    /**
+     *  Calculates the one dominant texture orientation of a sub-image for specific angles.
+     *  Range of angles can be restricted by setting range to an interval [A,B] := { x ∈ ℝ | A ≤ x ≤ B }
+     *
+     *  @see    GLCM::main_angle(const cv::Mat&, const cv::Rect&, GLCM::Implementation, const cv::Range&, unsigned int)
+     */
+    DLL unsigned int main_angle(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
+                                    const cv::Range& range, unsigned int max_r = 0);
+
+
+    /**
+     *  Calculates the dominant texture orientations of the sub-image (one or more + duplicates possible) for specific angles.
+     *  Range of angles can be restricted by setting range to an interval [A,B] := { x ∈ ℝ | A ≤ x ≤ B }
+     *
+     *  @see    GLCM::main_angles(const cv::Mat&, const cv::Rect&, GLCM::Implementation, GLCM::Method, const GLCM::Range&, unsigned int)
+     */
+    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
+                                                GLCM::Method meth, const cv::Range& range, unsigned int max_r = 0);
+
+
+    /**
+     *  Calculates the dominant texture orientations of the sub-image (one or more possible) for specific angles.
+     *  Range of angles can be restricted by setting range to an interval [A,B] := { x ∈ ℝ | A ≤ x ≤ B }
+     *
+     *  @see    GLCM::main_angles_set(const cv::Mat&, const cv::Rect&, GLCM::Implementation, GLCM::Method, const GLCM::Range&, unsigned int)
+     */
+    DLL std::set<unsigned int> main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
+                                                GLCM::Method meth, const cv::Range& range, unsigned int max_r = 0);
 #endif
+#endif
+
 
 
     /**

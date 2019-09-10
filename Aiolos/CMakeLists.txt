@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 2.2.0
+        VERSION 2.2.5
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -14,19 +14,21 @@ include_directories(./include)
 
 
 ########################################################################################################################
-#       BUILD OPTIONS FOR CREATING A SHARED LIBRARY
-#       => Use "target_compile_definitions" to specify different build options!
+#       BUILD OPTIONS FOR CREATING A SHARED LIBRARY:
+#           1. No features
+#           2. Feature: more types
+#           3. Feature: sub images
+#           4. Feature: more types + sub images
 #
 #       REVIEW: Exit code 127 is normal (because no "program" is run after building)
 ########################################################################################################################
+# No features
 add_library(${PROJECT_NAME}
         SHARED
             include/util/VectorFunctions.h
-            #src/util/VectorFunctions.cpp
             include/util/MatrixFunctions.h
             src/util/MatrixFunctions.cpp
             include/impl/Distribution.h
-            #src/impl/Distribution.cpp
             include/impl/Scheme1.h
             include/impl/Scheme2.h
             include/impl/Scheme3.h
@@ -47,13 +49,111 @@ target_link_libraries(${PROJECT_NAME}
         OpenMP::OpenMP_CXX
         ${OpenCV_LIBS})
 
-#target_compile_definitions(${PROJECT_NAME}
-#        PUBLIC
-#            AIOLOS_DEBUG_ANGLE_DISTRIBUTION)
+
+# Feature: more types
+add_library(Aiolos.MT
+        SHARED
+            include/util/VectorFunctions.h
+            include/util/MatrixFunctions.h
+            src/util/MatrixFunctions.cpp
+            include/impl/Distribution.h
+            include/impl/Scheme1.h
+            include/impl/Scheme2.h
+            include/impl/Scheme3.h
+            include/impl/Standard.h
+            src/GLCM.cpp)
+
+set_target_properties(Aiolos.MT
+        PROPERTIES
+            VERSION ${PROJECT_VERSION}
+            CXX_VISIBILITY_PRESET hidden
+            PUBLIC_HEADER include/GLCM.h)
+
+target_include_directories(Aiolos.MT
+        PUBLIC
+            ${PROJECT_SOURCE_DIR}/include)
+
+target_link_libraries(Aiolos.MT
+        OpenMP::OpenMP_CXX
+        ${OpenCV_LIBS})
+
+target_compile_definitions(Aiolos.MT
+        PUBLIC
+            AIOLOS_FEATURE_MORE_TYPE_SUPPORT)
 
 
-# After library is build, find it!
+# Feature: sub images
+add_library(Aiolos.SI
+        SHARED
+            include/util/VectorFunctions.h
+            include/util/MatrixFunctions.h
+            src/util/MatrixFunctions.cpp
+            include/impl/Distribution.h
+            include/impl/Scheme1.h
+            include/impl/Scheme2.h
+            include/impl/Scheme3.h
+            include/impl/Standard.h
+            src/GLCM.cpp)
+
+set_target_properties(Aiolos.SI
+        PROPERTIES
+            VERSION ${PROJECT_VERSION}
+            CXX_VISIBILITY_PRESET hidden
+            PUBLIC_HEADER include/GLCM.h)
+
+target_include_directories(Aiolos.SI
+        PUBLIC
+            ${PROJECT_SOURCE_DIR}/include)
+
+target_link_libraries(Aiolos.SI
+        OpenMP::OpenMP_CXX
+        ${OpenCV_LIBS})
+
+target_compile_definitions(Aiolos.SI
+        PUBLIC
+            AIOLOS_FEATURE_SUB_IMAGE)
+
+
+# Feature: more types + sub images
+add_library(Aiolos.MT.SI
+        SHARED
+            include/util/VectorFunctions.h
+            include/util/MatrixFunctions.h
+            src/util/MatrixFunctions.cpp
+            include/impl/Distribution.h
+            include/impl/Scheme1.h
+            include/impl/Scheme2.h
+            include/impl/Scheme3.h
+            include/impl/Standard.h
+            src/GLCM.cpp)
+
+set_target_properties(Aiolos.MT.SI
+        PROPERTIES
+            VERSION ${PROJECT_VERSION}
+            CXX_VISIBILITY_PRESET hidden
+            PUBLIC_HEADER include/GLCM.h)
+
+target_include_directories(Aiolos.MT.SI
+        PUBLIC
+            ${PROJECT_SOURCE_DIR}/include)
+
+target_link_libraries(Aiolos.MT.SI
+        OpenMP::OpenMP_CXX
+        ${OpenCV_LIBS})
+
+target_compile_definitions(Aiolos.MT.SI
+        PUBLIC
+            AIOLOS_FEATURE_MORE_TYPE_SUPPORT
+            AIOLOS_FEATURE_SUB_IMAGE)
+
+
+########################################################################################################################
+#       AFTER LIBRARIES ARE BUILD FIND THEM!
+########################################################################################################################
 find_library(Aiolos REQUIRED)
+find_library(Aiolos.MT REQUIRED)
+find_library(Aiolos.SI REQUIRED)
+find_library(Aiolos.MT.SI Required)
 
 
 ########################################################################################################################
