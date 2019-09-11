@@ -8,23 +8,13 @@
 #define AIOLOS_GLCM_H
 
 #if defined (_WIN32) || defined (__CYGWIN__)
-#   if defined (WIN_EXPORT)
-#       if defined (__GNUC__)
-#           define DLL __attribute__ ((dllexport))
-#       elif defined (_MSC_VER)
-#           define DLL __declspec(dllexport)
-#       else
-#           error "No suitable Compiler (GCC / MSVC) used (Windows + WIN_EXPORT)!"
-#       endif
-#   else
-#       if defined (__GNUC__)
-#           define DLL __attribute__ ((dllimport))
-#       elif defined (_MSC_VER)
-#           define DLL __declspec(dllimport)
-#       else
-#           error "No suitable Compiler (GCC / MSVC) used (Windows)!"
-#       endif
-#   endif
+#	if defined (__GNUC__)
+#		define DLL __attribute__ ((dllexport))
+#	elif defined (_MSC_VER)
+#		define DLL __declspec(dllexport)
+#	else
+#		error "No suitable Compiler (GCC / MSVC) used (Windows + WIN_EXPORT)!"
+#	endif
 #else
 #   if defined (__GNUC__)
 #       define DLL __attribute__ ((visibility("default")))

@@ -7,8 +7,16 @@ project(Aiolos
 
 set(CMAKE_CXX_STANDARD 14)
 
-find_package(OpenMP REQUIRED)           # OpenMP required for parallized working (astonishing speed increase!)
-find_package(OpenCV REQUIRED)           # OpenCV required for the rest
+# OpenMP required for parallized working (astonishing speed increase!)
+find_package(OpenMP REQUIRED)
+
+# OpenCV required for the rest
+if (WIN32)
+	# By now OpenCV has to be installed here for CMake to find it!
+	# TODO: Fix this later!
+    set(OpenCV_DIR C:/opencv/build/x64/vc15/lib)
+endif(WIN32)
+find_package(OpenCV REQUIRED)
 
 include_directories(./include)
 

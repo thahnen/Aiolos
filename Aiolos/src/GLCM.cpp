@@ -99,7 +99,9 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
             //                                std::vector<unsigned int> : \
             //                                omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
 
+#ifndef WIN32
             #pragma omp parallel for ordered //reduction(vector_push_back: angles)
+#endif
             for (auto it = orientation_dist.begin(); it < orientation_dist.end(); ++it) {
                 if (*it < value) {
                     angles.push_back(begin + std::distance(orientation_dist.begin(), it));
@@ -116,7 +118,9 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
     //                                                omp_out.begin(), std::plus<unsigned int>())) \
     //                                initializer(omp_priv = omp_orig)
 
+#ifndef WIN32
     #pragma omp parallel for ordered //reduction(vector_iterator_add: angles)
+#endif
     for (auto it = angles.begin(); it < angles.end(); ++it) {
         *it += begin;
     }
