@@ -91,7 +91,7 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
             } else if (meth == L_QUARTILE) {
                 value = Util::getQuantileValue(orientation_dist, LOWER_QUARTILE);
             } else {
-                throw std::runtime_error("[GLCM::main_angles] Other Options not implemented yet!");
+                throw std::runtime_error("[GLCM::main_angles] Other Methods not implemented yet!");
             }
 
             // TODO: Better parallelization -> see: https://stackoverflow.com/a/18671256

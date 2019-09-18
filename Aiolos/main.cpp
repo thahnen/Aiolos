@@ -17,7 +17,7 @@ using namespace cv;
 int main() {
     cout << "OpenCV-Version: " << CV_VERSION << endl;
     cout << "OpenMP-Version: " << _OPENMP << endl;
-    cout << "GCC-Version: " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << endl;
+    //cout << "GCC-Version: " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << endl;
 
     GLCM::FEATURES f = GLCM::getFeatures();
     cout << "Aiolos library features: " << f.size() << endl;

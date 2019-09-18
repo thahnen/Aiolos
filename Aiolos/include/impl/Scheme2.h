@@ -95,6 +95,7 @@ namespace GLCM { namespace Scheme2 {
             }
         }
 
+		/*
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
         unsigned int q = Standard::norm(image, r, theta);
 
@@ -106,6 +107,7 @@ namespace GLCM { namespace Scheme2 {
                 glcm(y, x) /= q;
             }
         }
+		*/
     }
 
 #if __cplusplus > 201402L

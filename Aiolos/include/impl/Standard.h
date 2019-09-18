@@ -77,6 +77,7 @@ namespace GLCM { namespace Standard {
             }
         }
 
+		/*
         // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
         unsigned int q = norm(image, r, theta);
 
@@ -88,6 +89,7 @@ namespace GLCM { namespace Standard {
                 glcm(y, x) /= q;
             }
         }
+		*/
     }
 
 #if __cplusplus > 201402L

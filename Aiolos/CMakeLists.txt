@@ -180,6 +180,7 @@ target_link_libraries(Aiolos_Test
 
 ########################################################################################################################
 #       BUILD OPTIONS FOR THE BENCHMARKS:
+#		TODO: does not complete on Windows due to errors inside the opencv-implementation!
 #
 #           - target name:      Aiolos_benchmark_main_angle
 #           - file:             benchmark.main_angle.cpp
@@ -189,7 +190,6 @@ target_link_libraries(Aiolos_Test
 #           - methods:          -/-
 ########################################################################################################################
 add_executable(Aiolos_benchmark_main_angle
-        #include/util/VisualizationHelper.h
         tests/benchmark.main_angle.cpp)
 
 target_link_libraries(Aiolos_benchmark_main_angle
