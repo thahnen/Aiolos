@@ -2,20 +2,21 @@
 
 ## Abstract
 
-Implementation of the Texture Orientation Estimation Method described in this [Paper](Paper.pdf) by the [IEEE](https://ieeexplore.ieee.org/abstract/document/8331276).
+Implementation of the Texture Orientation Estimation Method described in this paper by the [IEEE](https://ieeexplore.ieee.org/abstract/document/8331276).
 Uses a [GLCM](https://de.wikipedia.org/wiki/Grauwertematrix) to find the main orientation(s) in a given image.
 
 ### Usability
 
 Implemented as a C++14 shared library!
 Also there are two different schemes as described in the paper implemented by now (Standard and Scheme 2).
+Windows implementation does not work properly yet due to Microsoft Visual C++ only implementing the OpenMP 2.0 specification, more tests must be written and run then!
 
 ---
 
 ## Prerequisites
 
 Needs following software installed:
-1. Some kind of **Unix**-based OS => Windows implementation not tested yet!
+1. Some kind of **Unix**-based
 2. [CMake](https://cmake.org/) to build the project
 2. [OpenCV 4+](https://opencv.org/) for working on images
 3. [OpenMP](https://www.openmp.org/) for parallelization
@@ -56,22 +57,22 @@ std::set<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementat
 
 ![Screenfetch of benchmarking machine](/assets/Screenfetch.png)
 
-### Images with **max_r = 50**:
+### Images with GLCM::main_angle + max_r = 50:
 
-Image | Function | Implementation | Dominant Angle | Time
-------|----------|----------------|----------------|-----
-[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Standard* | **159°** | **4s**
-[SAR Plane](/assets/test_images/sar_plane.png) | *GLCM::main_angle* | *Scheme 2* | **155°** | **6s**
-[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Standard* | **126°** | **7s**
-[SAR Strip](/assets/test_images/sar_strip.png) | *GLCM::main_angle* | *Scheme 2* | **127°** | **13s**
-[SAR Tracks](/assets/test_images/sar_tracks.jpg) | *GLCM::main_angle* | *Standard* | **141°** | **14s**
-[SAR Tracks](/assets/test_images/sar_tracks.jpg) | *GLCM::main_angle* | *Scheme 2* | **142°** | **26s**
-[Sea 400x400](/assets/test_images/sea_400x400.jpg) | *GLCM::main_angle* | *Standard* | **84°** | **6s**
-[Sea 400x400](/assets/test_images/sea_400x400.jpg) | *GLCM::main_angle* | *Scheme 2* | **100°** | **9s**
-[Sea Texel](/assets/test_images/maps_texel_sea.png) | *GLCM::main_angle* | *Standard* | **124°** | **4s**
-[Sea Texel](/assets/test_images/maps_texel_sea.png) | *GLCM::main_angle* | *Scheme 2* | **127°** | **7s**
-[Zebrasteifen](/assets/test_images/zebrastreifen.jpg) | *GLCM::main_angle* | *Standard* | **179°** | **16s**
-[Zebrastreifen](/assets/test_images/zebrastreifen.jpg) | *GLCM::main_angle* | *Scheme 2* | **179°** | **30s**
+Image | Implementation | Dominant Angle | Time
+------|----------------|----------------|-----
+[SAR Plane](/assets/test_images/sar_plane.png) | *Standard* | **159°** | **3s**
+[SAR Plane](/assets/test_images/sar_plane.png) | *Scheme 2* | **155°** | **5s**
+[SAR Strip](/assets/test_images/sar_strip.png) | *Standard* | **126°** | **6s**
+[SAR Strip](/assets/test_images/sar_strip.png) | *Scheme 2* | **127°** | **11s**
+[SAR Tracks](/assets/test_images/sar_tracks.jpg) | *Standard* | **140°** | **11s**
+[SAR Tracks](/assets/test_images/sar_tracks.jpg) | *Scheme 2* | **142°** | **23s**
+[Sea 400x400](/assets/test_images/sea_400x400.jpg) | *Standard* | **83°** | **5s**
+[Sea 400x400](/assets/test_images/sea_400x400.jpg) | *Scheme 2* | **100°** | **7s**
+[Sea Texel](/assets/test_images/maps_texel_sea.png) | *Standard* | **124°** | **3s**
+[Sea Texel](/assets/test_images/maps_texel_sea.png) | *Scheme 2* | **127°** | **6s**
+[Zebrasteifen](/assets/test_images/zebrastreifen.jpg) | *Standard* | **179°** | **12s**
+[Zebrastreifen](/assets/test_images/zebrastreifen.jpg) | *Scheme 2* | **179°** | **26s**
 
 ### More are done ...
 
@@ -81,8 +82,6 @@ Image | Function | Implementation | Dominant Angle | Time
 
 Take a look at the Issues-Page!
 Always looking for some optimization or making the "library" more usable!
-
-Add support for subimage, more different methods!
 
 ---
 
