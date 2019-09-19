@@ -57,7 +57,6 @@ unsigned int GLCM::main_angle(const cv::Mat& image, Implementation impl, const R
 
 /// Calculates the dominant texture orientations of the image (one or more + duplicates possible) for specific angles.
 // TODO: Noch nicht eingefügte Möglichkeiten bedenken!
-// TODO: Umstellen, da "orientation_dist" nicht in allen Fällen benötigt wird!
 std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation impl, Method meth, const Range& range,
                                                 unsigned int max_r) {
     unsigned int max_radius = max_r != 0 ? max_r : ceil(sqrt(2)*std::max(image.cols/2, image.rows/2));
@@ -100,29 +99,28 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
             //                                omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
 
 #ifndef WIN32
-            #pragma omp parallel for ordered //reduction(vector_push_back: angles)
+            #pragma omp parallel for //ordered //reduction(vector_push_back: angles)
 #endif
             for (auto it = orientation_dist.begin(); it < orientation_dist.end(); ++it) {
-                if (*it < value) {
-                    angles.push_back(begin + std::distance(orientation_dist.begin(), it));
-                }
+                if (*it >= value) continue;
+                angles.push_back(begin + std::distance(orientation_dist.begin(), it));
             }
 
             return angles;
     }
 
     // TODO: Better parallelization -> see: https://stackoverflow.com/a/43169193
-    //#pragma omp declare reduction(vector_iterator_add : \
-    //                                std::vector<unsigned int> : \
-    //                                std::transform(omp_out.begin(), omp_out.end(), omp_in.begin(), \
-    //                                                omp_out.begin(), std::plus<unsigned int>())) \
-    //                                initializer(omp_priv = omp_orig)
+    //#pragma omp declare reduction(vector_unsigned_int_plus : \
+    //                                std::vector<unsigned int> : std::transform( \
+    //                                    omp_out.begin(), omp_out.end(), omp_in.begin(), omp_out.begin(), \
+    //                                    std::plus<unsigned int>() \
+    //                                )) initializer(omp_priv = decltype(omp_orig)(omp_orig.size()))
 
 #ifndef WIN32
-    #pragma omp parallel for ordered //reduction(vector_iterator_add: angles)
+    #pragma omp parallel for //reduction(vector_unsigned_int_plus: angles)
 #endif
-    for (auto it = angles.begin(); it < angles.end(); ++it) {
-        *it += begin;
+    for (int i = 0; i < angles.size(); i++) {
+        angles[i] += begin;
     }
 
     return angles;
@@ -131,7 +129,7 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
 
 /// Calculates the dominant texture orientations of the image (one or more possible) for specific angles.
 std::set<unsigned int> GLCM::main_angles_set(const cv::Mat &image, GLCM::Implementation impl, GLCM::Method meth,
-                                             const GLCM::Range &range, unsigned int max_r) {
+                                                const GLCM::Range &range, unsigned int max_r) {
     std::vector<unsigned int> angles = main_angles(image, impl, meth, range, max_r);
     return std::set<unsigned int>(angles.begin(), angles.end());
 }
@@ -153,14 +151,14 @@ unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementation impl, c
 
 /// Calculates the dominant texture orientations of the image (one or more + duplicates possible) for specific angles.
 std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
-                                          const cv::Range& range, unsigned int max_r) {
+                                                const cv::Range& range, unsigned int max_r) {
     return main_angles(image, impl, meth, GLCM::Range(range.start, range.end), max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the image (one or more possible) for specific angles.
 std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
-                                           const cv::Range& range, unsigned int max_r) {
+                                                const cv::Range& range, unsigned int max_r) {
     return main_angles_set(image, impl, meth, GLCM::Range(range.start, range.end), max_r);
 }
 #endif
@@ -211,7 +209,7 @@ std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, const cv::Rec
 
 /// Calculates the dominant texture orientations of the sub-image (one or more possible) for specific angles.
 std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
-                                           GLCM::Method meth, const GLCM::Range& range, unsigned int max_r) {
+                                                GLCM::Method meth, const GLCM::Range& range, unsigned int max_r) {
     return main_angles_set(image(boundaries), impl, meth, range, max_r);
 }
 
@@ -219,21 +217,21 @@ std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, const cv::Rec
 #ifdef AIOLOS_FEATURE_MORE_TYPE_SUPPORT
 /// Calculates the one dominant texture orientation of a sub-image for specific angles.
 unsigned int GLCM::main_angle(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
-                            const cv::Range& range, unsigned int max_r) {
+                                const cv::Range& range, unsigned int max_r) {
     return main_angle(image(boundaries), impl, GLCM::Range(range.start, range.end), max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the sub-image (one or more + duplicates possible) for specific angles.
 std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
-                                          GLCM::Method meth, const cv::Range& range, unsigned int max_r) {
+                                                GLCM::Method meth, const cv::Range& range, unsigned int max_r) {
     return main_angles(image(boundaries), impl, meth, GLCM::Range(range.start, range.end), max_r);
 }
 
 
 /// Calculates the dominant texture orientations of the sub-image (one or more possible) for specific angles.
 std::set<unsigned int> GLCM::main_angles_set(const cv::Mat& image, const cv::Rect& boundaries, GLCM::Implementation impl,
-                                           GLCM::Method meth, const cv::Range& range, unsigned int max_r) {
+                                                GLCM::Method meth, const cv::Range& range, unsigned int max_r) {
     return main_angles_set(image(boundaries), impl, meth, GLCM::Range(range.start, range.end), max_r);
 }
 #endif

@@ -33,15 +33,21 @@ namespace GLCM {
     /// TODO: add more possibilities (given boundaries to work with, ...)
     enum Method {
                                         // splitting the image in smaller ones, work on their (one) dominant angle:
-        SPLIT_IMAGE_2x2 = 0,            // 4    ->  2 in width, 2 in height
-        SPLIT_IMAGE_3x3,                // 9    ->  3 in width, 3 in height
-        SPLIT_IMAGE_4x4,                // 16   ->  4 in width, 4 in height
-        SPLIT_IMAGE_1x2,                // 2    ->  1 in width, 2 in height
+        SPLIT_IMAGE_1x2 = 0,            // 2    ->  1 in width, 2 in height
         SPLIT_IMAGE_1x3,                // 3    ->  1 in width, 3 in height
         SPLIT_IMAGE_1x4,                // 4    ->  1 in width, 4 in height
         SPLIT_IMAGE_2x1,                // 2    ->  2 in width, 1 in height
+        SPLIT_IMAGE_2x2,                // 4    ->  2 in width, 2 in height
+        SPLIT_IMAGE_2x3,                // 6    ->  2 in width, 3 in height
+        SPLIT_IMAGE_2x4,                // 8    ->  2 in width, 4 in height
         SPLIT_IMAGE_3x1,                // 3    ->  3 in width, 1 in height
+        SPLIT_IMAGE_3x2,                // 6    ->  3 in width, 2 in height
+        SPLIT_IMAGE_3x3,                // 9    ->  3 in width, 3 in height
+        SPLIT_IMAGE_3x4,                // 12   ->  3 in width, 4 in height
         SPLIT_IMAGE_4x1,                // 4    ->  4 in width, 1 in height
+        SPLIT_IMAGE_4x2,                // 8    ->  4 in width, 2 in height
+        SPLIT_IMAGE_4x3,                // 12   ->  4 in width, 3 in height
+        SPLIT_IMAGE_4x4,                // 16   ->  4 in width, 4 in height
 
                                         // statistical methods:
         MEDIAN,                         // works using the Median

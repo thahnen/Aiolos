@@ -44,11 +44,10 @@ int GLCM::Util::max_gray_value(const cv::Mat& image) {
 /**
  *  Splits image in subimages to evaluate their angles
  *
- *  TODO: parallelize for loop!
  *  TODO: implement other methods
  */
 void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& angles, Implementation impl, Method meth,
-                 const Range& range, unsigned int max_r) {
+                                const Range& range, unsigned int max_r) {
     std::vector<cv::Mat> mats;
 
     if (meth == SPLIT_IMAGE_2x2) {
@@ -142,7 +141,13 @@ void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& an
         throw std::runtime_error("[GLCM::Util::split_image] Unsupported (unimplemented) image splitting method!");
     }
 
-    for (cv::Mat& sub : mats) {
-        angles.emplace_back(GLCM::main_angle(sub, impl, range, max_r));
+    #pragma omp declare reduction (vector_push_back: \
+                                    std::vector<unsigned int> : omp_out.insert(         \
+                                        omp_out.end(), omp_in.begin(), omp_in.end()     \
+                                    ))
+
+    #pragma omp parallel for reduction(vector_push_back: angles)
+    for (int i = 0; i < mats.size(); i++) {
+        angles.push_back(GLCM::main_angle(mats.at(i), impl, range, max_r));
     }
 }
