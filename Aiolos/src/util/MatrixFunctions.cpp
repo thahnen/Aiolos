@@ -9,12 +9,10 @@
 
 
 /**
- *  Returns the maximum gray value of the image-matrix + 1
+ *  Returns the maximum gray value of the image-matrix + 1 (equals number of possible values)
  *
  *  REVIEW: Usage does not depend on specific Mat-Type
  *  REVIEW: Assert correct maximum values using standard library!
- *
- *  TODO: change to unsigned int again to support CV_32S (?)
  */
 int GLCM::Util::max_gray_value(const cv::Mat& image) {
     switch (image.type() & CV_MAT_DEPTH_MASK) {
@@ -30,13 +28,8 @@ int GLCM::Util::max_gray_value(const cv::Mat& image) {
         case CV_16U:
             // unsigned short   -> 2^16 highest value (65536)
             return static_cast<int>(std::numeric_limits<unsigned short>::max() + 1);
-        /*
-        case CV_32S:
-            // (signed) int     -> 2^31 highest value (2147483648)
-            return std::numeric_limits<int>::max() + 1;
-        */
         default:
-            throw std::runtime_error("[GLCM::Uitl::max_gray_value] Unsupported Mat-type!");
+            throw std::runtime_error("[GLCM::Util::max_gray_value] Unsupported Mat-type!");
     }
 }
 
@@ -45,12 +38,36 @@ int GLCM::Util::max_gray_value(const cv::Mat& image) {
  *  Splits image in subimages to evaluate their angles
  *
  *  TODO: implement other methods
+ *  TODO: replace with non hardcoded version!
  */
 void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& angles, Implementation impl, Method meth,
                                 const Range& range, unsigned int max_r) {
     std::vector<cv::Mat> mats;
 
-    if (meth == SPLIT_IMAGE_2x2) {
+    if (meth == SPLIT_IMAGE_1x2) {
+        int middle_height = ceil(image.rows/2);
+
+        mats.emplace_back(image(cv::Range(0, middle_height), cv::Range(0, image.cols)));
+        mats.emplace_back(image(cv::Range(middle_height + 1, image.rows), cv::Range(0, image.cols)));
+    } else if (meth == SPLIT_IMAGE_1x3) {
+        int third_height = ceil(image.rows/3);
+
+        mats.emplace_back(image(cv::Range(0, third_height), cv::Range(0, image.cols)));
+        mats.emplace_back(image(cv::Range(third_height + 1, third_height * 2), cv::Range(0, image.cols)));
+        mats.emplace_back(image(cv::Range(third_height * 2 + 1, image.rows), cv::Range(0, image.cols)));
+    } else if (meth == SPLIT_IMAGE_1x4) {
+        int fourth_height = ceil(image.rows/4);
+
+        mats.emplace_back(image(cv::Range(0, fourth_height), cv::Range(0, image.cols)));
+        mats.emplace_back(image(cv::Range(fourth_height + 1, fourth_height * 2), cv::Range(0, image.cols)));
+        mats.emplace_back(image(cv::Range(fourth_height * 2 + 1, fourth_height * 3), cv::Range(0, image.cols)));
+        mats.emplace_back(image(cv::Range(fourth_height * 3 + 1, image.rows), cv::Range(0, image.cols)));
+    } else if (meth == SPLIT_IMAGE_2x1) {
+        int middle_width = ceil(image.cols/2);
+
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(0, middle_width)));
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(middle_width + 1, image.cols)));
+    } else if (meth == SPLIT_IMAGE_2x2) {
         int middle_width = ceil(image.cols/2);
         int middle_height = ceil(image.rows/2);
 
@@ -60,6 +77,33 @@ void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& an
         // Second row left to right
         mats.emplace_back(image(cv::Range(middle_height + 1, image.rows), cv::Range(0, middle_width)));
         mats.emplace_back(image(cv::Range(middle_height + 1, image.rows), cv::Range(middle_width + 1, image.cols)));
+    } else if (meth == SPLIT_IMAGE_2x3) {
+        // TODO: implement
+        int middle_width = ceil(image.cols/2);
+        int third_height = ceil(image.rows/3);
+
+        // First row left to right
+        // Second row left to right
+        // Third row left to right
+    } else if (meth == SPLIT_IMAGE_2x4) {
+        // TODO: implement
+        int middle_width = ceil(image.cols/2);
+        int fourth_height = ceil(image.rows/4);
+
+        // First row left to right
+        // Second row left to right
+        // Third row left to right
+        // Fourth row left to right
+    } else if (meth == SPLIT_IMAGE_3x1) {
+        int third_width = ceil(image.cols/3);
+
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(0, third_width)));
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(third_width + 1, third_width * 2)));
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(third_width * 2 + 1, image.cols)));
+    } else if (meth == SPLIT_IMAGE_3x2) {
+        // TODO: implement
+        int third_width = ceil(image.cols/3);
+        int middle_height = ceil(image.rows/2);
     } else if (meth == SPLIT_IMAGE_3x3) {
         int third_width = ceil(image.cols/3);
         int third_height = ceil(image.rows/3);
@@ -76,6 +120,37 @@ void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& an
         mats.emplace_back(image(cv::Range(third_height * 2 + 1, image.rows), cv::Range(0, third_width)));
         mats.emplace_back(image(cv::Range(third_height * 2 + 1, image.rows), cv::Range(third_width + 1, third_width * 2)));
         mats.emplace_back(image(cv::Range(third_height * 2 + 1, image.rows), cv::Range(third_width * 2 + 1, image.cols)));
+    } else if (meth == SPLIT_IMAGE_3x4) {
+        // TODO: implement
+        int third_width = ceil(image.cols/3);
+        int fourth_height = ceil(image.rows/4);
+
+        // First row left to right
+        // Second row left to right
+        // Third row left to right
+        // Fourth row left to right
+    } else if (meth == SPLIT_IMAGE_4x1) {
+        int fourth_width = ceil(image.cols/4);
+
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(0, fourth_width)));
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(fourth_width + 1, fourth_width * 2)));
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(fourth_width * 2 + 1, fourth_width * 3)));
+        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(fourth_width * 3 + 1, image.cols)));
+    } else if (meth == SPLIT_IMAGE_4x2) {
+        // TODO: implement
+        int fourth_width = ceil(image.cols/4);
+        int middle_height = ceil(image.rows/2);
+
+        // First row left to right
+        // Second row left to right
+    } else if (meth == SPLIT_IMAGE_4x3) {
+        // TODO: implement
+        int fourth_width = ceil(image.cols/4);
+        int third_height = ceil(image.rows/3);
+
+        // First row left to right
+        // Second row left to right
+        // Third row left to right
     } else if (meth == SPLIT_IMAGE_4x4) {
         int fourth_width = ceil(image.cols/4);
         int fourth_height = ceil(image.rows/4);
@@ -100,42 +175,6 @@ void GLCM::Util::split_image(const cv::Mat& image, std::vector<unsigned int>& an
         mats.emplace_back(image(cv::Range(fourth_height * 3 + 1, image.rows), cv::Range(fourth_width + 1, fourth_width * 2)));
         mats.emplace_back(image(cv::Range(fourth_height * 3 + 1, image.rows), cv::Range(fourth_width * 2 + 1, fourth_width * 3)));
         mats.emplace_back(image(cv::Range(fourth_height * 3 + 1, image.rows), cv::Range(fourth_width * 3 + 1, image.cols)));
-    } else if (meth == SPLIT_IMAGE_1x2) {
-        int middle_height = ceil(image.rows/2);
-
-        mats.emplace_back(image(cv::Range(0, middle_height), cv::Range(0, image.cols)));
-        mats.emplace_back(image(cv::Range(middle_height + 1, image.rows), cv::Range(0, image.cols)));
-    } else if (meth == SPLIT_IMAGE_1x3) {
-        int third_height = ceil(image.rows/3);
-
-        mats.emplace_back(image(cv::Range(0, third_height), cv::Range(0, image.cols)));
-        mats.emplace_back(image(cv::Range(third_height + 1, third_height * 2), cv::Range(0, image.cols)));
-        mats.emplace_back(image(cv::Range(third_height * 2 + 1, image.rows), cv::Range(0, image.cols)));
-    } else if (meth == SPLIT_IMAGE_1x4) {
-        int fourth_height = ceil(image.rows/4);
-
-        mats.emplace_back(image(cv::Range(0, fourth_height), cv::Range(0, image.cols)));
-        mats.emplace_back(image(cv::Range(fourth_height + 1, fourth_height * 2), cv::Range(0, image.cols)));
-        mats.emplace_back(image(cv::Range(fourth_height * 2 + 1, fourth_height * 3), cv::Range(0, image.cols)));
-        mats.emplace_back(image(cv::Range(fourth_height * 3 + 1, image.rows), cv::Range(0, image.cols)));
-    } else if (meth == SPLIT_IMAGE_2x1) {
-        int middle_width = ceil(image.cols/2);
-
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(0, middle_width)));
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(middle_width + 1, image.cols)));
-    } else if (meth == SPLIT_IMAGE_3x1) {
-        int third_width = ceil(image.cols/3);
-
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(0, third_width)));
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(third_width + 1, third_width * 2)));
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(third_width * 2 + 1, image.cols)));
-    } else if (meth == SPLIT_IMAGE_4x1) {
-        int fourth_width = ceil(image.cols/3);
-
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(0, fourth_width)));
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(fourth_width + 1, fourth_width * 2)));
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(fourth_width * 2 + 1, fourth_width * 3)));
-        mats.emplace_back(image(cv::Range(0, image.rows), cv::Range(fourth_width * 3 + 1, image.cols)));
     } else {
         // TODO: Happens when new and not implemented methods are used!
         throw std::runtime_error("[GLCM::Util::split_image] Unsupported (unimplemented) image splitting method!");

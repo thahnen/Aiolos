@@ -63,9 +63,10 @@ std::vector<unsigned int> GLCM::main_angles(const cv::Mat& image, Implementation
     std::vector<unsigned int> angles;
 
     // Test for image splitting method!
-    if (meth == SPLIT_IMAGE_2x2 || meth == SPLIT_IMAGE_3x3 || meth == SPLIT_IMAGE_4x4
-        || meth == SPLIT_IMAGE_1x2 || meth == SPLIT_IMAGE_1x3 || meth == SPLIT_IMAGE_1x4
-        || meth == SPLIT_IMAGE_2x1 || meth == SPLIT_IMAGE_3x1 || meth == SPLIT_IMAGE_4x1) {
+    if (meth == SPLIT_IMAGE_1x2 || meth == SPLIT_IMAGE_1x3 || meth == SPLIT_IMAGE_1x4
+        || meth == SPLIT_IMAGE_2x1 || meth == SPLIT_IMAGE_2x2 || meth == SPLIT_IMAGE_2x3 || meth == SPLIT_IMAGE_2x4
+        || meth == SPLIT_IMAGE_3x1 || meth == SPLIT_IMAGE_3x2 || meth == SPLIT_IMAGE_3x3 || meth == SPLIT_IMAGE_3x4
+        || meth == SPLIT_IMAGE_4x1 || meth == SPLIT_IMAGE_4x2 || meth == SPLIT_IMAGE_4x3 || meth == SPLIT_IMAGE_4x4) {
         Util::split_image(image, angles, impl, meth, range, max_radius);
         return angles;
     }

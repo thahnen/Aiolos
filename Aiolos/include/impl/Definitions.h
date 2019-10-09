@@ -4,8 +4,8 @@
 
 
 #pragma once
-#ifndef AIOLOS_ENUMERATIONS_H
-#define AIOLOS_ENUMERATIONS_H
+#ifndef AIOLOS_DEFINITIONS_H
+#define AIOLOS_DEFINITIONS_H
 
 
 namespace GLCM {
@@ -69,4 +69,4 @@ namespace GLCM {
 }
 
 
-#endif //AIOLOS_ENUMERATIONS_H
+#endif //AIOLOS_DEFINITIONS_H

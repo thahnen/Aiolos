@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Aiolos
-        VERSION 2.3.0
+        VERSION 2.3.5
         DESCRIPTION "GLCM-Based Texture Orientation Estimation Method"
         HOMEPAGE_URL "https://github.com/thahnen/Aiolos"
         LANGUAGES CXX)
@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 14)
 # OpenMP required for parallized working (astonishing speed increase!)
 find_package(OpenMP REQUIRED)
 
-# OpenCV required for the rest
+# OpenCV required for image processing
 if (WIN32)
 	# By now OpenCV has to be installed here for CMake to find it!
 	# TODO: Fix this later!
@@ -180,7 +180,7 @@ target_link_libraries(Aiolos_Test
 
 ########################################################################################################################
 #       BUILD OPTIONS FOR THE BENCHMARKS:
-#		TODO: does not complete on Windows due to errors inside the opencv-implementation!
+#		TODO: does not complete on Windows due to errors inside the OpenCV-implementation!
 #
 #           - target name:      Aiolos_benchmark_main_angle
 #           - file:             benchmark.main_angle.cpp

@@ -9,7 +9,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "impl/Enumerations.h"
+#include "impl/Definitions.h"
 
 
 #if __cplusplus > 201402L
@@ -19,7 +19,7 @@ namespace GLCM { namespace Util {
 #endif
 
     /**
-     *  Returns the maximum gray value of the image-matrix
+     *  Returns the number of all possible gray values of the image based on its type
      *
      *  @param image        the given image
      *  @return             the value

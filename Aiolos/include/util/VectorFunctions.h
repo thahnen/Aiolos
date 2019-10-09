@@ -23,7 +23,7 @@
 #include <vector>
 #include <numeric>
 
-#include "../impl/Enumerations.h"
+#include "impl/Definitions.h"
 
 
 /**
@@ -128,15 +128,18 @@ namespace GLCM { namespace Util {
         assert(list.size() > 0);
         assert(n < list.size());
 
+        std::vector<unsigned int> indizes;
+
         // Get maximum value of copy
         T maximum = *max_element(list.begin(), list.end());
 
-        std::vector<unsigned int> indizes;
-
-        for (unsigned int i = 0; i < n; i++) {
-            auto min = min_element(list.begin(), list.end());       // get minimum values index
-            indizes.push_back(std::distance(list.begin(), min));    // add index
-            list.at(std::distance(list.begin(), min)) = maximum;    // set value at index to maximum (to not find it again)
+        // Check if maximum is zero
+        if (maximum != 0) {
+            for (unsigned int i = 0; i < n; i++) {
+                auto min = min_element(list.begin(), list.end());       // get minimum values index
+                indizes.push_back(std::distance(list.begin(), min));    // add index
+                list.at(std::distance(list.begin(), min)) = maximum;    // set value at index to maximum (to not find it again)
+            }
         }
 
         return indizes;
