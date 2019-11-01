@@ -31,7 +31,7 @@ The second one can be used to restrict the range of angles which should be consi
 
 ```cpp
 unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
-unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementaion impl, const GLCM::Range& range, unsigned int max_r = 0);
+unsigned int GLCM::main_angle(const cv::Mat& image, GLCM::Implementation impl, const GLCM::Range& range, unsigned int max_r = 0);
 ```
 
 To get multiple (or one) dominant angles of a given image one of these functions should be used! There is a possibility that some duplicate angles exist in the vector.
