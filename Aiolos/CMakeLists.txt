@@ -179,7 +179,7 @@ target_link_libraries(Aiolos_Test
 
 
 ########################################################################################################################
-#       BUILD OPTIONS FOR THE BENCHMARKS:
+#       BUILD OPTIONS FOR THE BENCHMARK:
 #		TODO: does not complete on Windows due to errors inside the OpenCV-implementation!
 #
 #           - target name:      Aiolos_benchmark_main_angle
@@ -196,6 +196,23 @@ target_link_libraries(Aiolos_benchmark_main_angle
         PUBLIC
             Aiolos)
 
+
+########################################################################################################################
+#       BUILD OPTIONS FOR THE BENCHMARK:
+#
+#           - target name:      Aiolos_benchmark_main_angles
+#           - file:             benchmark.main_angles.cpp
+#           - input type:       test images
+#           - function:         main_angles
+#           - implementation:   STANDARD + SCHEME2
+#           - methods:          TOP_2 + TOP_3 + MEDIAN + AVERAGE + L_QUARTILE
+########################################################################################################################
+add_executable(Aiolos_benchmark_main_angles
+        tests/benchmark.main_angles.cpp)
+
+target_link_libraries(Aiolos_benchmark_main_angles
+        PUBLIC
+            Aiolos)
 
 
 ########################################################################################################################
