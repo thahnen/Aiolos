@@ -104,7 +104,7 @@ namespace GLCM { namespace Util {
         assert(list.size() > 0);
 
         return std::accumulate(
-                list.begin(), list.end(), 0.0/list.size()
+                list.begin(), list.end(), 0.0
         ) / list.size();
     }
 

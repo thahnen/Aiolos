@@ -52,7 +52,7 @@ namespace GLCM {
      *  NOBUG: Do not change x/y to unsigned => would break everything!
      *  REVIEW: Usage does not depend on specific Mat-Type (CT nor RT)
      */
-    double concentration_degree(const cv::Mat1d& glcm, double (*inc)(int, int)) {
+    /*double concentration_degree(const cv::Mat1d& glcm, double (*inc)(int, int)) {
         double value = 0;
 
         #pragma omp parallel for collapse(2) reduction(+:value)
@@ -63,7 +63,7 @@ namespace GLCM {
         }
 
         return value;
-    }
+    }*/
 
 
     /**

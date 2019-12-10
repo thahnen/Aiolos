@@ -3,6 +3,8 @@
 //
 
 #include <iostream>
+#include <numeric>
+#include <vector>
 #include <chrono>
 #include <opencv2/opencv.hpp>
 #include <GLCM.h>
@@ -12,134 +14,66 @@ using namespace cv;
 
 
 int main() {
+    vector<const char*> images = {
 #ifdef WIN32
-	Mat image = imread("../../../../assets/test_images/sar_plane.png");
+        "../../../../assets/test_images/sar_plane.png",
+        "../../../../assets/test_images/sar_strip.png",
+        "../../../../assets/test_images/sar_tracks.jpg",
+        "../../../../assets/test_images/sea_400x400.jpg",
+        "../../../../assets/test_images/maps_texel_sea.png",
+        "../../../../assets/test_images/zebrastreifen.jpg"
 #else
-    Mat image = imread("../../assets/test_images/sar_plane.png");
+        "../../assets/test_images/sar_plane.png",
+        "../../assets/test_images/sar_strip.png",
+        "../../assets/test_images/sar_tracks.jpg",
+        "../../assets/test_images/sea_400x400.jpg",
+        "../../assets/test_images/maps_texel_sea.png",
+        "../../assets/test_images/zebrastreifen.jpg"
 #endif
-	if (image.channels() != 1) {
-        cvtColor(image, image, COLOR_BGR2GRAY);
+    };
+
+    for (const char* path : images) {
+        Mat image = imread(path);
+        if (image.channels() != 1) {
+            cvtColor(image, image, COLOR_BGR2GRAY);
+        }
+
+        unsigned int angle;
+        vector<unsigned int> times;
+
+        /**
+         *  GLCM::STANDARD, max_r := 50
+         */
+        for (int i = 0; i < 10; i++) {
+            auto begin = chrono::steady_clock::now();
+            angle = GLCM::main_angle(image, GLCM::STANDARD, 50);
+            unsigned int time = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now()-begin).count();
+
+            times.push_back(time);
+        }
+
+        cout << "Datei: " << path << endl
+            << "Dom. Winkel (Standard): " << angle << "°" << endl
+            << "Durch. Zeit (Standard): " << accumulate(times.begin(), times.end(), 0.0) / times.size() / 1000
+            << " Sekunden" << endl;
+
+
+        /**
+         * GLCM::SCHEME2, max_r := 50
+         */
+        times.clear();
+        for (int i = 0; i < 10; i++) {
+            auto begin = chrono::steady_clock::now();
+            angle = GLCM::main_angle(image, GLCM::SCHEME2, 50);
+            unsigned int time = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now()-begin).count();
+
+            times.push_back(time);
+        }
+
+        cout << "Dom. Winkel (Scheme 2): " << angle << "°" << endl
+             << "Durch. Zeit (Scheme 2): " << accumulate(times.begin(), times.end(), 0.0) / times.size() / 1000
+             << " Sekunden" << endl << endl;
     }
 
-    auto begin = chrono::steady_clock::now();
-    unsigned int main_angle = GLCM::main_angle(image, GLCM::STANDARD, 50);
-    cout << "Dominanter Winkel 'sar_plane' (Standard) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sar_plane' (Standard) - Winkel: " << main_angle << " Grad" << endl;
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::SCHEME2, 50);
-    cout << "Dominanter Winkel 'sar_plane' (Scheme 2) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sar_plane' (Scheme 2) - Winkel: " << main_angle << " Grad" << endl;
-
-
-#ifdef WIN32
-	image = imread("../../../../assets/test_images/sar_strip.png");
-#else
-    image = imread("../../assets/test_images/sar_strip.png");
-#endif
-	if (image.channels() != 1) {
-        cvtColor(image, image, COLOR_BGR2GRAY);
-    }
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::STANDARD, 50);
-    cout << "Dominanter Winkel 'sar_strip' (Standard) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sar_strip' (Standard) - Winkel: " << main_angle << " Grad" << endl;
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::SCHEME2, 50);
-    cout << "Dominanter Winkel 'sar_strip' (Scheme 2) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sar_strip' (Scheme 2) - Winkel: " << main_angle << " Grad" << endl;
-
-
-#ifdef WIN32
-	image = imread("../../../../assets/test_images/sar_tracks.jpg");
-#else
-    image = imread("../../assets/test_images/sar_tracks.jpg");
-#endif
-    if (image.channels() != 1) {
-        cvtColor(image, image, COLOR_BGR2GRAY);
-    }
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::STANDARD, 50);
-    cout << "Dominanter Winkel 'sar_tracks' (Standard) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sar_tracks' (Standard) - Winkel: " << main_angle << " Grad" << endl;
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::SCHEME2, 50);
-    cout << "Dominanter Winkel 'sar_tracks' (Scheme 2) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sar_tracks' (Scheme 2) - Winkel: " << main_angle << " Grad" << endl;
-
-
-#ifdef WIN32
-	image = imread("../../../../assets/test_images/sea_400x400.jpg");
-#else
-    image = imread("../../assets/test_images/sea_400x400.jpg");
-#endif
-	if (image.channels() != 1) {
-        cvtColor(image, image, COLOR_BGR2GRAY);
-    }
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::STANDARD, 50);
-    cout << "Dominanter Winkel 'sea_400x400' (Standard) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sea_400x400' (Standard) - Winkel: " << main_angle << " Grad" << endl;
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::SCHEME2, 50);
-    cout << "Dominanter Winkel 'sea_400x400' (Scheme 2) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'sea_400x400' (Scheme 2) - Winkel: " << main_angle << " Grad" << endl;
-
-
-#ifdef WIN32
-	image = imread("../../../../assets/test_images/maps_texel_sea.png");
-#else
-    image = imread("../../assets/test_images/maps_texel_sea.png");
-#endif
-    if (image.channels() != 1) {
-        cvtColor(image, image, COLOR_BGR2GRAY);
-    }
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::STANDARD, 50);
-    cout << "Dominanter Winkel 'maps_texel_sea' (Standard) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'maps_texel_sea' (Standard) - Winkel: " << main_angle << " Grad" << endl;
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::SCHEME2, 50);
-    cout << "Dominanter Winkel 'maps_texel_sea' (Scheme 2) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'maps_texel_sea' (Scheme 2) - Winkel: " << main_angle << " Grad" << endl;
-
-
-#ifdef WIN32
-	image = imread("../../../../assets/test_images/zebrastreifen.jpg");
-#else
-    image = imread("../../assets/test_images/zebrastreifen.jpg");
-#endif
-	if (image.channels() != 1) {
-        cvtColor(image, image, COLOR_BGR2GRAY);
-    }
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::STANDARD, 50);
-    cout << "Dominanter Winkel 'zebrastreifen' (Standard) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'zebrastreifen' (Standard) - Winkel: " << main_angle << " Grad" << endl;
-
-    begin = chrono::steady_clock::now();
-    main_angle = GLCM::main_angle(image, GLCM::SCHEME2, 50);
-    cout << "Dominanter Winkel 'zebrastreifen' (Scheme 2) - Dauer: "
-         << chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now()-begin).count() << " Sec" << endl;
-    cout << "Dominanter Winkel 'zebrastreifen' (Scheme 2) - Winkel: " << main_angle << " Grad" << endl;
+    return 0;
 }

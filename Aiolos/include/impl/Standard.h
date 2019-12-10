@@ -25,7 +25,7 @@ namespace GLCM { namespace Standard {
      *  REVIEW: Usage does not depend on specific Mat-Type
      *  TODO: change x, y to int (and x2, y2 as well) to test for negative values!
      */
-    unsigned int norm(const cv::Mat& image, double r, double theta) {
+    /*unsigned int norm(const cv::Mat& image, double r, double theta) {
         unsigned int value = 0;
 
         double dist_x = r*cos(theta);
@@ -45,7 +45,7 @@ namespace GLCM { namespace Standard {
         }
 
         return value;
-    }
+    }*/
 
 
     /**
@@ -76,20 +76,6 @@ namespace GLCM { namespace Standard {
                 glcm(image(y, x), image(y2, x2))++;
             }
         }
-
-		/*
-        // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = norm(image, r, theta);
-
-        #pragma omp parallel for collapse(2)
-        for (unsigned int x = 0; x < glcm.cols; x++) {
-            for (unsigned int y = 0; y < glcm.rows; y++) {
-                if (glcm(y, x) == 0) continue;
-
-                glcm(y, x) /= q;
-            }
-        }
-		*/
     }
 
 #if __cplusplus > 201402L

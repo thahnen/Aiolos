@@ -94,20 +94,6 @@ namespace GLCM { namespace Scheme2 {
                 glcm(image(y, x), gray_1+gray_2+gray_3+gray_4)++;
             }
         }
-
-		/*
-        // TODO: Division by Q is not really neccessary!? Numbers only get smaller?
-        unsigned int q = Standard::norm(image, r, theta);
-
-        #pragma omp parallel for collapse(2)
-        for (unsigned int x = 0; x < glcm.cols; x++) {
-            for (unsigned int y = 0; y < glcm.rows; y++) {
-                if (glcm(y, x) == 0) continue;
-
-                glcm(y, x) /= q;
-            }
-        }
-		*/
     }
 
 #if __cplusplus > 201402L

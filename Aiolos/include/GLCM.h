@@ -35,7 +35,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle (in degrees!)
      */
-    DLL inline unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
+    DLL unsigned int main_angle(const cv::Mat& image, GLCM::Implementation impl, unsigned int max_r = 0);
 
 
     /**
@@ -61,7 +61,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle(s) (in degrees!)
      */
-    DLL inline std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+    DLL std::vector<unsigned int> main_angles(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
                                                         unsigned int max_r = 0);
 
 
@@ -89,7 +89,7 @@ namespace GLCM {
      *  @param max_r        fixed maximum radius or, if not stated, one based on the image boundaries
      *  @return             the dominant angle(s) (in degrees!)
      */
-    DLL inline std::set<unsigned int> main_angles_set(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
+    DLL std::set<unsigned int> main_angles_set(const cv::Mat& image, GLCM::Implementation impl, GLCM::Method meth,
                                                         unsigned int max_r = 0);
 
 
